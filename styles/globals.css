@@ -1,16 +1,271 @@
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+html,
 a {
   color: inherit;
   text-decoration: none;
+}
+body {
+  padding: 0;
+  margin: 0;
+  background-color: #333333;
+}
+
+h1 {
+  text-align: center;
+  font-weight: 500;
+  font-size: 4rem;
+}
+
+h2 {
+  align-self: center;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: xx-large;
+  font-style: inherit;
+  font-weight: 600;
+  width: fit-content;
+}
+h3 {
+  align-self: center;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: x-large;
+  font-style: inherit;
+  font-weight: 500;
+  width: fit-content;
+}
+
+Nav {
+  color: rgb(255, 174, 0);
+  background-color: #333333;
+}
+
+select {
+  width: 250px;
+  display: flex;
+  margin: 0 auto;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  font-weight: 900;
+  background-color: white;
+}
+
+table {
+  background-color: rgb(250, 250, 250);
+  text-align: center;
+  margin: auto;
+  display: block;
+  min-width: fit-content;
+  border: 10px double black;
+  position: relative;
+}
+
+th {
+  padding: 15px;
+}
+
+thead {
+  padding: 105px;
+}
+
+tr {
+  border: 1px solid black;
+  padding: 2%;
+  margin: 2%;
 }
 
 * {
   box-sizing: border-box;
 }
+
+.fullWidth {
+  display: flex;
+  min-width: 75%;
+  max-width: 100%;
+  width: min-content;
+  margin: auto;
+  margin-bottom: 10px;
+  padding: auto;
+  align-items: center;
+  border: 2px solid rgb(255, 174, 0);
+}
+
+.leagues {
+  display: flex;
+  margin: 1rem;
+  padding: 1rem;
+  background-color: rgb(200, 200, 200);
+  color: black;
+  border: 5px double black;
+}
+
+.leaguesHeader {
+  align-self: center;
+  text-align: center;
+  width: 50%;
+  font-weight: 400;
+}
+
+.leaguesSubHeader {
+  color: steelblue;
+  font-weight: 200;
+  float: right;
+  margin: 0 15px;
+  font-style: italic;
+  border-bottom: 1px solid steelblue;
+}
+
+.playerChart {
+  align-self: center;
+  /* color: blue; */
+  /* background-color: lightgray; */
+}
+
+.playerCard {
+  width: 100%;
+  color: rgb(255, 174, 0);
+  background: #333333;
+}
+
+.playerCard h1 {
+  width: 100%;
+  position: relative;
+}
+.playerCard h2 {
+  width: 100%;
+  position: relative;
+  text-align: center;
+}
+.playerCard p {
+  width: 20%;
+  float: left;
+  color: rgb(255, 174, 0);
+  background: #333333;
+  padding: 5px;
+  margin-bottom: 5px;
+  border: 1px solid rgb(255, 174, 0);
+}
+
+.playerCard span {
+  display: flex;
+  justify-content: center;
+  color: #333333;
+  background: rgb(255, 174, 0);
+}
+
+.sideBySide {
+  display: flex;
+  flex-direction: column;
+  width: min-content;
+  float: left;
+  margin: 10px;
+  padding: auto;
+  align-self: center;
+  align-content: center;
+  border: 2px solid black;
+}
+
+.stickyHeaderRow {
+  position: sticky;
+  top: 0%;
+  background-color: steelblue;
+  border-bottom: 3px solid black;
+}
+
+.subCategoryTable {
+  align-self: center;
+  font-weight: bolder;
+  margin: 2px;
+  padding: 1.25rem;
+  font-size: 35px;
+  font-family: Chalkduster, fantasy;
+}
+
+.tableCells {
+  color: slategrey;
+  padding: 0.25rem;
+  border: 1px solid slategray;
+  font-style: oblique;
+  font-family: Luminari, fantasy;
+}
+.tableHeaders {
+  color: steelblue;
+  background-color: black;
+  padding-bottom: 10px;
+  font-size: auto;
+  padding: 0.5rem;
+  font-family: OCR A Std, monospace;
+}
+
+/* Copying and pasting stuff for a dropdown menu */
+/* .menu-container {
+  position: relative;
+}
+
+.menu {
+  background: #ffffff;
+  border-radius: 8px;
+  position: absolute;
+  top: 60px;
+  right: 0;
+  width: 300px;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-20px);
+  transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+}
+
+.menu.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu li {
+  border-bottom: 1px solid #dddddd;
+}
+
+.menu li a {
+  text-decoration: none;
+  color: #333333;
+  padding: 15px 20px;
+  display: block;
+}
+
+.menu-trigger {
+  background: #ffffff;
+  border-radius: 90px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  border: none;
+  vertical-align: middle;
+  transition: box-shadow 0.4s ease;
+}
+
+.menu-trigger:hover {
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+}
+
+.menu-trigger span {
+  font-weight: 700;
+  vertical-align: middle;
+  font-size: 14px;
+  margin: 0 10px;
+}
+
+.menu-trigger img {
+  border-radius: 90px;
+} */

@@ -37,6 +37,8 @@ const PlayerDropdown = ({ players }) => {
   let goals =
     parseInt(getPercentile('I_F_goals').substring(0, 2)) === 10
       ? 100
+      : !parseInt(getPercentile('I_F_goals').substring(0, 2))
+      ? 0
       : parseInt(getPercentile('I_F_goals').substring(0, 2));
   let points =
     parseInt(getPercentile('I_F_points').substring(0, 2)) === 10
@@ -181,7 +183,7 @@ const PlayerDropdown = ({ players }) => {
               data={playerGraphData}
               margin={{
                 top: 15,
-                right: 5,
+                right: 10,
                 left: 5,
                 bottom: 5,
               }}
@@ -221,7 +223,7 @@ const PlayerDropdown = ({ players }) => {
               data={playerGraphData}
               margin={{
                 top: 15,
-                right: 5,
+                right: 10,
                 left: 5,
                 bottom: 5,
               }}

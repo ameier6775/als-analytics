@@ -154,7 +154,8 @@ const PlayerDropdown = ({ players }) => {
       return (selectedPlayer[category] / maxValue).toFixed(2).substring(2, 4) + '%';
     }
   }
-  // Gets the percentile for the given statistic
+
+  // Gets the percentile for the given negative statistic
   function getNegativePercentile(category) {
     // Group forwards & defensemen together
     if (selectedPlayer['position'] === 'D') {
@@ -164,22 +165,22 @@ const PlayerDropdown = ({ players }) => {
     }
 
     // Get the maximum player value for the statistic
-    var minValue = Math.min.apply(
+    var maxValue = Math.max.apply(
       Math,
       positionalArr.map((obj) => {
         return obj[category];
       }),
     );
 
-    // Specific conditions (100% & 0&)
-    if (minValue === selectedPlayer[category]) {
+    // Specific conditions (100% & 0%)
+    if (maxValue === selectedPlayer[category]) {
       return '100%';
     } else if (selectedPlayer[category] === 0) {
       return 'N/A';
-    } else if ((selectedPlayer[category] / minValue).toFixed(2).substring(2, 3) === '0') {
-      return (selectedPlayer[category] / minValue).toFixed(2).substring(3, 4) + '%';
+    } else if ((1 - selectedPlayer[category] / maxValue).toFixed(2).substring(2, 3) === '0') {
+      return (1 - selectedPlayer[category] / maxValue).toFixed(2).substring(3, 4) + '%';
     } else {
-      return (selectedPlayer[category] / minValue).toFixed(2).substring(2, 4) + '%';
+      return (1 - selectedPlayer[category] / maxValue).toFixed(2).substring(2, 4) + '%';
     }
   }
 
@@ -243,7 +244,7 @@ const PlayerDropdown = ({ players }) => {
             xGA: <span>{getNegativePercentile('OnIce_A_xGoals')}</span>
           </p>
           <p>
-            On Ice GA: <span>{getPercentile('OnIce_A_goals')}</span>
+            On Ice GA: <span>{getNegativePercentile('OnIce_A_goals')}</span>
           </p>
           <p>
             Games: <span>{getPercentile('games_played')}</span>

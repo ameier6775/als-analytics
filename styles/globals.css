@@ -119,8 +119,7 @@ tr {
 
 .playerChart {
   align-self: center;
-  /* color: blue; */
-  /* background-color: lightgray; */
+  margin-left: auto;
 }
 
 .playerCard {

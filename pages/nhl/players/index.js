@@ -69,14 +69,6 @@ export default function Players() {
     playerCardArray.push(allSituationsPlayerCard[i]);
   }
 
-  // const maxGoals = Math.max.apply(
-  //   Math,
-  //   playerCardArray.map((obj) => {
-  //     return obj.I_F_goals;
-  //   }),
-  // );
-  // console.log(maxGoals);
-
   // Assigning new values
   {
     barChartArray

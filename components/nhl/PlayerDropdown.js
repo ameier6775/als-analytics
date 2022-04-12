@@ -169,7 +169,6 @@ const PlayerDropdown = ({ players }) => {
     );
 
     let topNumber = (selectedPlayer[category] / selectedPlayer['icetime'] / maxValue).toFixed(2);
-    console.log(typeof topNumber);
     // Specific conditions (100% & 0&)
     if (topNumber === '1.00') {
       return '100%';
@@ -183,8 +182,9 @@ const PlayerDropdown = ({ players }) => {
   }
 
   function combineCategories(categoryOne, categoryTwo) {
-    let category1 = parseInt(categoryOne.substring(0, 2));
-    let category2 = parseInt(categoryTwo.substring(0, 2));
+    let category1 = parseInt(categoryOne.substring(0, categoryOne.length - 1));
+    let category2 = parseInt(categoryTwo.substring(0, categoryTwo.length - 1));
+    console.log(category1, category2);
     let avg = ((category1 + category2) / 2).toString() + '%';
     return avg;
   }
@@ -252,6 +252,18 @@ const PlayerDropdown = ({ players }) => {
           </p>
           <p>
             🚨 Per 60: <span>{getTimePercentile('I_F_goals')}</span>
+          </p>
+          <p>
+            🍏 Per 60:{' '}
+            <span>
+              {combineCategories(getTimePercentile('I_F_primaryAssists'), getTimePercentile('I_F_secondaryAssists'))}
+            </span>
+          </p>
+          <p>
+            🥅 Per 60: <span>{getProductionPercentile('I_F_points')}</span>
+          </p>
+          <p>
+            🍏 Per 60: <span>{getProductionPercentile('expectedCases')}</span>
           </p>
           <p>
             🍏 Per 60: <span>{getProductionPercentile('expectedCases')}</span>

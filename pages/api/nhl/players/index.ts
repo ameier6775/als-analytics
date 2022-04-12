@@ -28,13 +28,44 @@ export default async function handler(req, res) {
       };
     }, {});
 
+    // Creating a new field inside the objects
+    rowObject.expectedCases =
+      (rowObject['I_F_flurryAdjustedxGoals'] +
+        rowObject['I_F_flurryScoreVenueAdjustedxGoals'] +
+        rowObject['I_F_highDangerxGoals'] +
+        rowObject['I_F_lowDangerxGoals'] +
+        rowObject['I_F_mediumDangerxGoals'] +
+        rowObject['I_F_reboundxGoals'] +
+        rowObject['I_F_scoreVenueAdjustedxGoals'] +
+        rowObject['OnIce_F_reboundxGoals'] +
+        rowObject['OnIce_F_scoreVenueAdjustedxGoals'] +
+        rowObject['OnIce_F_xGoals'] +
+        rowObject['OnIce_F_xGoalsFromActualReboundsOfShots'] +
+        rowObject['OnIce_F_xGoalsFromxReboundsOfShots'] +
+        rowObject['OnIce_F_xGoals_with_earned_rebounds'] +
+        rowObject['OnIce_F_xGoals_with_earned_rebounds_scoreAdjusted'] +
+        rowObject['OnIce_F_xGoals_with_earned_rebounds_scoreFlurryAdjusted'] +
+        rowObject['OnIce_F_flurryAdjustedxGoals'] +
+        rowObject['OnIce_F_flurryScoreVenueAdjustedxGoals'] +
+        rowObject['OnIce_F_highDangerxGoals'] +
+        rowObject['OnIce_F_lowDangerxGoals'] +
+        rowObject['OnIce_F_mediumDangerxGoals'] +
+        rowObject['I_F_xGoals'] +
+        rowObject['I_F_xGoalsFromActualReboundsOfShots'] +
+        rowObject['I_F_xGoalsFromxReboundsOfShots'] +
+        rowObject['I_F_xGoals_with_earned_rebounds'] +
+        rowObject['I_F_xGoals_with_earned_rebounds_scoreAdjusted'] +
+        rowObject['I_F_xGoals_with_earned_rebounds_scoreFlurryAdjusted'] +
+        rowObject['onIce_xGoalsPercentage']) /
+      rowObject['icetime'];
+
     if (rowNumber !== 1) {
       dataMoneyPuck.push(rowObject);
     }
   });
   // Configuring the average offensive awareness based off the model above
   const dataMoneyPuckAll = dataMoneyPuck.filter(
-    (player) => player.situation === 'all' && parseInt(player.icetime) > 1500,
+    (player) => player.situation === 'all' && parseInt(player.icetime) > 2000,
   );
 
   // Response

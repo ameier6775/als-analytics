@@ -25,68 +25,37 @@ const PlayerDropdown = ({ players }) => {
     setSelectedPlayer(e);
   };
 
-  var allXgf = parseFloat(
-    selectedPlayer['I_F_flurryAdjustedxGoals'] +
-      selectedPlayer['I_F_flurryScoreVenueAdjustedxGoals'] +
-      selectedPlayer['I_F_highDangerxGoals'] +
-      selectedPlayer['I_F_lowDangerxGoals'] +
-      selectedPlayer['I_F_mediumDangerxGoals'] +
-      selectedPlayer['I_F_reboundxGoals'] +
-      selectedPlayer['I_F_scoreVenueAdjustedxGoals'] +
-      selectedPlayer['OnIce_F_reboundxGoals'] +
-      selectedPlayer['OnIce_F_scoreVenueAdjustedxGoals'] +
-      selectedPlayer['OnIce_F_xGoals'] +
-      selectedPlayer['OnIce_F_xGoalsFromActualReboundsOfShots'] +
-      selectedPlayer['OnIce_F_xGoalsFromxReboundsOfShots'] +
-      selectedPlayer['OnIce_F_xGoals_with_earned_rebounds'] +
-      selectedPlayer['OnIce_F_xGoals_with_earned_rebounds_scoreAdjusted'] +
-      selectedPlayer['OnIce_F_xGoals_with_earned_rebounds_scoreFlurryAdjusted'] +
-      selectedPlayer['OnIce_F_flurryAdjustedxGoals'] +
-      selectedPlayer['OnIce_F_flurryScoreVenueAdjustedxGoals'] +
-      selectedPlayer['OnIce_F_highDangerxGoals'] +
-      selectedPlayer['OnIce_F_lowDangerxGoals'] +
-      selectedPlayer['OnIce_F_mediumDangerxGoals'] +
-      selectedPlayer['I_F_xGoals'] +
-      selectedPlayer['I_F_xGoalsFromActualReboundsOfShots'] +
-      selectedPlayer['I_F_xGoalsFromxReboundsOfShots'] +
-      selectedPlayer['I_F_xGoals_with_earned_rebounds'] +
-      selectedPlayer['I_F_xGoals_with_earned_rebounds_scoreAdjusted'] +
-      selectedPlayer['I_F_xGoals_with_earned_rebounds_scoreFlurryAdjusted'] +
-      selectedPlayer['onIce_xGoalsPercentage'],
-  );
-  console.log(allXgf);
-
   // Preparing offensive chart data
   let xGF =
-    parseInt(getPercentile('OnIce_F_xGoals').substring(0, 2)) === 10
+    parseInt(getTimePercentile('OnIce_F_xGoals').substring(0, 2)) === 10
       ? 100
-      : parseInt(getPercentile('OnIce_F_xGoals').substring(0, 2));
+      : parseInt(getTimePercentile('OnIce_F_xGoals').substring(0, 2));
   let goals =
-    parseInt(getPercentile('I_F_goals').substring(0, 2)) === 10
+    parseInt(getTimePercentile('OnIce_F_goals').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getPercentile('I_F_goals').substring(0, 2))
+      : !parseInt(getTimePercentile('OnIce_F_goals').substring(0, 2))
       ? 0
-      : parseInt(getPercentile('I_F_goals').substring(0, 2));
+      : parseInt(getTimePercentile('OnIce_F_goals').substring(0, 2));
   let points =
-    parseInt(getPercentile('I_F_points').substring(0, 2)) === 10
+    parseInt(getTimePercentile('I_F_points').substring(0, 2)) === 10
       ? 100
-      : parseInt(getPercentile('I_F_points').substring(0, 2));
+      : parseInt(getTimePercentile('I_F_points').substring(0, 2));
 
   // Preparing defensive chart data
   let xGA =
-    parseInt(getPercentile('OnIce_A_xGoals').substring(0, 2)) === 10
+    parseInt(getTimePercentile('OnIce_A_xGoals').substring(0, 2)) === 10
       ? 100
-      : parseInt(getPercentile('OnIce_A_xGoals').substring(0, 2));
+      : parseInt(getTimePercentile('OnIce_A_xGoals').substring(0, 2));
   let goalsAgainst =
-    parseInt(getPercentile('OnIce_A_goals').substring(0, 2)) === 10
+    parseInt(getTimePercentile('OnIce_A_goals').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getPercentile('OnIce_A_goals').substring(0, 2))
+      : !parseInt(getTimePercentile('OnIce_A_goals').substring(0, 2))
       ? 0
-      : parseInt(getPercentile('OnIce_A_goals').substring(0, 2));
+      : parseInt(getTimePercentile('OnIce_A_goals').substring(0, 2));
   let giveaways =
-    parseInt(getPercentile('I_F_giveaways').substring(0, 2)) === 10
+    parseInt(getTimePercentile('I_F_giveaways').substring(0, 2)) === 10
       ? 100
-      : parseInt(getPercentile('I_F_giveaways').substring(0, 2));
+      : parseInt(getTimePercentile('I_F_giveaways').substring(0, 2));
 
   // Plotting chart data
   var offensiveGraphData = [
@@ -124,10 +93,8 @@ const PlayerDropdown = ({ players }) => {
     },
   ];
 
-  console.log(offensiveGraphData);
-
   // Gets the percentile for the given statistic
-  function getPercentile(category) {
+  function getProductionPercentile(category) {
     // Group forwards & defensemen together
     if (selectedPlayer['position'] === 'D') {
       var positionalArr = players.filter((player) => player.position === 'D');
@@ -184,6 +151,37 @@ const PlayerDropdown = ({ players }) => {
     }
   }
 
+  // Gets the percentile for the given statistic
+  function getTimePercentile(category) {
+    // Group forwards & defensemen together
+    if (selectedPlayer['position'] === 'D') {
+      var positionalArr = players.filter((player) => player.position === 'D');
+    } else {
+      var positionalArr = players.filter((player) => player.position != 'D');
+    }
+
+    // Get the maximum player value for the statistic
+    var maxValue = Math.max.apply(
+      Math,
+      positionalArr.map((obj) => {
+        return obj[category] / obj['icetime'];
+      }),
+    );
+
+    let topNumber = (selectedPlayer[category] / selectedPlayer['icetime'] / maxValue).toFixed(2);
+    console.log(typeof topNumber);
+    // Specific conditions (100% & 0&)
+    if (topNumber === '1.00') {
+      return '100%';
+    } else if (selectedPlayer[category] === 0) {
+      return 'N/A';
+    } else if (topNumber.substring(2, 3) === '0') {
+      return topNumber.substring(0, 4) + '%';
+    } else {
+      return topNumber.substring(2, 4) + '%';
+    }
+  }
+
   function combineCategories(categoryOne, categoryTwo) {
     let category1 = parseInt(categoryOne.substring(0, 2));
     let category2 = parseInt(categoryTwo.substring(0, 2));
@@ -215,30 +213,36 @@ const PlayerDropdown = ({ players }) => {
               ? selectedPlayer.position + 'W'
               : selectedPlayer.position}
           </h2>
+          <h2>{selectedPlayer['team']}</h2>
           <p>
-            Goals: <span>{getPercentile('I_F_goals')}</span>
+            Goals: <span>{getProductionPercentile('I_F_goals')}</span>
           </p>
           <p>
             Assists:{' '}
-            <span>{combineCategories(getPercentile('I_F_primaryAssists'), getPercentile('I_F_secondaryAssists'))}</span>
+            <span>
+              {combineCategories(
+                getProductionPercentile('I_F_primaryAssists'),
+                getProductionPercentile('I_F_secondaryAssists'),
+              )}
+            </span>
           </p>
           <p>
-            Points: <span>{getPercentile('I_F_points')}</span>
+            Points: <span>{getProductionPercentile('I_F_points')}</span>
           </p>
           <p>
-            xGF: <span>{getPercentile('I_F_xGoals')}</span>
+            xGF: <span>{getProductionPercentile('I_F_xGoals')}</span>
           </p>
           <p>
-            On Ice GF: <span>{getPercentile('OnIce_F_xGoals')}</span>
+            On Ice GF: <span>{getProductionPercentile('OnIce_F_xGoals')}</span>
           </p>
           <p>
-            Hits: <span>{getPercentile('I_F_hits')}</span>
+            Hits: <span>{getProductionPercentile('I_F_hits')}</span>
           </p>
           <p>
-            Blocks: <span>{getPercentile('shotsBlockedByPlayer')}</span>
+            Blocks: <span>{getProductionPercentile('shotsBlockedByPlayer')}</span>
           </p>
           <p>
-            Takeaways: <span>{getPercentile('I_F_takeaways')}</span>
+            Takeaways: <span>{getProductionPercentile('I_F_takeaways')}</span>
           </p>
           <p>
             xGA: <span>{getNegativePercentile('OnIce_A_xGoals')}</span>
@@ -247,25 +251,31 @@ const PlayerDropdown = ({ players }) => {
             On Ice GA: <span>{getNegativePercentile('OnIce_A_goals')}</span>
           </p>
           <p>
-            Games: <span>{getPercentile('games_played')}</span>
+            🚨 Per 60: <span>{getTimePercentile('I_F_goals')}</span>
+          </p>
+          <p>
+            🍏 Per 60: <span>{getProductionPercentile('expectedCases')}</span>
+          </p>
+
+          <p>
+            Games: <span>{getProductionPercentile('games_played')}</span>
           </p>
 
           <p>
             Time On Ice:{' '}
             <span>
               {/* {(selectedPlayer.icetime / 60 / selectedPlayer.games_played).toFixed(2).substring(0, 4)} */}
-              {getPercentile('icetime')}
+              {getProductionPercentile('icetime')}
             </span>
           </p>
-          <p>
-            Team: <span>{selectedPlayer['team']}</span>
-          </p>
-
           <p>
             Faceoffs: <span>{getFaceOffPercentage()}</span>
           </p>
           <p>
-            Game Score: <span>{getPercentile('gameScore')}</span>
+            Game Score: <span>{getProductionPercentile('gameScore')}</span>
+          </p>
+          <p>
+            Expected: <span>{getProductionPercentile('expectedCases')}</span>
           </p>
           <div className="fullWidth">
             <h2 className="playerChart">Offense</h2>
@@ -360,64 +370,51 @@ export default PlayerDropdown;
 {
   /* Offensive */
 }
-// I_F_flurryAdjustedxGoals
-// I_F_flurryScoreVenueAdjustedxGoals
+// Pure Production Sub Category
 // I_F_goals
 // I_F_highDangerGoals
 // I_F_highDangerShots
-// I_F_highDangerxGoals
 // I_F_lowDangerGoals
 // I_F_lowDangerShots
-// I_F_lowDangerxGoals
 // I_F_mediumDangerGoals
 // I_F_mediumDangerShots
-// I_F_mediumDangerxGoals
-// I_F_oZoneShiftEnds
-// I_F_oZoneShiftStarts
 // I_F_points
 // I_F_primaryAssists
 // I_F_reboundGoals
 // I_F_rebounds
-// I_F_reboundxGoals
 // I_F_savedShotsOnGoal
 // I_F_savedUnblockedShotAttempts
-// I_F_scoreAdjustedShotsAttempts
-// I_F_scoreAdjustedUnblockedShotAttempts
-// I_F_scoreVenueAdjustedxGoals
 // I_F_secondaryAssists
-// I_F_playContinuedInZone
 // I_F_shotsOnGoal
 // I_F_shotAttempts
+// I_F_unblockedShotAttempts
 // OnIce_F_reboundGoals
 // OnIce_F_rebounds
-// OnIce_F_reboundxGoals
-// OnIce_F_scoreAdjustedShotsAttempts
-// OnIce_F_scoreAdjustedUnblockedShotAttempts
-// OnIce_F_scoreVenueAdjustedxGoals
 // OnIce_F_shotAttempts
 // OnIce_F_shotsOnGoal
 // OnIce_F_unblockedShotAttempts
-// OnIce_F_xGoals
-// OnIce_F_xGoalsFromActualReboundsOfShots
-// OnIce_F_xGoalsFromxReboundsOfShots
-// OnIce_F_xGoals_with_earned_rebounds
-// OnIce_F_xGoals_with_earned_rebounds_scoreAdjusted
-// OnIce_F_xGoals_with_earned_rebounds_scoreFlurryAdjusted
-// OnIce_F_xOnGoal
-// I_F_xRebounds
 // OnIce_F_blockedShotAttempts
-// OnIce_F_flurryAdjustedxGoals
-// OnIce_F_flurryScoreVenueAdjustedxGoals
-// OnIce_F_goals
 // OnIce_F_highDangerGoals
 // OnIce_F_highDangerShots
-// OnIce_F_highDangerxGoals
+// OnIce_F_goals
 // OnIce_F_lowDangerGoals
 // OnIce_F_lowDangerShots
-// OnIce_F_lowDangerxGoals
 // OnIce_F_mediumDangerGoals
 // OnIce_F_mediumDangerShots
-// OnIce_F_mediumDangerxGoals
+// onIce_corsiPercentage
+// onIce_fenwickPercentage
+
+// Anything Expected / Adjusted
+// I_F_flurryAdjustedxGoals
+// I_F_flurryScoreVenueAdjustedxGoals
+// I_F_highDangerxGoals
+// I_F_lowDangerxGoals
+// I_F_mediumDangerxGoals
+// I_F_reboundxGoals
+// I_F_scoreAdjustedShotsAttempts
+// I_F_scoreAdjustedUnblockedShotAttempts
+// I_F_scoreVenueAdjustedxGoals
+// I_F_xRebounds
 // I_F_xGoals
 // I_F_xGoalsFromActualReboundsOfShots
 // I_F_xGoalsFromxReboundsOfShots
@@ -425,46 +422,66 @@ export default PlayerDropdown;
 // I_F_xGoals_with_earned_rebounds_scoreAdjusted
 // I_F_xGoals_with_earned_rebounds_scoreFlurryAdjusted
 // I_F_xOnGoal
-// I_F_unblockedShotAttempts
 // I_F_xPlayContinuedInZone
-// onIce_corsiPercentage
-// onIce_fenwickPercentage
+// OnIce_F_scoreAdjustedShotsAttempts
+// OnIce_F_scoreAdjustedUnblockedShotAttempts
+// OnIce_F_scoreVenueAdjustedxGoals
+// OnIce_F_reboundxGoals
+// OnIce_F_xGoals
+// OnIce_F_xGoalsFromActualReboundsOfShots
+// OnIce_F_xGoalsFromxReboundsOfShots
+// OnIce_F_xGoals_with_earned_rebounds
+// OnIce_F_xGoals_with_earned_rebounds_scoreAdjusted
+// OnIce_F_xGoals_with_earned_rebounds_scoreFlurryAdjusted
+// OnIce_F_xOnGoal
+// OnIce_F_flurryAdjustedxGoals
+// OnIce_F_flurryScoreVenueAdjustedxGoals
+// OnIce_F_highDangerxGoals
+// OnIce_F_lowDangerxGoals
+// OnIce_F_mediumDangerxGoals
 // onIce_xGoalsPercentage
+
+// Zones / Shifts
+// I_F_oZoneShiftEnds
+// I_F_oZoneShiftStarts
+// I_F_playContinuedInZone
 // fenwickForAfterShifts
 
 {
   /* Defensive */
 }
+// Pure Production Sub Category
 // I_F_blockedShotAttempts
 // I_F_dZoneGiveaways
-// I_F_dZoneShiftEnds
-// I_F_dZoneShiftStarts
 // I_F_giveaways
 // I_F_hits
 // I_F_takeaways
 // OnIce_A_blockedShotAttempts
-// OnIce_A_flurryAdjustedxGoals
-// OnIce_A_flurryScoreVenueAdjustedxGoals
 // OnIce_A_goals
 // OnIce_A_highDangerGoals
 // OnIce_A_highDangerShots
-// OnIce_A_highDangerxGoals
 // OnIce_A_lowDangerGoals
 // OnIce_A_lowDangerShots
-// OnIce_A_lowDangerxGoals
 // OnIce_A_mediumDangerGoals
 // OnIce_A_mediumDangerShots
-// OnIce_A_mediumDangerxGoals
 // OnIce_A_missedShots
 // OnIce_A_reboundGoals
 // OnIce_A_rebounds
+// OnIce_A_shotAttempts
+// OnIce_A_shotsOnGoal
+// OnIce_A_unblockedShotAttempts
+// shotsBlockedByPlayer
+
+// Anything Expected / Adjusted
+// OnIce_A_flurryAdjustedxGoals
+// OnIce_A_flurryScoreVenueAdjustedxGoals
+// OnIce_A_highDangerxGoals
+// OnIce_A_lowDangerxGoals
+// OnIce_A_mediumDangerxGoals
 // OnIce_A_reboundxGoals
 // OnIce_A_scoreAdjustedShotsAttempts
 // OnIce_A_scoreAdjustedUnblockedShotAttempts
 // OnIce_A_scoreVenueAdjustedxGoals
-// OnIce_A_shotAttempts
-// OnIce_A_shotsOnGoal
-// OnIce_A_unblockedShotAttempts
 // OnIce_A_xGoals
 // OnIce_A_xGoalsFromActualReboundsOfShots
 // OnIce_A_xGoalsFromxReboundsOfShots
@@ -472,27 +489,23 @@ export default PlayerDropdown;
 // OnIce_A_xGoals_with_earned_rebounds_scoreAdjusted
 // OnIce_A_xGoals_with_earned_rebounds_scoreFlurryAdjusted
 // OnIce_A_xOnGoal
-// shotsBlockedByPlayer
-// fenwickAgainstAfterShifts
 // xGoalsAgainstAfterShifts
 
+// Zones / Shifts
+// I_F_dZoneShiftEnds
+// I_F_dZoneShiftStarts
+// fenwickAgainstAfterShifts
 {
   /* Neutral */
 }
+// Pure Production Sub Category
 // I_F_faceOffsWon
 // I_F_flyShiftEnds
-// I_F_flyShiftStarts
 // I_F_missedShots
-// I_F_neutralZoneShiftEnds
-// I_F_neutralZoneShiftStarts
 // I_F_penalityMinutes
 // I_F_shifts
 // OffIce_A_shotAttempts
-// OffIce_A_xGoals
 // OffIce_F_shotAttempts
-// OffIce_F_xGoals
-// xGoalsForAfterShifts
-// gameScore
 // games_played
 // iceTimeRank
 // icetime
@@ -500,8 +513,6 @@ export default PlayerDropdown;
 // corsiAgainstAfterShifts
 // offIce_corsiPercentage
 // offIce_fenwickPercentage
-// offIce_xGoalsPercentage
-// shifts
 // situation
 // team
 // timeOnBench
@@ -511,16 +522,25 @@ export default PlayerDropdown;
 // penalityMinutesDrawn
 // penalties
 // penaltiesDrawn
-// expectedGoalDifferential
-
-{
-  /* Need some clarity */
-}
 // I_F_playStopped
 // I_F_freeze
 // I_F_playContinuedOutsideZone
+// OnIce_F_missedShots
+// actualOnIceGoalsAgainst
+
+// Anything Expected / Adjusted
+// OffIce_A_xGoals
+// OffIce_F_xGoals
+// gameScore
+// xGoalsForAfterShifts
+// offIce_xGoalsPercentage
+// expectedGoalDifferential
 // I_F_xFreeze
 // I_F_xPlayContinuedOutsideZone
 // I_F_xPlayStopped
-// OnIce_F_missedShots
-// actualOnIceGoalsAgainst
+
+// Zones / Shifts
+// I_F_flyShiftStarts
+// I_F_neutralZoneShiftEnds
+// I_F_neutralZoneShiftStarts
+// shifts

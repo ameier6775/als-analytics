@@ -203,7 +203,6 @@ const PlayerDropdown = ({ players }) => {
 
   return (
     <div>
-      {/* <img src="https://1000logos.net/wp-content/uploads/2017/05/NHL-Logo.png" alt="User avatar" width={50} /> */}
       <Select onChange={onChange} options={players} />
       {selectedPlayer ? (
         <div id={selectedPlayer.playerId} className="playerCard">
@@ -233,49 +232,11 @@ const PlayerDropdown = ({ players }) => {
             xGF: <span>{getProductionPercentile('I_F_xGoals')}</span>
           </p>
           <p>
-            On Ice GF: <span>{getProductionPercentile('OnIce_F_xGoals')}</span>
+            🧊 GF: <span>{getProductionPercentile('OnIce_F_xGoals')}</span>
           </p>
           <p>
             Hits: <span>{getProductionPercentile('I_F_hits')}</span>
           </p>
-          <p>
-            Blocks: <span>{getProductionPercentile('shotsBlockedByPlayer')}</span>
-          </p>
-          <p>
-            Takeaways: <span>{getProductionPercentile('I_F_takeaways')}</span>
-          </p>
-          <p>
-            xGA: <span>{getNegativePercentile('OnIce_A_xGoals')}</span>
-          </p>
-          <p>
-            On Ice GA: <span>{getNegativePercentile('OnIce_A_goals')}</span>
-          </p>
-          <p>
-            🚨 Per 60: <span>{getTimePercentile('I_F_goals')}</span>
-          </p>
-          <p className="sameCategory">
-            🍏 Per 60:{' '}
-            <span>
-              {combineCategories(getTimePercentile('I_F_primaryAssists'), getTimePercentile('I_F_secondaryAssists'))}
-            </span>
-            <span>
-              {combineCategories(getTimePercentile('I_F_primaryAssists'), getTimePercentile('I_F_secondaryAssists'))}
-            </span>
-          </p>
-          <p>
-            🥅 Per 60: <span>{getProductionPercentile('I_F_points')}</span>
-          </p>
-          <p>
-            🍏 Per 60: <span>{getProductionPercentile('expectedCases')}</span>
-          </p>
-          <p>
-            🍏 Per 60: <span>{getProductionPercentile('expectedCases')}</span>
-          </p>
-
-          <p>
-            Games: <span>{getProductionPercentile('games_played')}</span>
-          </p>
-
           <p>
             Time On Ice:{' '}
             <span>
@@ -283,20 +244,58 @@ const PlayerDropdown = ({ players }) => {
               {getProductionPercentile('icetime')}
             </span>
           </p>
+
+          <p>
+            Takeaways: <span>{getProductionPercentile('I_F_takeaways')}</span>
+          </p>
           <p>
             Faceoffs: <span>{getFaceOffPercentage()}</span>
           </p>
           <p>
             Game Score: <span>{getProductionPercentile('gameScore')}</span>
           </p>
+
+          <p>
+            🚨 Per 60: <span>{getTimePercentile('I_F_goals')}</span>
+          </p>
+          <p>
+            🍏 Per 60:{' '}
+            <span>
+              {combineCategories(getTimePercentile('I_F_primaryAssists'), getTimePercentile('I_F_secondaryAssists'))}
+            </span>
+          </p>
+          <p>
+            🥅 Per 60: <span>{getTimePercentile('I_F_points')}</span>
+          </p>
+          <p>
+            xGA: <span>{getNegativePercentile('OnIce_A_xGoals')}</span>
+          </p>
+          <p>
+            🧊 GA: <span>{getNegativePercentile('OnIce_A_goals')}</span>
+          </p>
+
+          <p>
+            Blocks: <span>{getProductionPercentile('shotsBlockedByPlayer')}</span>
+          </p>
+
+          <p>
+            Games: <span>{getProductionPercentile('games_played')}</span>
+          </p>
+          <p>
+            Giveaways: <span>{getProductionPercentile('I_F_giveaways')}</span>
+          </p>
+          <p>
+            Shot Attempts: <span>{getProductionPercentile('I_F_shotAttempts')}</span>
+          </p>
+
           <p>
             Expected: <span>{getProductionPercentile('expectedCases')}</span>
           </p>
-          <div className="fullWidth">
+          <div className="fullWidthChart">
             <h2 className="playerChart">Offense</h2>
             <LineChart
-              width={600}
-              height={200}
+              width={1200}
+              height={280}
               data={offensiveGraphData}
               margin={{
                 top: 15,
@@ -332,11 +331,11 @@ const PlayerDropdown = ({ players }) => {
               />
             </LineChart>
           </div>
-          <div className="fullWidth">
+          <div className="fullWidthChart">
             <h2 className="playerChart">Defense</h2>
             <LineChart
-              width={600}
-              height={200}
+              width={1200}
+              height={280}
               data={defensiveGraphData}
               margin={{
                 top: 15,

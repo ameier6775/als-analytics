@@ -80,14 +80,14 @@ tr {
   box-sizing: border-box;
 }
 
-.fullWidth {
+.fullWidthChart {
   display: flex;
   min-width: 75%;
   max-width: 100%;
   width: min-content;
   margin: auto;
   margin-bottom: 10px;
-  padding: auto;
+  padding: 20px;
   align-items: center;
   border: 2px solid rgb(255, 174, 0);
 }
@@ -120,8 +120,8 @@ tr {
 .playerChart {
   align-self: center;
   margin-left: auto;
-  /* color: blue; */
-  /* background-color: lightgray; */
+  color: lightblue;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .playerCard {
@@ -155,10 +155,14 @@ tr {
   justify-content: center;
   color: #333333;
   background: rgb(255, 174, 0);
+  /* margin-bottom: 2rem; */
+}
+.playerCard span span {
 }
 
 .sameCategory {
-  position: fixed;
+  /* position: fixed; */
+  margin-bottom: 3rem;
 }
 
 .sideBySide {

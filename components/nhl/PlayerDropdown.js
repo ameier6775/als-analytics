@@ -253,8 +253,11 @@ const PlayerDropdown = ({ players }) => {
           <p>
             🚨 Per 60: <span>{getTimePercentile('I_F_goals')}</span>
           </p>
-          <p>
+          <p className="sameCategory">
             🍏 Per 60:{' '}
+            <span>
+              {combineCategories(getTimePercentile('I_F_primaryAssists'), getTimePercentile('I_F_secondaryAssists'))}
+            </span>
             <span>
               {combineCategories(getTimePercentile('I_F_primaryAssists'), getTimePercentile('I_F_secondaryAssists'))}
             </span>

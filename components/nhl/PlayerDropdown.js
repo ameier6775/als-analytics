@@ -40,6 +40,14 @@ const PlayerDropdown = ({ players }) => {
     parseInt(getTimePercentile('I_F_points').substring(0, 2)) === 10
       ? 100
       : parseInt(getTimePercentile('I_F_points').substring(0, 2));
+  let shotAttemptsFor =
+    parseInt(getTimePercentile('OnIce_F_shotAttempts').substring(0, 2)) === 10
+      ? 100
+      : parseInt(getTimePercentile('OnIce_F_shotAttempts').substring(0, 2));
+  let reboundsFor =
+    parseInt(getTimePercentile('I_F_rebounds').substring(0, 2)) === 10
+      ? 100
+      : parseInt(getTimePercentile('I_F_rebounds').substring(0, 2));
 
   // Preparing defensive chart data
   let xGA =
@@ -56,39 +64,71 @@ const PlayerDropdown = ({ players }) => {
     parseInt(getTimePercentile('I_F_giveaways').substring(0, 2)) === 10
       ? 100
       : parseInt(getTimePercentile('I_F_giveaways').substring(0, 2));
+  let shotAttemptsAgainst =
+    parseInt(getTimePercentile('OnIce_A_shotAttempts').substring(0, 2)) === 10
+      ? 100
+      : parseInt(getTimePercentile('OnIce_A_shotAttempts').substring(0, 2));
+  let reboundsAgainst =
+    parseInt(getTimePercentile('OnIce_A_reboundGoals').substring(0, 2)) === 10
+      ? 100
+      : parseInt(getTimePercentile('OnIce_A_reboundGoals').substring(0, 2));
 
   // Plotting chart data
   var offensiveGraphData = [
-    {
-      category: 'xGF',
-      score: xGF,
-      fullMark: 100,
-    },
-    {
-      category: '🧊 GF Per 60',
-      score: goals,
-      fullMark: 100,
-    },
     {
       category: 'Points',
       score: points,
       fullMark: 100,
     },
-  ];
-  var defensiveGraphData = [
+
     {
-      category: 'xGA',
-      score: xGA,
+      category: '🧊 Goals',
+      score: goals,
       fullMark: 100,
     },
     {
-      category: '🧊 GA Per 60',
+      category: 'Expected Goals',
+      score: xGF,
+      fullMark: 100,
+    },
+
+    {
+      category: '🧊 Shot Attempts',
+      score: shotAttemptsFor,
+      fullMark: 100,
+    },
+    {
+      category: 'Net Front',
+      score: reboundsFor,
+      fullMark: 100,
+    },
+  ];
+  var defensiveGraphData = [
+    {
+      category: 'Giveaways',
+      score: giveaways,
+      fullMark: 100,
+    },
+
+    {
+      category: '🧊 Goals',
       score: goalsAgainst,
       fullMark: 100,
     },
     {
-      category: 'Giveaways',
-      score: giveaways,
+      category: 'Expected Goals',
+      score: xGA,
+      fullMark: 100,
+    },
+
+    {
+      category: '🧊 Shot Attempts',
+      score: shotAttemptsAgainst,
+      fullMark: 100,
+    },
+    {
+      category: 'Net Front',
+      score: reboundsAgainst,
       fullMark: 100,
     },
   ];
@@ -292,7 +332,7 @@ const PlayerDropdown = ({ players }) => {
             Expected: <span>{getProductionPercentile('expectedCases')}</span>
           </p>
           <div className="fullWidthChart">
-            <h2 className="playerChart">Offense</h2>
+            <h2 className="playerChart">Offense Per 60</h2>
             <LineChart
               width={1200}
               height={280}
@@ -332,7 +372,7 @@ const PlayerDropdown = ({ players }) => {
             </LineChart>
           </div>
           <div className="fullWidthChart">
-            <h2 className="playerChart">Defense</h2>
+            <h2 className="playerChart">Defense Per 60</h2>
             <LineChart
               width={1200}
               height={280}

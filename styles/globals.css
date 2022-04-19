@@ -142,7 +142,7 @@ tr {
   margin-bottom: 5px;
 }
 .playerCard p {
-  width: 10%;
+  width: 20%;
   float: left;
   color: rgb(255, 174, 0);
   background: #333333;
@@ -157,8 +157,6 @@ tr {
   color: #333333;
   background: rgb(255, 174, 0);
   /* margin-bottom: 2rem; */
-}
-.playerCard span span {
 }
 
 .sameCategory {

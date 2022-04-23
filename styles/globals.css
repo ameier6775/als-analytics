@@ -17,6 +17,7 @@ h1 {
   text-align: center;
   font-weight: 500;
   font-size: 4rem;
+  color: rgb(255, 174, 0);
 }
 
 h2 {
@@ -91,22 +92,30 @@ tr {
   padding: 20px;
   align-items: center;
   border: 2px solid rgb(255, 174, 0);
+  font-family: Trebuchet MS, sans-serif;
+}
+
+.homeHeader {
+  color: rgb(255, 174, 0);
 }
 
 .leagues {
   display: flex;
   margin: 1rem;
   padding: 1rem;
-  background-color: rgb(200, 200, 200);
-  color: black;
-  border: 5px double black;
+  background-color: #333333;
+  color: rgb(255, 174, 0);
+  border: 5px double rgb(255, 174, 0);
 }
 
 .leaguesHeader {
   align-self: center;
   text-align: center;
-  width: 50%;
+  width: auto;
+  margin: auto;
   font-weight: 400;
+  font-style: italic;
+  border-bottom: 0.5px solid rgb(255, 174, 0);
 }
 
 .leaguesSubHeader {
@@ -134,10 +143,15 @@ tr {
 .playerCard h1 {
   width: 100%;
   position: relative;
+  font-family: OCR A Std, monospace;
+  font-weight: 500;
 }
+
 .playerCard h2 {
   width: 100%;
   position: relative;
+  font-family: OCR A Std, monospace;
+  font-weight: 500;
   text-align: center;
   margin-bottom: 5px;
 }
@@ -149,6 +163,7 @@ tr {
   padding: 5px;
   margin-bottom: 5px;
   border: 1px solid rgb(255, 174, 0);
+  font-family: Chalkduster, fantasy;
 }
 
 .playerCard span {
@@ -156,7 +171,9 @@ tr {
   justify-content: center;
   color: #333333;
   background: rgb(255, 174, 0);
-  /* margin-bottom: 2rem; */
+  font-family: Marker Felt, fantasy;
+  font-weight: 600;
+  font-size: large;
 }
 
 .sameCategory {

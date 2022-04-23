@@ -12,7 +12,7 @@ const Home: NextPage = () => {
   ];
   return (
     <>
-      <h1 className="font-mono">Browse Different Leagues</h1>
+      <h1 className="font-mono homeHeader">Browse Different Leagues</h1>
       {leagues.map((league) => (
         <div key={league.id} className="leagues">
           <Link passHref={true} href={`/${league.abbreviation}`}>

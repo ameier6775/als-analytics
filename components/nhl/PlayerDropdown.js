@@ -82,7 +82,7 @@ const PlayerDropdown = ({ players }) => {
     },
 
     {
-      category: '🧊 Goals',
+      category: '🧊 Goals For',
       score: goals,
       fullMark: 100,
     },
@@ -111,7 +111,7 @@ const PlayerDropdown = ({ players }) => {
     },
 
     {
-      category: '🧊 Goals',
+      category: '🧊 Goals Against',
       score: goalsAgainst,
       fullMark: 100,
     },
@@ -253,6 +253,7 @@ const PlayerDropdown = ({ players }) => {
               : selectedPlayer.position}
           </h2>
           <h2>{selectedPlayer['team']}</h2>
+
           <p>
             Goals: <span>{getProductionPercentile('I_F_goals')}</span>
           </p>
@@ -269,10 +270,10 @@ const PlayerDropdown = ({ players }) => {
             Points: <span>{getProductionPercentile('I_F_points')}</span>
           </p>
           <p>
-            xGF: <span>{getProductionPercentile('I_F_xGoals')}</span>
+            Expected Goals For: <span>{getProductionPercentile('I_F_xGoals')}</span>
           </p>
           <p>
-            🧊 GF: <span>{getProductionPercentile('OnIce_F_xGoals')}</span>
+            🧊 Goals For: <span>{getProductionPercentile('OnIce_F_xGoals')}</span>
           </p>
           <p>
             🚨 Per 60: <span>{getTimePercentile('I_F_goals')}</span>
@@ -287,10 +288,10 @@ const PlayerDropdown = ({ players }) => {
             🥅 Per 60: <span>{getTimePercentile('I_F_points')}</span>
           </p>
           <p>
-            xGA: <span>{getNegativePercentile('OnIce_A_xGoals')}</span>
+            Expected Goals Against: <span>{getNegativePercentile('OnIce_A_xGoals')}</span>
           </p>
           <p>
-            🧊 GA: <span>{getNegativePercentile('OnIce_A_goals')}</span>
+            🧊 Goals Against: <span>{getNegativePercentile('OnIce_A_goals')}</span>
           </p>
           <p>
             Shot Attempts: <span>{getProductionPercentile('I_F_shotAttempts')}</span>
@@ -311,22 +312,16 @@ const PlayerDropdown = ({ players }) => {
             Games: <span>{getProductionPercentile('games_played')}</span>
           </p>
           <p>
-            Time On Ice:{' '}
-            <span>
-              {/* {(selectedPlayer.icetime / 60 / selectedPlayer.games_played).toFixed(2).substring(0, 4)} */}
-              {getProductionPercentile('icetime')}
-            </span>
+            Time On Ice: <span>{getProductionPercentile('icetime')}</span>
           </p>
-
-          <p>
+          {/* <p>
             Faceoffs: <span>{getFaceOffPercentage()}</span>
           </p>
           <p>
             Game Score: <span>{getProductionPercentile('gameScore')}</span>
-          </p>
-
+          </p> */}
           <p>
-            Zone Starts ( O / N / D ):{' '}
+            Offensive Zone Starts:{' '}
             <span>
               {parseFloat(
                 selectedPlayer['I_F_oZoneShiftStarts'] /
@@ -335,7 +330,12 @@ const PlayerDropdown = ({ players }) => {
                     selectedPlayer['I_F_neutralZoneShiftStarts']),
               )
                 .toFixed(2)
-                .substring(2, 4) + '% / '}
+                .substring(2, 4) + '%'}
+            </span>
+          </p>
+          <p>
+            Neutral Zone Starts:{' '}
+            <span>
               {parseFloat(
                 selectedPlayer['I_F_neutralZoneShiftStarts'] /
                   (selectedPlayer['I_F_oZoneShiftStarts'] +
@@ -343,7 +343,12 @@ const PlayerDropdown = ({ players }) => {
                     selectedPlayer['I_F_neutralZoneShiftStarts']),
               )
                 .toFixed(2)
-                .substring(2, 4) + '% / '}
+                .substring(2, 4) + '%'}
+            </span>
+          </p>
+          <p>
+            Defensive Zone Starts:{' '}
+            <span>
               {parseFloat(
                 selectedPlayer['I_F_dZoneShiftStarts'] /
                   (selectedPlayer['I_F_oZoneShiftStarts'] +

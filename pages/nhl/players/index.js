@@ -29,7 +29,6 @@ import {
   Radar,
 } from 'recharts';
 import Select from 'react-select';
-import { createLoopVariable } from 'typescript';
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 

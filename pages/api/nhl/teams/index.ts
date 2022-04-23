@@ -118,15 +118,6 @@ export default async function handler(req, res) {
           (rowObject.missedShotsFor * 0.0333 + rowObject.blockedShotAttemptsFor * 0.0333),
       ) / rowObject.games_played;
 
-    // (team.xPlayContinuedOutsideZoneFor * 0.01 +
-    //   team.missedShotsFor * 0.01 +
-    //   team.blockedShotAttemptsFor * 0.01 +
-    //   team.playStoppedFor * 0.01)
-
-    // if (rowNumber === 8) {
-    //   console.log(rowObject.position);
-    // }
-
     if (rowNumber !== 1) {
       dataMoneyPuck.push(rowObject);
     }
@@ -134,8 +125,6 @@ export default async function handler(req, res) {
 
   // Configuring the average offensive awareness based off the model above
   const dataMoneyPuckAll = dataMoneyPuck.filter((team) => team.situation === 'all');
-  // const averageOffensiveAwareness =
-  //   dataMoneyPuckAll.reduce((total, next) => total + parseFloat(next.offensiveAwareness), 0) / dataMoneyPuckAll.length;
   const averageOffensiveAwareness = dataMoneyPuckAll.reduce(
     (first, second) =>
       parseInt(first.offensiveAwareness) > parseInt(second.offensiveAwareness)
@@ -143,8 +132,6 @@ export default async function handler(req, res) {
         : parseFloat(second.offensiveAwareness),
     0,
   );
-
-  console.log(averageOffensiveAwareness);
 
   // Trying to formulate a score
   dataMoneyPuckAll.map((team) => {

@@ -29,7 +29,9 @@ import {
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
-const COLORS = ['#2c2d34', '#e94822', '#f2910a', '#efd510'];
+const COLORS = ['#FFADAD', '#CAFFBF', '#BDB2FF', '#FFD6A5', '#9BF6FF', '#FFC6FF', '#FDFFB6', '#A0C4FF', '#FFFFFC'];
+const ZONECOLORS = ['#fe2712', '#ff7e00', '#ffbe00'];
+const COMPARISONCOLORS = ['#ff1b6b', '#45caff'];
 
 export default function Teams() {
   const { data, error } = useSWR('../api/nhl/teams/', fetcher);
@@ -189,10 +191,11 @@ export default function Teams() {
 
   return (
     <>
-      <div className="fullWidth">
+      <div className="teamCharts">
         {/* Custom Made Analytics */}
-        <h2>Als Analytics</h2>
-        <h3>Decision Making (Offensive Zone)</h3>
+        <h1>Als Analytics</h1>
+        <h2>Decision Making</h2>
+        <h3>Offensive Zone</h3>
         <BarChart
           width={1400}
           height={600}
@@ -208,8 +211,6 @@ export default function Teams() {
           <XAxis dataKey="name" />
           <YAxis tick={false} />
           <Tooltip />
-          <Legend />
-
           <Bar dataKey="offensiveAwareness" shape={<TriangleBar />}>
             {allSituations.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -220,9 +221,9 @@ export default function Teams() {
         {/* Radial Bar Chart */}
         {/* East */}
         <h2>Points %</h2>
-        <h3>East</h3>
+        <h3>Eastern Conference</h3>
         <RadialBarChart
-          width={1150}
+          width={1400}
           height={975}
           innerRadius={100}
           outerRadius={500}
@@ -235,14 +236,14 @@ export default function Teams() {
         >
           <RadialBar
             label={{
-              fill: '#ffffff',
+              fill: '#333333',
               position: 'insideStart',
               fontSize: '18px',
-              fontWeight: 500,
+              fontWeight: 600,
               fontFamily: 'OCR A Std, monospace',
               fontStretch: 'max',
             }}
-            background={{ fill: '#4682b4' }}
+            background={{ fill: '#c2c2c2' }}
             clockWise={true}
             dataKey="pointsPercentage"
             animationEasing="ease-in"
@@ -254,9 +255,9 @@ export default function Teams() {
           <Tooltip />
         </RadialBarChart>
         {/* West */}
-        <h3>West</h3>
+        <h3>Western Conference</h3>
         <RadialBarChart
-          width={1150}
+          width={1400}
           height={975}
           innerRadius={100}
           outerRadius={500}
@@ -269,20 +270,20 @@ export default function Teams() {
         >
           <RadialBar
             label={{
-              fill: '#ffffff',
+              fill: '#333333',
               position: 'insideStart',
               fontSize: '18px',
-              fontWeight: 500,
+              fontWeight: 600,
               fontFamily: 'OCR A Std, monospace',
               fontStretch: 'max',
             }}
-            background={{ fill: '#4682b4' }}
+            background={{ fill: '#c2c2c2' }}
             clockWise={true}
             dataKey="pointsPercentage"
             animationEasing="ease-in"
           >
             {west.map((team, index) => (
-              <Cell key={team.name} value={team.name + ' - ' + team.points} fill={COLORS[index % COLORS.length]}></Cell>
+              <Cell key={team.name} value={team.name + ': ' + team.points} fill={COLORS[index % COLORS.length]}></Cell>
             ))}
           </RadialBar>
           <Tooltip />
@@ -291,7 +292,7 @@ export default function Teams() {
         {/* Even Strength */}
         <h2>Even Strength</h2>
         {/* Area Chart */}
-        <h3>Expected Goals For By Zone</h3>
+        <h3>Expected Goals For By Type</h3>
         <AreaChart
           width={1400}
           height={600}
@@ -308,22 +309,22 @@ export default function Teams() {
           <XAxis dataKey="team" />
           <YAxis tickFormatter={toPercent} />
           <Tooltip content={renderTooltipContent} />
-          <Area type="monotone" dataKey="lowDangerxGoalsFor" stackId="1" stroke="#222831" fill="#efd510" />
-          <Area type="monotone" dataKey="mediumDangerxGoalsFor" stackId="1" stroke="#222831" fill="#f2910a" />
-          <Area type="monotone" dataKey="highDangerxGoalsFor" stackId="1" stroke="#222831" fill="#e94822" />
+          <Area type="monotone" dataKey="lowDangerxGoalsFor" stackId="1" stroke="#222831" fill={ZONECOLORS[2]} />
+          <Area type="monotone" dataKey="mediumDangerxGoalsFor" stackId="1" stroke="#222831" fill={ZONECOLORS[1]} />
+          <Area type="monotone" dataKey="highDangerxGoalsFor" stackId="1" stroke="#222831" fill={ZONECOLORS[0]} />
         </AreaChart>
 
         {/* Types of Goals */}
-        <h3>Goal Types</h3>
+        <h3>Actual Goals For By Type</h3>
         <BarChart width={1400} height={600} data={evenStrength}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" fontSize="13px" fontStyle="italic" tickSize={10} />
           <YAxis dataKey="goalsFor" />
           <Tooltip />
           <Legend />
-          <Bar dataKey="lowDangerGoalsFor" stackId="a" fill={COLORS[3]} />
-          <Bar dataKey="mediumDangerGoalsFor" stackId="a" fill={COLORS[2]} />
-          <Bar dataKey="highDangerGoalsFor" stackId="a" fill={COLORS[1]} />
+          <Bar dataKey="lowDangerGoalsFor" stackId="a" fill={ZONECOLORS[2]} />
+          <Bar dataKey="mediumDangerGoalsFor" stackId="a" fill={ZONECOLORS[1]} />
+          <Bar dataKey="highDangerGoalsFor" stackId="a" fill={ZONECOLORS[0]} />
         </BarChart>
 
         {/* Offense */}
@@ -337,7 +338,7 @@ export default function Teams() {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis fontSize="13px" dataKey="name" name="Team" fontStyle="italic" tickSize={10}></XAxis>
           <YAxis tickSize={10}>
-            <Label
+            {/* <Label
               value="🚨 GOALS 🚨"
               position="insideLeft"
               angle={-90}
@@ -346,13 +347,12 @@ export default function Teams() {
               fontWeight={500}
               fontSize="19px"
               fontFamily="OCR A Std, monospace"
-              color="red"
-            />
+            /> */}
           </YAxis>
           <Tooltip value="Goals" />
           <Legend />
-          <Line type="monotone" dataKey="xGoalsFor" stroke={COLORS[2]} />
-          <Line type="monotone" dataKey="goalsFor" stroke={'#4682b4'} />
+          <Line type="monotone" dataKey="xGoalsFor" stroke={COMPARISONCOLORS[0]} />
+          <Line type="monotone" dataKey="goalsFor" stroke={COMPARISONCOLORS[1]} />
         </LineChart>
         {/* Defense */}
         <h3>Expected vs Actual Goals Against</h3>
@@ -365,7 +365,7 @@ export default function Teams() {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis fontSize="13px" dataKey="name" name="Team" fontStyle="italic" tickSize={10}></XAxis>
           <YAxis tickSize={10}>
-            <Label
+            {/* <Label
               value="🚨 GOALS 🚨"
               position="insideLeft"
               angle={-90}
@@ -374,27 +374,26 @@ export default function Teams() {
               fontWeight={500}
               fontSize="19px"
               fontFamily="OCR A Std, monospace"
-              color="red"
-            />
+            /> */}
           </YAxis>
           <Tooltip value="Goals" />
           <Legend />
-          <Line type="monotone" dataKey="xGoalsAgainst" stroke={COLORS[2]} />
-          <Line type="monotone" dataKey="goalsAgainst" stroke={'#4682b4'} />
+          <Line type="monotone" dataKey="xGoalsAgainst" stroke={COMPARISONCOLORS[0]} />
+          <Line type="monotone" dataKey="goalsAgainst" stroke={COMPARISONCOLORS[1]} />
         </LineChart>
         {/* Power Play */}
         <h2>Power Play</h2>
         {/* Types of Goals */}
-        <h3>Goal Types</h3>
+        <h3>Actual Goals For By Type</h3>
         <BarChart width={1400} height={600} data={powerPlay}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" fontSize="13px" fontStyle="italic" tickSize={10} />
           <YAxis dataKey="goalsFor" />
           <Tooltip />
           <Legend />
-          <Bar dataKey="lowDangerGoalsFor" stackId="a" fill={COLORS[3]} />
-          <Bar dataKey="mediumDangerGoalsFor" stackId="a" fill={COLORS[2]} />
-          <Bar dataKey="highDangerGoalsFor" stackId="a" fill={COLORS[1]} />
+          <Bar dataKey="lowDangerGoalsFor" stackId="a" fill={ZONECOLORS[2]} />
+          <Bar dataKey="mediumDangerGoalsFor" stackId="a" fill={ZONECOLORS[1]} />
+          <Bar dataKey="highDangerGoalsFor" stackId="a" fill={ZONECOLORS[0]} />
         </BarChart>
 
         {/* Offense */}
@@ -408,7 +407,7 @@ export default function Teams() {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis fontSize="13px" dataKey="name" name="Team" fontStyle="italic" tickSize={10}></XAxis>
           <YAxis tickSize={10}>
-            <Label
+            {/* <Label
               value="🚨 GOALS 🚨"
               position="insideLeft"
               angle={-90}
@@ -418,26 +417,26 @@ export default function Teams() {
               fontSize="19px"
               fontFamily="OCR A Std, monospace"
               color="red"
-            />
+            /> */}
           </YAxis>
           <Tooltip value="Goals" />
           <Legend />
-          <Line type="monotone" dataKey="xGoalsFor" stroke={COLORS[2]} />
-          <Line type="monotone" dataKey="goalsFor" stroke={'#4682b4'} />
+          <Line type="monotone" dataKey="xGoalsFor" stroke={COMPARISONCOLORS[0]} />
+          <Line type="monotone" dataKey="goalsFor" stroke={COMPARISONCOLORS[1]} />
         </LineChart>
         {/* Short Handed */}
         <h2>Short Handed</h2>
         {/* Types of Goals */}
-        <h3>Goal Types</h3>
+        <h3>Actual Goals Against By Type</h3>
         <BarChart width={1400} height={600} data={shortHanded}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" fontSize="13px" fontStyle="italic" tickSize={10} />
           <YAxis dataKey="goalsAgainst" />
           <Tooltip />
           <Legend />
-          <Bar dataKey="lowDangerGoalsAgainst" stackId="a" fill={COLORS[3]} />
-          <Bar dataKey="mediumDangerGoalsAgainst" stackId="a" fill={COLORS[2]} />
-          <Bar dataKey="highDangerGoalsAgainst" stackId="a" fill={COLORS[1]} />
+          <Bar dataKey="lowDangerGoalsAgainst" stackId="a" fill={ZONECOLORS[2]} />
+          <Bar dataKey="mediumDangerGoalsAgainst" stackId="a" fill={ZONECOLORS[1]} />
+          <Bar dataKey="highDangerGoalsAgainst" stackId="a" fill={ZONECOLORS[0]} />
         </BarChart>
 
         {/* Defense */}
@@ -451,7 +450,7 @@ export default function Teams() {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis fontSize="13px" dataKey="name" name="Team" fontStyle="italic" tickSize={10}></XAxis>
           <YAxis tickSize={10}>
-            <Label
+            {/* <Label
               value="🚨 GOALS 🚨"
               position="insideLeft"
               angle={-90}
@@ -460,13 +459,12 @@ export default function Teams() {
               fontWeight={500}
               fontSize="19px"
               fontFamily="OCR A Std, monospace"
-              color="red"
-            />
+            /> */}
           </YAxis>
           <Tooltip value="Goals" />
           <Legend />
-          <Line type="monotone" dataKey="xGoalsAgainst" stroke={COLORS[2]} />
-          <Line type="monotone" dataKey="goalsAgainst" stroke={'#4682b4'} />
+          <Line type="monotone" dataKey="xGoalsAgainst" stroke={COMPARISONCOLORS[0]} />
+          <Line type="monotone" dataKey="goalsAgainst" stroke={COMPARISONCOLORS[1]} />
         </LineChart>
       </div>
     </>

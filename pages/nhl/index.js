@@ -11,10 +11,21 @@ export default function Teams() {
   if (error) return <div>failed to load</div>;
   if (!data) return <div>loading...</div>;
 
-  // const central = data.conferences[0].divisions[1];
-  // const pacific = data.conferences[0].divisions[0];
-  // const metro = data.conferences[1].divisions[0];
-  // const atlantic = data.conferences[1].divisions[1];
+  var teamCardArray = [];
+  for (let i = 0; i < data.dataMoneyPuck.length; i++) {
+    teamCardArray.push(data.dataMoneyPuck[i]);
+  }
+
+  {
+    teamCardArray
+      ? teamCardArray.forEach((team) => {
+          team.value = team.name;
+          team.label = team.name;
+        })
+      : teams;
+  }
+
+  console.log(teamCardArray);
 
   return (
     <>

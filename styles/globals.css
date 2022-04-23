@@ -224,3 +224,20 @@ tr {
   padding: 0.5rem;
   font-family: OCR A Std, monospace;
 }
+
+.teamCharts {
+  text-align: center;
+  color: rgb(255, 174, 0);
+  min-width: 75%;
+  max-width: 100%;
+  width: fit-content;
+  margin: auto;
+  padding: 20px;
+  align-items: center;
+  border: 2px solid rgb(255, 174, 0);
+  font-family: Trebuchet MS, sans-serif;
+}
+
+.teamCharts h2 {
+  color: lightgray;
+}

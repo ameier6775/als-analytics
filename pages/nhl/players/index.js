@@ -2,7 +2,6 @@
 import React, { useRef, useState } from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
-import PlayersTable from '../../../components/nhl/PlayersTable';
 import PlayerDropdown from '../../../components/nhl/PlayerDropdown';
 import {
   XAxis,

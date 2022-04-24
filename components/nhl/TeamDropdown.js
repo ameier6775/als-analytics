@@ -35,16 +35,26 @@ const TeamDropdown = ({ teams }) => {
         return obj[category];
       }),
     );
+    var minValue = Math.min.apply(
+      Math,
+      positionalArr.map((obj) => {
+        return obj[category];
+      }),
+    );
+    var difference = maxValue - minValue;
+    var teamValue = selectedTeam[category];
+    var result = (teamValue - minValue) / difference;
+    console.log('difference is: ' + difference + ', teamValue: ' + teamValue);
 
     // Specific conditions (100% & 0&)
-    if (maxValue === selectedTeam[category]) {
+    if (maxValue === teamValue) {
       return '100%';
-    } else if (selectedTeam[category] === 0) {
+    } else if (minValue === teamValue) {
       return '0%';
-    } else if ((selectedTeam[category] / maxValue).toFixed(2).substring(2, 3) === '0') {
-      return (selectedTeam[category] / maxValue).toFixed(2).substring(3, 4) + '%';
+    } else if (result.toFixed(2).substring(2, 3) === '0') {
+      return result.toFixed(2).substring(3, 4) + '%';
     } else {
-      return (selectedTeam[category] / maxValue).toFixed(2).substring(2, 4) + '%';
+      return result.toFixed(2).substring(2, 4) + '%';
     }
   }
 
@@ -54,15 +64,43 @@ const TeamDropdown = ({ teams }) => {
       {selectedTeam ? (
         <div id={selectedTeam.playerId} className="playerCard">
           <h1>{selectedTeam.name}</h1>
-          <h2>
-            {selectedTeam.position === 'R' || selectedTeam.position === 'L'
-              ? selectedTeam.position + 'W'
-              : selectedTeam.position}
-          </h2>
-          <h2>{selectedTeam['team']}</h2>
+          <p>
+            Goals For: <span>{getProductionPercentile('goalsFor')}</span>
+          </p>
+          <p>
+            Expected Goals For: <span>{getProductionPercentile('xGoalsFor')}</span>
+          </p>
+          <p>
+            Takeaways: <span>{getProductionPercentile('takeawaysFor')}</span>
+          </p>
+          <p>
+            Shot Attempts For: <span>{getProductionPercentile('shotAttemptsFor')}</span>
+          </p>
+          <p>
+            Faceoffs:{' '}
+            <span>
+              {(selectedTeam['faceOffsWonFor'] / (selectedTeam['faceOffsWonAgainst'] + selectedTeam['faceOffsWonFor']))
+                .toFixed(2)
+                .substring(2, 4) + '%'}
+            </span>
+          </p>
+          <p>
+            Goals Against: <span>{getProductionPercentile('goalsAgainst')}</span>
+          </p>
 
           <p>
-            Goals: <span>{getProductionPercentile('goalsFor')}</span>
+            Expected Goals Against: <span>{getProductionPercentile('xGoalsAgainst')}</span>
+          </p>
+
+          <p>
+            Giveaways: <span>{getProductionPercentile('giveawaysFor')}</span>
+          </p>
+          <p>
+            Shot Attempts Against: <span>{getProductionPercentile('shotAttemptsAgainst')}</span>
+          </p>
+
+          <p>
+            Penalty Differential: <span>{selectedTeam['penaltiesAgainst'] - selectedTeam['penaltiesFor']}</span>
           </p>
         </div>
       ) : (

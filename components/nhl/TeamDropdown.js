@@ -44,7 +44,6 @@ const TeamDropdown = ({ teams }) => {
     var difference = maxValue - minValue;
     var teamValue = selectedTeam[category];
     var result = (teamValue - minValue) / difference;
-    console.log('difference is: ' + difference + ', teamValue: ' + teamValue);
 
     // Specific conditions (100% & 0&)
     if (maxValue === teamValue) {
@@ -55,6 +54,68 @@ const TeamDropdown = ({ teams }) => {
       return result.toFixed(2).substring(3, 4) + '%';
     } else {
       return result.toFixed(2).substring(2, 4) + '%';
+    }
+  }
+
+  // Gets the percentile for the given negative statistic
+  function getNegativePercentile(category) {
+    // Get the maximum player value for the statistic
+    var positionalArr = teams;
+    var maxValue = Math.max.apply(
+      Math,
+      positionalArr.map((obj) => {
+        return obj[category];
+      }),
+    );
+    var minValue = Math.min.apply(
+      Math,
+      positionalArr.map((obj) => {
+        return obj[category];
+      }),
+    );
+    var difference = maxValue - minValue;
+    var teamValue = selectedTeam[category];
+    var result = (teamValue - minValue) / difference;
+
+    // Specific conditions (100% & 0%)
+    if (minValue === teamValue) {
+      return '100%';
+    } else if (maxValue === teamValue) {
+      return '0%';
+    } else if ((1 - result).toFixed(2).substring(2, 3) === '0') {
+      return (1 - result).toFixed(2).substring(3, 4) + '%';
+    } else {
+      return (1 - result).toFixed(2).substring(2, 4) + '%';
+    }
+  }
+
+  // Gets the percentile for the given statistic
+  function getTimePercentile(category) {
+    // Get the maximum player value for the statistic
+    var positionalArr = teams;
+    var maxValue = Math.max.apply(
+      Math,
+      positionalArr.map((obj) => {
+        return obj[category] / obj['icetime'];
+      }),
+    );
+    var minValue = Math.min.apply(
+      Math,
+      positionalArr.map((obj) => {
+        return obj[category] / obj['icetime'];
+      }),
+    );
+
+    let topNumber = (selectedPlayer[category] / selectedPlayer['icetime'] / maxValue).toFixed(2);
+    // Specific conditions (100% & 0&)
+    if (topNumber === '1.00') {
+      return '100%';
+    } else if (selectedPlayer[category] === 0) {
+      return '0%';
+    } else if (topNumber.substring(2, 3) === '0') {
+      return topNumber.substring(0, 4) + '%';
+    } else {
+      return topNumber.substring(2, 4) + '%';
     }
   }
 
@@ -85,18 +146,18 @@ const TeamDropdown = ({ teams }) => {
             </span>
           </p>
           <p>
-            Goals Against: <span>{getProductionPercentile('goalsAgainst')}</span>
+            Goals Against: <span>{getNegativePercentile('goalsAgainst')}</span>
           </p>
 
           <p>
-            Expected Goals Against: <span>{getProductionPercentile('xGoalsAgainst')}</span>
+            Expected Goals Against: <span>{getNegativePercentile('xGoalsAgainst')}</span>
           </p>
 
           <p>
-            Giveaways: <span>{getProductionPercentile('giveawaysFor')}</span>
+            Giveaways: <span>{getNegativePercentile('giveawaysFor')}</span>
           </p>
           <p>
-            Shot Attempts Against: <span>{getProductionPercentile('shotAttemptsAgainst')}</span>
+            Shot Attempts Against: <span>{getNegativePercentile('shotAttemptsAgainst')}</span>
           </p>
 
           <p>

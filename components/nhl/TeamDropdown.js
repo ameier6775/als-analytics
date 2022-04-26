@@ -154,28 +154,36 @@ const TeamDropdown = ({ teams }) => {
       : parseInt(getProductionPercentile('reboundsFor').substring(0, 2));
 
   // Preparing defensive chart data
-  // let xGA =
-  //   parseInt(getProductionPercentile('OnIce_A_xGoals').substring(0, 2)) === 10
-  //     ? 100
-  //     : parseInt(getProductionPercentile('OnIce_A_xGoals').substring(0, 2));
-  // let goalsAgainst =
-  //   parseInt(getProductionPercentile('OnIce_A_goals').substring(0, 2)) === 10
-  //     ? 100
-  //     : !parseInt(getProductionPercentile('OnIce_A_goals').substring(0, 2))
-  //     ? 0
-  //     : parseInt(getProductionPercentile('OnIce_A_goals').substring(0, 2));
-  // let giveaways =
-  //   parseInt(getProductionPercentile('I_F_giveaways').substring(0, 2)) === 10
-  //     ? 100
-  //     : parseInt(getProductionPercentile('I_F_giveaways').substring(0, 2));
-  // let shotAttemptsAgainst =
-  //   parseInt(getProductionPercentile('OnIce_A_shotAttempts').substring(0, 2)) === 10
-  //     ? 100
-  //     : parseInt(getProductionPercentile('OnIce_A_shotAttempts').substring(0, 2));
-  // let reboundsAgainst =
-  //   parseInt(getProductionPercentile('OnIce_A_reboundGoals').substring(0, 2)) === 10
-  //     ? 100
-  //     : parseInt(getProductionPercentile('OnIce_A_reboundGoals').substring(0, 2));
+  let goalsAgainst =
+    parseInt(getProductionPercentile('goalsAgainst').substring(0, 2)) === 10
+      ? 100
+      : !parseInt(getProductionPercentile('goalsAgainst').substring(0, 2)) === 0
+      ? 0
+      : parseInt(getProductionPercentile('goalsAgainst').substring(0, 2));
+  let xGoalsAgainst =
+    parseInt(getProductionPercentile('xGoalsAgainst').substring(0, 2)) === 10
+      ? 100
+      : !parseInt(getProductionPercentile('xGoalsAgainst').substring(0, 2)) === 0
+      ? 0
+      : parseInt(getProductionPercentile('xGoalsAgainst').substring(0, 2));
+  let shotAttemptsAgainst =
+    parseInt(getProductionPercentile('shotAttemptsAgainst').substring(0, 2)) === 10
+      ? 100
+      : !parseInt(getProductionPercentile('shotAttemptsAgainst').substring(0, 2)) === 0
+      ? 0
+      : parseInt(getProductionPercentile('shotAttemptsAgainst').substring(0, 2));
+  let giveawaysFor =
+    parseInt(getProductionPercentile('giveawaysFor').substring(0, 2)) === 10
+      ? 100
+      : !parseInt(getProductionPercentile('giveawaysFor').substring(0, 2)) === 0
+      ? 0
+      : parseInt(getProductionPercentile('giveawaysFor').substring(0, 2));
+  let reboundsAgainst =
+    parseInt(getProductionPercentile('reboundsAgainst').substring(0, 2)) === 10
+      ? 100
+      : !parseInt(getProductionPercentile('reboundsAgainst').substring(0, 2)) === 0
+      ? 0
+      : parseInt(getProductionPercentile('reboundsAgainst').substring(0, 2));
 
   // Plotting chart data
   var offensiveGraphData = [
@@ -206,35 +214,35 @@ const TeamDropdown = ({ teams }) => {
       fullMark: 100,
     },
   ];
-  // var defensiveGraphData = [
-  //   {
-  //     category: 'Giveaways',
-  //     score: giveaways,
-  //     fullMark: 100,
-  //   },
+  var defensiveGraphData = [
+    {
+      category: 'Goals',
+      score: goalsAgainst,
+      fullMark: 100,
+    },
 
-  //   {
-  //     category: '🧊 Goals Against',
-  //     score: goalsAgainst,
-  //     fullMark: 100,
-  //   },
-  //   {
-  //     category: 'Expected Goals',
-  //     score: xGA,
-  //     fullMark: 100,
-  //   },
+    {
+      category: 'Shot Attempts',
+      score: shotAttemptsAgainst,
+      fullMark: 100,
+    },
+    {
+      category: 'Expected Goals',
+      score: xGoalsAgainst,
+      fullMark: 100,
+    },
 
-  //   {
-  //     category: '🧊 Shot Attempts',
-  //     score: shotAttemptsAgainst,
-  //     fullMark: 100,
-  //   },
-  //   {
-  //     category: 'Net Front',
-  //     score: reboundsAgainst,
-  //     fullMark: 100,
-  //   },
-  // ];
+    {
+      category: 'Giveaways',
+      score: giveawaysFor,
+      fullMark: 100,
+    },
+    {
+      category: 'Rebounds',
+      score: reboundsAgainst,
+      fullMark: 100,
+    },
+  ];
 
   return (
     <div>
@@ -310,6 +318,46 @@ const TeamDropdown = ({ teams }) => {
                 y={0}
                 label={{ value: 'Worst', angle: 0, position: 'top', fill: 'red', fontSize: 12 }}
                 stroke="red"
+              />
+              <Line
+                type="monotone"
+                dataKey="score"
+                stroke="white"
+                fill="rgb(255, 174, 0)"
+                label={{ angle: 0, position: 'bottom', fill: 'white', fontSize: 9 }}
+              />
+            </LineChart>
+          </div>
+          <div className="fullWidthChart">
+            <h2 className="playerChart">Defense</h2>
+            <LineChart
+              width={1200}
+              height={280}
+              data={defensiveGraphData}
+              margin={{
+                top: 15,
+                right: 10,
+                left: 5,
+                bottom: 5,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="category" stroke="white" />
+              <YAxis stroke="white" />
+              <ReferenceLine
+                y={100}
+                label={{ value: 'Worst', angle: 0, position: 'top', fill: 'red', fontSize: 12 }}
+                stroke="red"
+              />
+              <ReferenceLine
+                y={50}
+                label={{ value: 'Average', angle: 0, position: 'top', fill: 'gold', fontSize: 12 }}
+                stroke="gold"
+              />
+              <ReferenceLine
+                y={0}
+                label={{ value: 'Best', angle: 0, position: 'top', fill: 'lightgreen', fontSize: 12 }}
+                stroke="lightgreen"
               />
               <Line
                 type="monotone"

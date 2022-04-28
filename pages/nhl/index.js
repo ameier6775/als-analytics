@@ -292,7 +292,7 @@ export default function Teams() {
         {/* Even Strength */}
         <h2>Even Strength</h2>
         {/* Area Chart */}
-        <h3>Expected Goals For By Type</h3>
+        {/* <h3>Expected Goals For By Type</h3>
         <AreaChart
           width={1400}
           height={600}
@@ -312,7 +312,7 @@ export default function Teams() {
           <Area type="monotone" dataKey="lowDangerxGoalsFor" stackId="1" stroke="#222831" fill={ZONECOLORS[2]} />
           <Area type="monotone" dataKey="mediumDangerxGoalsFor" stackId="1" stroke="#222831" fill={ZONECOLORS[1]} />
           <Area type="monotone" dataKey="highDangerxGoalsFor" stackId="1" stroke="#222831" fill={ZONECOLORS[0]} />
-        </AreaChart>
+        </AreaChart> */}
 
         {/* Types of Goals */}
         <h3>Actual Goals For By Type</h3>

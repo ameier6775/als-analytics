@@ -101,6 +101,7 @@ tr {
 
 .leagues {
   display: flex;
+  width: auto;
   margin: 1rem;
   padding: 1rem;
   background-color: #333333;
@@ -109,10 +110,10 @@ tr {
 }
 
 .leaguesHeader {
-  align-self: center;
-  text-align: center;
-  width: auto;
   margin: auto;
+  /* float: right; */
+  float: inline-start;
+  /* display: flex; */
   font-weight: 400;
   font-style: italic;
   border-bottom: 0.5px solid rgb(255, 174, 0);

@@ -6,9 +6,9 @@ import TeamDropdown from '../../../components/nhl/TeamDropdown';
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
-const COLORS = ['#FFADAD', '#CAFFBF', '#BDB2FF', '#FFD6A5', '#9BF6FF', '#FFC6FF', '#FDFFB6', '#A0C4FF', '#FFFFFC'];
-const ZONECOLORS = ['#fe2712', '#ff7e00', '#ffbe00'];
-const COMPARISONCOLORS = ['#ff1b6b', '#45caff'];
+// const COLORS = ['#FFADAD', '#CAFFBF', '#BDB2FF', '#FFD6A5', '#9BF6FF', '#FFC6FF', '#FDFFB6', '#A0C4FF', '#FFFFFC'];
+// const ZONECOLORS = ['#fe2712', '#ff7e00', '#ffbe00'];
+// const COMPARISONCOLORS = ['#ff1b6b', '#45caff'];
 
 export default function Teams() {
   const { data, error } = useSWR('../api/nhl/teams/', fetcher);

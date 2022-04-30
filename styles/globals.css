@@ -21,12 +21,15 @@ h1 {
 }
 
 h2 {
-  align-self: center;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  font-size: xx-large;
+  font-size: x-large;
   font-style: inherit;
   font-weight: 600;
   width: fit-content;
+  float: left;
+  margin-left: 10px;
+  margin-right: 10px;
+  color: rgb(255, 174, 0);
 }
 h3 {
   align-self: center;

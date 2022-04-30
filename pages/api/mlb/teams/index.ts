@@ -60,21 +60,6 @@ export default async function handler(req, res) {
     }
   });
 
-  // Configuring the average offensive awareness based off the model above
-  //   const dataMoneyPuckAll = dataMoneyPuck.filter((team) => team.situation === 'all');
-  //   const averageOffensiveAwareness = dataMoneyPuckAll.reduce(
-  //     (first, second) =>
-  //       parseInt(first.offensiveAwareness) > parseInt(second.offensiveAwareness)
-  //         ? parseFloat(first.offensiveAwareness)
-  //         : parseFloat(second.offensiveAwareness),
-  //     0,
-  //   );
-
-  // Trying to formulate a score
-  //   dataMoneyPuckAll.map((team) => {
-  //     team.averageOffensiveAwareness = parseFloat(team.offensiveAwareness) / averageOffensiveAwareness;
-  //   });
-
   // Joining the two hockey-reference tables
   const data = [];
   for (let i = 0; i < 30; i++) {

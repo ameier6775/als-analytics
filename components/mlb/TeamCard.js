@@ -69,66 +69,66 @@ const TeamCard = ({ teams }) => {
     }
   }
 
-  // Preparing offensive chart data goalsFor
+  // Preparing hitters chart data
   let runs =
     parseInt(getProductionPercentile('R').substring(0, 2)) === 10
       ? 100
       : !parseInt(getProductionPercentile('R').substring(0, 2)) === 0
       ? 0
       : parseInt(getProductionPercentile('R').substring(0, 2));
-  let xGoalsFor =
-    parseInt(getProductionPercentile('xGoalsFor').substring(0, 2)) === 10
+  let onBase =
+    parseInt(getProductionPercentile('OBP').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('xGoalsFor').substring(0, 2)) === 0
+      : !parseInt(getProductionPercentile('OBP').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('xGoalsFor').substring(0, 2));
-  let shotAttemptsFor =
-    parseInt(getProductionPercentile('shotAttemptsFor').substring(0, 2)) === 10
+      : parseInt(getProductionPercentile('OBP').substring(0, 2));
+  let average =
+    parseInt(getProductionPercentile('AVG').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('shotAttemptsFor').substring(0, 2)) === 0
+      : !parseInt(getProductionPercentile('AVG').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('shotAttemptsFor').substring(0, 2));
-  let takeawaysFor =
-    parseInt(getProductionPercentile('takeawaysFor').substring(0, 2)) === 10
+      : parseInt(getProductionPercentile('AVG').substring(0, 2));
+  let slug =
+    parseInt(getProductionPercentile('SLG').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('takeawaysFor').substring(0, 2)) === 0
+      : !parseInt(getProductionPercentile('SLG').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('takeawaysFor').substring(0, 2));
-  let reboundsFor =
-    parseInt(getProductionPercentile('reboundsFor').substring(0, 2)) === 10
+      : parseInt(getProductionPercentile('SLG').substring(0, 2));
+  let strikeouts =
+    parseInt(getProductionPercentile('SO', 'negative').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('reboundsFor').substring(0, 2)) === 0
+      : !parseInt(getProductionPercentile('SO', 'negative').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('reboundsFor').substring(0, 2));
+      : parseInt(getProductionPercentile('SO', 'negative').substring(0, 2));
 
   // Plotting chart data
-  //   var offensiveGraphData = [
-  //     {
-  //       category: 'Goals',
-  //       score: goalsFor,
-  //       fullMark: 100,
-  //     },
-  //     {
-  //       category: 'Shot Attempts',
-  //       score: shotAttemptsFor,
-  //       fullMark: 100,
-  //     },
-  //     {
-  //       category: 'Expected Goals',
-  //       score: xGoalsFor,
-  //       fullMark: 100,
-  //     },
-  //     {
-  //       category: 'Takeaways',
-  //       score: takeawaysFor,
-  //       fullMark: 100,
-  //     },
-  //     {
-  //       category: 'Rebounds',
-  //       score: reboundsFor,
-  //       fullMark: 100,
-  //     },
-  //   ];
+  var hittersGraphData = [
+    {
+      category: 'Runs',
+      score: runs,
+      fullMark: 100,
+    },
+    {
+      category: 'Average',
+      score: average,
+      fullMark: 100,
+    },
+    {
+      category: 'Strikeouts',
+      score: strikeouts,
+      fullMark: 100,
+    },
+    {
+      category: 'On Base',
+      score: onBase,
+      fullMark: 100,
+    },
+    {
+      category: 'Slug',
+      score: slug,
+      fullMark: 100,
+    },
+  ];
 
   return (
     <div>
@@ -138,11 +138,8 @@ const TeamCard = ({ teams }) => {
         <div id={selectedTeam.playerId} className="playerCard">
           <h1>{selectedTeam.Team}</h1>
           <p>
-            Average: <span>{getProductionPercentile('AVG', 'positive')}</span>
+            Average: <span>{getProductionPercentile('AVG')}</span>
           </p>
-          {/* <p>
-            Hits: <span>{getProductionPercentile('H')}</span>
-          </p> */}
           <p>
             Singles: <span>{getProductionPercentile('1B')}</span>
           </p>
@@ -170,12 +167,12 @@ const TeamCard = ({ teams }) => {
           <p>
             Walk Per Strikeout: <span>{getProductionPercentile('BBPerK')}</span>
           </p>
-          {/*<div className="fullWidthChart">
-            <h2 className="playerChart">Offense</h2>
+          <div className="fullWidthChart">
+            <h2 className="playerChart">Hitters</h2>
             <LineChart
               width={1200}
               height={280}
-              data={offensiveGraphData}
+              data={hittersGraphData}
               margin={{
                 top: 15,
                 right: 10,
@@ -209,7 +206,7 @@ const TeamCard = ({ teams }) => {
                 label={{ angle: 0, position: 'bottom', fill: 'white', fontSize: 9 }}
               />
             </LineChart>
-          </div> */}
+          </div>
         </div>
       ) : (
         <p>N/A</p>

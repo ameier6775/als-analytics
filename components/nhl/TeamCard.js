@@ -26,7 +26,7 @@ const TeamCard = ({ teams }) => {
   };
 
   // Gets the percentile for the given statistic
-  function getProductionPercentile(category, direction) {
+  function getProductionPercentile(category, direction = 'positive') {
     // Get the maximum player value for the statistic
     var positionalArr = teams;
     var maxValue = Math.max.apply(
@@ -69,101 +69,69 @@ const TeamCard = ({ teams }) => {
     }
   }
 
-  // Gets the percentile for the given statistic
-  function getTimePercentile(category) {
-    // Get the maximum player value for the statistic
-    var positionalArr = teams;
-    var maxValue = Math.max.apply(
-      Math,
-      positionalArr.map((obj) => {
-        return obj[category] / obj['icetime'];
-      }),
-    );
-    var minValue = Math.min.apply(
-      Math,
-      positionalArr.map((obj) => {
-        return obj[category] / obj['icetime'];
-      }),
-    );
-    var difference = maxValue - minValue;
-    var teamValue = selectedTeam[category];
-    var result = (teamValue - minValue) / difference;
-
-    // Specific conditions (100% & 0%)
-    if (minValue === teamValue) {
-      return '100%';
-    } else if (maxValue === teamValue) {
-      return '0%';
-    } else if ((1 - result).toFixed(2).substring(2, 3) === '0') {
-      return (1 - result).toFixed(2).substring(3, 4) + '%';
-    } else {
-      return (1 - result).toFixed(2).substring(2, 4) + '%';
-    }
-  }
-
   // Preparing offensive chart data goalsFor
   let goalsFor =
-    parseInt(getProductionPercentile('goalsFor', 'positive').substring(0, 2)) === 10
+    parseInt(getProductionPercentile('goalsFor').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('goalsFor', 'positive').substring(0, 2)) === 0
+      : !parseInt(getProductionPercentile('goalsFor').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('goalsFor', 'positive').substring(0, 2));
+      : parseInt(getProductionPercentile('goalsFor').substring(0, 2));
   let xGoalsFor =
-    parseInt(getProductionPercentile('xGoalsFor', 'positive').substring(0, 2)) === 10
+    parseInt(getProductionPercentile('xGoalsFor').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('xGoalsFor', 'positive').substring(0, 2)) === 0
+      : !parseInt(getProductionPercentile('xGoalsFor').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('xGoalsFor', 'positive').substring(0, 2));
+      : parseInt(getProductionPercentile('xGoalsFor').substring(0, 2));
   let shotAttemptsFor =
-    parseInt(getProductionPercentile('shotAttemptsFor', 'positive').substring(0, 2)) === 10
+    parseInt(getProductionPercentile('shotAttemptsFor').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('shotAttemptsFor', 'positive').substring(0, 2)) === 0
+      : !parseInt(getProductionPercentile('shotAttemptsFor').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('shotAttemptsFor', 'positive').substring(0, 2));
+      : parseInt(getProductionPercentile('shotAttemptsFor').substring(0, 2));
   let takeawaysFor =
-    parseInt(getProductionPercentile('takeawaysFor', 'positive').substring(0, 2)) === 10
+    parseInt(getProductionPercentile('takeawaysFor').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('takeawaysFor', 'positive').substring(0, 2)) === 0
+      : !parseInt(getProductionPercentile('takeawaysFor').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('takeawaysFor', 'positive').substring(0, 2));
+      : parseInt(getProductionPercentile('takeawaysFor').substring(0, 2));
   let reboundsFor =
-    parseInt(getProductionPercentile('reboundsFor', 'positive').substring(0, 2)) === 10
+    parseInt(getProductionPercentile('reboundsFor').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('reboundsFor', 'positive').substring(0, 2)) === 0
+      : !parseInt(getProductionPercentile('reboundsFor').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('reboundsFor', 'positive').substring(0, 2));
+      : parseInt(getProductionPercentile('reboundsFor').substring(0, 2));
 
   // Preparing defensive chart data
   let goalsAgainst =
-    parseInt(getProductionPercentile('goalsAgainst', 'positive').substring(0, 2)) === 10
+    parseInt(getProductionPercentile('goalsAgainst').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('goalsAgainst', 'positive').substring(0, 2)) === 0
+      : !parseInt(getProductionPercentile('goalsAgainst').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('goalsAgainst', 'positive').substring(0, 2));
+      : parseInt(getProductionPercentile('goalsAgainst').substring(0, 2));
   let xGoalsAgainst =
-    parseInt(getProductionPercentile('xGoalsAgainst', 'positive').substring(0, 2)) === 10
+    parseInt(getProductionPercentile('xGoalsAgainst').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('xGoalsAgainst', 'positive').substring(0, 2)) === 0
+      : !parseInt(getProductionPercentile('xGoalsAgainst').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('xGoalsAgainst', 'positive').substring(0, 2));
+      : parseInt(getProductionPercentile('xGoalsAgainst').substring(0, 2));
   let shotAttemptsAgainst =
-    parseInt(getProductionPercentile('shotAttemptsAgainst', 'positive').substring(0, 2)) === 10
+    parseInt(getProductionPercentile('shotAttemptsAgainst').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('shotAttemptsAgainst', 'positive').substring(0, 2)) === 0
+      : !parseInt(getProductionPercentile('shotAttemptsAgainst').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('shotAttemptsAgainst', 'positive').substring(0, 2));
+      : parseInt(getProductionPercentile('shotAttemptsAgainst').substring(0, 2));
   let giveawaysFor =
-    parseInt(getProductionPercentile('giveawaysFor', 'positive').substring(0, 2)) === 10
+    parseInt(getProductionPercentile('giveawaysFor').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('giveawaysFor', 'positive').substring(0, 2)) === 0
+      : !parseInt(getProductionPercentile('giveawaysFor').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('giveawaysFor', 'positive').substring(0, 2));
+      : parseInt(getProductionPercentile('giveawaysFor').substring(0, 2));
   let reboundsAgainst =
-    parseInt(getProductionPercentile('reboundsAgainst', 'positive').substring(0, 2)) === 10
+    parseInt(getProductionPercentile('reboundsAgainst').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('reboundsAgainst', 'positive').substring(0, 2)) === 0
+      : !parseInt(getProductionPercentile('reboundsAgainst').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('reboundsAgainst', 'positive').substring(0, 2));
+      : parseInt(getProductionPercentile('reboundsAgainst').substring(0, 2));
 
   // Plotting chart data
   var offensiveGraphData = [
@@ -231,16 +199,16 @@ const TeamCard = ({ teams }) => {
         <div id={selectedTeam.playerId} className="playerCard">
           <h1>{selectedTeam.name}</h1>
           <p>
-            Goals For: <span>{getProductionPercentile('goalsFor', 'positive')}</span>
+            Goals For: <span>{getProductionPercentile('goalsFor')}</span>
           </p>
           <p>
-            Expected Goals For: <span>{getProductionPercentile('xGoalsFor', 'positive')}</span>
+            Expected Goals For: <span>{getProductionPercentile('xGoalsFor')}</span>
           </p>
           <p>
-            Takeaways: <span>{getProductionPercentile('takeawaysFor', 'positive')}</span>
+            Takeaways: <span>{getProductionPercentile('takeawaysFor')}</span>
           </p>
           <p>
-            Shot Attempts For: <span>{getProductionPercentile('shotAttemptsFor', 'positive')}</span>
+            Shot Attempts For: <span>{getProductionPercentile('shotAttemptsFor')}</span>
           </p>
           <p>
             Faceoffs:{' '}

@@ -25,6 +25,113 @@ const PlayerCard = ({ players }) => {
     setSelectedPlayer(e);
   };
 
+  // Gets the percentile for the given statistic
+  function getProductionPercentile(category, direction = 'positive') {
+    // Group forwards & defensemen separately
+    if (selectedPlayer['position'] === 'D') {
+      var positionalArr = players.filter((player) => player.position === 'D');
+    } else {
+      var positionalArr = players.filter((player) => player.position != 'D');
+    }
+
+    // Get the maximum & minimum player values for the statistic
+    var maxValue = Math.max.apply(
+      Math,
+      positionalArr.map((obj) => {
+        return obj[category];
+      }),
+    );
+    var minValue = Math.min.apply(
+      Math,
+      positionalArr.map((obj) => {
+        return obj[category];
+      }),
+    );
+
+    var difference = maxValue - minValue;
+    var playerValue = selectedPlayer[category];
+    var result = (playerValue - minValue) / difference;
+
+    if (direction === 'positive') {
+      // Specific conditions (100% & 0&)
+      if (maxValue === playerValue) {
+        return '100%';
+      } else if (minValue === playerValue) {
+        return '0%';
+      } else if (result.toFixed(2).substring(2, 3) === '0') {
+        return result.toFixed(2).substring(3, 4) + '%';
+      } else {
+        return result.toFixed(2).substring(2, 4) + '%';
+      }
+    } else if (direction === 'negative') {
+      if (minValue === playerValue) {
+        return '100%';
+      } else if (maxValue === playerValue) {
+        return '0%';
+      } else if ((1 - result).toFixed(2).substring(2, 3) === '0') {
+        return (1 - result).toFixed(2).substring(3, 4) + '%';
+      } else {
+        return (1 - result).toFixed(2).substring(2, 4) + '%';
+      }
+    }
+  }
+
+  // Gets the percentile for the given statistic
+  function getTimePercentile(category, direction) {
+    // Group forwards & defensemen together
+    if (selectedPlayer['position'] === 'D') {
+      var positionalArr = players.filter((player) => player.position === 'D');
+    } else {
+      var positionalArr = players.filter((player) => player.position != 'D');
+    }
+
+    // Get the maximum player value for the statistic
+    var maxValue = Math.max.apply(
+      Math,
+      positionalArr.map((obj) => {
+        return obj[category] / obj['icetime'];
+      }),
+    );
+    var minValue = Math.min.apply(
+      Math,
+      positionalArr.map((obj) => {
+        return obj[category] / obj['icetime'];
+      }),
+    );
+
+    let result = (selectedPlayer[category] / selectedPlayer['icetime'] / maxValue).toFixed(2);
+    // Specific conditions (100% & 0&)
+    if (result === '1.00') {
+      return '100%';
+    } else if (selectedPlayer[category] === 0) {
+      return '0%';
+    } else if (result.substring(2, 3) === '0') {
+      return result.substring(0, 4) + '%';
+    } else {
+      return result.substring(2, 4) + '%';
+    }
+  }
+
+  function combineCategories(categoryOne, categoryTwo) {
+    let category1 = parseInt(categoryOne.substring(0, categoryOne.length - 1));
+    let category2 = parseInt(categoryTwo.substring(0, categoryTwo.length - 1));
+    console.log(category1, category2);
+    let avg = ((category1 + category2) / 2).toString() + '%';
+    return avg;
+  }
+
+  function getFaceOffPercentage() {
+    let faceOffPercentage =
+      (selectedPlayer['faceoffsWon'] / (selectedPlayer['faceoffsWon'] + selectedPlayer['faceoffsLost']))
+        .toFixed(2)
+        .substring(2, 4) + '%';
+    if (selectedPlayer['faceoffsWon'] != 0) {
+      return faceOffPercentage;
+    } else {
+      return 'N/A';
+    }
+  }
+
   // Preparing offensive chart data
   let xGF =
     parseInt(getTimePercentile('OnIce_F_xGoals').substring(0, 2)) === 10
@@ -133,107 +240,6 @@ const PlayerCard = ({ players }) => {
     },
   ];
 
-  // Gets the percentile for the given statistic
-  function getProductionPercentile(category, direction) {
-    // Group forwards & defensemen separately
-    if (selectedPlayer['position'] === 'D') {
-      var positionalArr = players.filter((player) => player.position === 'D');
-    } else {
-      var positionalArr = players.filter((player) => player.position != 'D');
-    }
-
-    // Get the maximum & minimum player values for the statistic
-    var maxValue = Math.max.apply(
-      Math,
-      positionalArr.map((obj) => {
-        return obj[category];
-      }),
-    );
-    var minValue = Math.min.apply(
-      Math,
-      positionalArr.map((obj) => {
-        return obj[category];
-      }),
-    );
-
-    var difference = maxValue - minValue;
-    var playerValue = selectedPlayer[category];
-    var result = (playerValue - minValue) / difference;
-
-    if (direction === 'positive') {
-      // Specific conditions (100% & 0&)
-      if (maxValue === playerValue) {
-        return '100%';
-      } else if (minValue === playerValue) {
-        return '0%';
-      } else if (result.toFixed(2).substring(2, 3) === '0') {
-        return result.toFixed(2).substring(3, 4) + '%';
-      } else {
-        return result.toFixed(2).substring(2, 4) + '%';
-      }
-    } else if (direction === 'negative') {
-      if (minValue === playerValue) {
-        return '100%';
-      } else if (maxValue === playerValue) {
-        return '0%';
-      } else if ((1 - result).toFixed(2).substring(2, 3) === '0') {
-        return (1 - result).toFixed(2).substring(3, 4) + '%';
-      } else {
-        return (1 - result).toFixed(2).substring(2, 4) + '%';
-      }
-    }
-  }
-
-  // Gets the percentile for the given statistic
-  function getTimePercentile(category) {
-    // Group forwards & defensemen together
-    if (selectedPlayer['position'] === 'D') {
-      var positionalArr = players.filter((player) => player.position === 'D');
-    } else {
-      var positionalArr = players.filter((player) => player.position != 'D');
-    }
-
-    // Get the maximum player value for the statistic
-    var maxValue = Math.max.apply(
-      Math,
-      positionalArr.map((obj) => {
-        return obj[category] / obj['icetime'];
-      }),
-    );
-
-    let topNumber = (selectedPlayer[category] / selectedPlayer['icetime'] / maxValue).toFixed(2);
-    // Specific conditions (100% & 0&)
-    if (topNumber === '1.00') {
-      return '100%';
-    } else if (selectedPlayer[category] === 0) {
-      return '0%';
-    } else if (topNumber.substring(2, 3) === '0') {
-      return topNumber.substring(0, 4) + '%';
-    } else {
-      return topNumber.substring(2, 4) + '%';
-    }
-  }
-
-  function combineCategories(categoryOne, categoryTwo) {
-    let category1 = parseInt(categoryOne.substring(0, categoryOne.length - 1));
-    let category2 = parseInt(categoryTwo.substring(0, categoryTwo.length - 1));
-    console.log(category1, category2);
-    let avg = ((category1 + category2) / 2).toString() + '%';
-    return avg;
-  }
-
-  function getFaceOffPercentage() {
-    let faceOffPercentage =
-      (selectedPlayer['faceoffsWon'] / (selectedPlayer['faceoffsWon'] + selectedPlayer['faceoffsLost']))
-        .toFixed(2)
-        .substring(2, 4) + '%';
-    if (selectedPlayer['faceoffsWon'] != 0) {
-      return faceOffPercentage;
-    } else {
-      return 'N/A';
-    }
-  }
-
   return (
     <div>
       <Select onChange={onChange} options={players} />
@@ -248,25 +254,25 @@ const PlayerCard = ({ players }) => {
           <h2>{selectedPlayer['team']}</h2>
 
           <p>
-            Goals: <span>{getProductionPercentile('I_F_goals', 'positive')}</span>
+            Goals: <span>{getProductionPercentile('I_F_goals')}</span>
           </p>
           <p>
             Assists:{' '}
             <span>
               {combineCategories(
-                getProductionPercentile('I_F_primaryAssists', 'positive'),
-                getProductionPercentile('I_F_secondaryAssists', 'positive'),
+                getProductionPercentile('I_F_primaryAssists'),
+                getProductionPercentile('I_F_secondaryAssists'),
               )}
             </span>
           </p>
           <p>
-            Points: <span>{getProductionPercentile('I_F_points', 'positive')}</span>
+            Points: <span>{getProductionPercentile('I_F_points')}</span>
           </p>
           <p>
-            Expected Goals For: <span>{getProductionPercentile('I_F_xGoals', 'positive')}</span>
+            Expected Goals For: <span>{getProductionPercentile('I_F_xGoals')}</span>
           </p>
           <p>
-            🧊 Goals For: <span>{getProductionPercentile('OnIce_F_xGoals', 'positive')}</span>
+            🧊 Goals For: <span>{getProductionPercentile('OnIce_F_xGoals')}</span>
           </p>
           <p>
             🚨 Per 60: <span>{getTimePercentile('I_F_goals')}</span>
@@ -287,25 +293,25 @@ const PlayerCard = ({ players }) => {
             🧊 Goals Against: <span>{getProductionPercentile('OnIce_A_goals', 'negative')}</span>
           </p>
           <p>
-            Shot Attempts: <span>{getProductionPercentile('I_F_shotAttempts', 'positive')}</span>
+            Shot Attempts: <span>{getProductionPercentile('I_F_shotAttempts')}</span>
           </p>
           <p>
-            Hits: <span>{getProductionPercentile('I_F_hits', 'positive')}</span>
+            Hits: <span>{getProductionPercentile('I_F_hits')}</span>
           </p>
           <p>
-            Blocks: <span>{getProductionPercentile('shotsBlockedByPlayer', 'positive')}</span>
+            Blocks: <span>{getProductionPercentile('shotsBlockedByPlayer')}</span>
           </p>
           <p>
-            Takeaways: <span>{getProductionPercentile('I_F_takeaways', 'positive')}</span>
+            Takeaways: <span>{getProductionPercentile('I_F_takeaways')}</span>
           </p>
           <p>
             Giveaways: <span>{getProductionPercentile('I_F_giveaways', 'negative')}</span>
           </p>
           <p>
-            Games: <span>{getProductionPercentile('games_played', 'positive')}</span>
+            Games: <span>{getProductionPercentile('games_played')}</span>
           </p>
           <p>
-            Time On Ice: <span>{getProductionPercentile('icetime', 'positive')}</span>
+            Time On Ice: <span>{getProductionPercentile('icetime')}</span>
           </p>
           {/* <p>
             Faceoffs: <span>{getFaceOffPercentage()}</span>

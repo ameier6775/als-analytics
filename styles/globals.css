@@ -115,23 +115,24 @@ tr {
 }
 
 .leaguesHeader {
+  width: 40%;
+}
+
+.leaguesSubHeader {
   margin: auto;
-  /* float: right; */
-  float: inline-start;
-  /* display: flex; */
   font-weight: 400;
   font-style: italic;
   border-bottom: 0.5px solid rgb(255, 174, 0);
 }
 
-.leaguesSubHeader {
+/* .leaguesSubHeader {
   color: steelblue;
   font-weight: 200;
   float: right;
   margin: 0 15px;
   font-style: italic;
   border-bottom: 1px solid steelblue;
-}
+} */
 
 .mlbTeamCardSubHeader {
   float: left;
@@ -167,6 +168,7 @@ tr {
   width: 100%;
   position: relative;
   font-family: OCR A Std, monospace;
+  font-size: xx-large;
   font-weight: 500;
   text-align: center;
   margin-bottom: 5px;

@@ -12,24 +12,29 @@ const Home: NextPage = () => {
   ];
   return (
     <>
-      <h1 className="font-mono homeHeader">Browse Different Leagues</h1>
+      <h1 className="font-mono homeHeader">Browse Leagues</h1>
       {leagues.map((league) => (
         <div key={league.id} className="leagues">
-          <Link passHref={true} href={`/${league.abbreviation}`}>
-            <h2 className="font-mono">
-              {league.name}
-              {' ('}
-              {league.abbreviation.toUpperCase()}
-              {') '}
-            </h2>
-          </Link>
-
-          <Link passHref={true} href={`/${league.abbreviation}/teams`}>
-            <div className="leaguesHeader">Teams</div>
-          </Link>
-          <Link passHref={true} href={`/${league.abbreviation}/players`}>
-            <div className="leaguesHeader">Players</div>
-          </Link>
+          <div className="leaguesHeader">
+            <Link passHref={true} href={`/${league.abbreviation}`}>
+              <h2 className="font-mono">
+                {league.name}
+                {' ('}
+                {league.abbreviation.toUpperCase()}
+                {') '}
+              </h2>
+            </Link>
+          </div>
+          <div className="leaguesSubHeader">
+            <Link passHref={true} href={`/${league.abbreviation}/teams`}>
+              Teams
+            </Link>
+          </div>
+          <div className="leaguesSubHeader">
+            <Link passHref={true} href={`/${league.abbreviation}/players`}>
+              Players
+            </Link>
+          </div>
         </div>
       ))}
     </>

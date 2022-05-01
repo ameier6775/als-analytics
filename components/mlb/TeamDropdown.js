@@ -26,8 +26,7 @@ const TeamDropdown = ({ teams }) => {
     console.log(e);
   };
 
-  // Gets the percentile for the given statistic
-  function getProductionPercentile(category) {
+  function getProductionPercentile(category, direction) {
     // Get the maximum player value for the statistic
     var positionalArr = teams;
     var maxValue = Math.max.apply(
@@ -46,47 +45,27 @@ const TeamDropdown = ({ teams }) => {
     var teamValue = selectedTeam[category];
     var result = (teamValue - minValue) / difference;
 
-    // Specific conditions (100% & 0&)
-    if (maxValue === teamValue) {
-      return '100%';
-    } else if (minValue === teamValue) {
-      return '0%';
-    } else if (result.toFixed(2).substring(2, 3) === '0') {
-      return result.toFixed(2).substring(3, 4) + '%';
-    } else {
-      return result.toFixed(2).substring(2, 4) + '%';
-    }
-  }
-
-  // Gets the percentile for the given negative statistic
-  function getNegativePercentile(category) {
-    // Get the maximum player value for the statistic
-    var positionalArr = teams;
-    var maxValue = Math.max.apply(
-      Math,
-      positionalArr.map((obj) => {
-        return obj[category];
-      }),
-    );
-    var minValue = Math.min.apply(
-      Math,
-      positionalArr.map((obj) => {
-        return obj[category];
-      }),
-    );
-    var difference = maxValue - minValue;
-    var teamValue = selectedTeam[category];
-    var result = (teamValue - minValue) / difference;
-
-    // Specific conditions (100% & 0%)
-    if (minValue === teamValue) {
-      return '100%';
-    } else if (maxValue === teamValue) {
-      return '0%';
-    } else if ((1 - result).toFixed(2).substring(2, 3) === '0') {
-      return (1 - result).toFixed(2).substring(3, 4) + '%';
-    } else {
-      return (1 - result).toFixed(2).substring(2, 4) + '%';
+    if (direction === 'positive') {
+      // Specific conditions (100% & 0&)
+      if (maxValue === teamValue) {
+        return '100%';
+      } else if (minValue === teamValue) {
+        return '0%';
+      } else if (result.toFixed(2).substring(2, 3) === '0') {
+        return result.toFixed(2).substring(3, 4) + '%';
+      } else {
+        return result.toFixed(2).substring(2, 4) + '%';
+      }
+    } else if (direction === 'negative') {
+      if (minValue === teamValue) {
+        return '100%';
+      } else if (maxValue === teamValue) {
+        return '0%';
+      } else if ((1 - result).toFixed(2).substring(2, 3) === '0') {
+        return (1 - result).toFixed(2).substring(3, 4) + '%';
+      } else {
+        return (1 - result).toFixed(2).substring(2, 4) + '%';
+      }
     }
   }
 
@@ -185,43 +164,43 @@ const TeamDropdown = ({ teams }) => {
 
   return (
     <div>
-      <h2>Batting:</h2>
+      <h2 className="mlbTeamCardSubHeader">Batting:</h2>
       <Select onChange={onChange} options={teams} />
       {selectedTeam ? (
         <div id={selectedTeam.playerId} className="playerCard">
           <h1>{selectedTeam.Team}</h1>
           <p>
-            Average: <span>{getProductionPercentile('AVG')}</span>
+            Average: <span>{getProductionPercentile('AVG', 'positive')}</span>
           </p>
           {/* <p>
             Hits: <span>{getProductionPercentile('H')}</span>
           </p> */}
           <p>
-            Singles: <span>{getProductionPercentile('1B')}</span>
+            Singles: <span>{getProductionPercentile('1B', 'positive')}</span>
           </p>
           <p>
-            Doubles: <span>{getProductionPercentile('2B')}</span>
+            Doubles: <span>{getProductionPercentile('2B', 'positive')}</span>
           </p>
           <p>
-            Triples: <span>{getProductionPercentile('3B')}</span>
+            Triples: <span>{getProductionPercentile('3B', 'positive')}</span>
           </p>
           <p>
-            Home Runs: <span>{getProductionPercentile('HR')}</span>
+            Home Runs: <span>{getProductionPercentile('HR', 'positive')}</span>
           </p>
           <p>
-            Runs: <span>{getProductionPercentile('R')}</span>
+            Runs: <span>{getProductionPercentile('R', 'positive')}</span>
           </p>
           <p>
-            Hits: <span>{getProductionPercentile('H')}</span>
+            Hits: <span>{getProductionPercentile('H', 'positive')}</span>
           </p>
           <p>
-            Walks: <span>{getProductionPercentile('BB')}</span>
+            Walks: <span>{getProductionPercentile('BB', 'positive')}</span>
           </p>
           <p>
-            Strikeouts: <span>{getProductionPercentile('SO')}</span>
+            Strikeouts: <span>{getProductionPercentile('SO', 'negative')}</span>
           </p>
           <p>
-            Walk Per Strikeout: <span>{getProductionPercentile('BBPerK')}</span>
+            Walk Per Strikeout: <span>{getProductionPercentile('BBPerK', 'positive')}</span>
           </p>
           {/* <p>
             Goals For: <span>{getProductionPercentile('goalsFor')}</span>

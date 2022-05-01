@@ -38,6 +38,8 @@ h3 {
   font-style: inherit;
   font-weight: 500;
   width: fit-content;
+  margin: 0px;
+  display: block;
 }
 
 Nav {
@@ -133,6 +135,12 @@ tr {
 
 .mlbTeamCardSubHeader {
   float: left;
+}
+
+.nhlSubHeaders {
+  float: left;
+  font-size: xx-large;
+  width: 100%;
 }
 
 .playerChart {

@@ -2,7 +2,7 @@
 import React, { useRef, useState } from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
-import PlayerDropdown from '../../../components/nhl/PlayerDropdown';
+import PlayerCard from '../../../components/nhl/PlayerCard';
 import {
   XAxis,
   Tooltip,
@@ -102,7 +102,7 @@ export default function Players() {
   if (data) {
     return (
       <>
-        <PlayerDropdown players={playerCardArray}></PlayerDropdown>
+        <PlayerCard players={playerCardArray}></PlayerCard>
         {/* <div className="fullWidth">
           <ScatterChart
             width={1735}

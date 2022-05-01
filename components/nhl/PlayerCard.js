@@ -19,7 +19,7 @@ import {
   ReferenceLine,
 } from 'recharts';
 
-const PlayerDropdown = ({ players }) => {
+const PlayerCard = ({ players }) => {
   const [selectedPlayer, setSelectedPlayer] = useState(players[0]);
   const onChange = (e) => {
     setSelectedPlayer(e);
@@ -134,60 +134,53 @@ const PlayerDropdown = ({ players }) => {
   ];
 
   // Gets the percentile for the given statistic
-  function getProductionPercentile(category) {
-    // Group forwards & defensemen together
+  function getProductionPercentile(category, direction) {
+    // Group forwards & defensemen separately
     if (selectedPlayer['position'] === 'D') {
       var positionalArr = players.filter((player) => player.position === 'D');
     } else {
       var positionalArr = players.filter((player) => player.position != 'D');
     }
 
-    // Get the maximum player value for the statistic
+    // Get the maximum & minimum player values for the statistic
     var maxValue = Math.max.apply(
       Math,
       positionalArr.map((obj) => {
         return obj[category];
       }),
     );
-
-    // Specific conditions (100% & 0&)
-    if (maxValue === selectedPlayer[category]) {
-      return '100%';
-    } else if (selectedPlayer[category] === 0) {
-      return '0%';
-    } else if ((selectedPlayer[category] / maxValue).toFixed(2).substring(2, 3) === '0') {
-      return (selectedPlayer[category] / maxValue).toFixed(2).substring(3, 4) + '%';
-    } else {
-      return (selectedPlayer[category] / maxValue).toFixed(2).substring(2, 4) + '%';
-    }
-  }
-
-  // Gets the percentile for the given negative statistic
-  function getNegativePercentile(category) {
-    // Group forwards & defensemen together
-    if (selectedPlayer['position'] === 'D') {
-      var positionalArr = players.filter((player) => player.position === 'D');
-    } else {
-      var positionalArr = players.filter((player) => player.position != 'D');
-    }
-
-    // Get the maximum player value for the statistic
-    var maxValue = Math.max.apply(
+    var minValue = Math.min.apply(
       Math,
       positionalArr.map((obj) => {
         return obj[category];
       }),
     );
 
-    // Specific conditions (100% & 0%)
-    if (maxValue === selectedPlayer[category]) {
-      return '100%';
-    } else if (selectedPlayer[category] === 0) {
-      return '0%';
-    } else if ((1 - selectedPlayer[category] / maxValue).toFixed(2).substring(2, 3) === '0') {
-      return (1 - selectedPlayer[category] / maxValue).toFixed(2).substring(3, 4) + '%';
-    } else {
-      return (1 - selectedPlayer[category] / maxValue).toFixed(2).substring(2, 4) + '%';
+    var difference = maxValue - minValue;
+    var playerValue = selectedPlayer[category];
+    var result = (playerValue - minValue) / difference;
+
+    if (direction === 'positive') {
+      // Specific conditions (100% & 0&)
+      if (maxValue === playerValue) {
+        return '100%';
+      } else if (minValue === playerValue) {
+        return '0%';
+      } else if (result.toFixed(2).substring(2, 3) === '0') {
+        return result.toFixed(2).substring(3, 4) + '%';
+      } else {
+        return result.toFixed(2).substring(2, 4) + '%';
+      }
+    } else if (direction === 'negative') {
+      if (minValue === playerValue) {
+        return '100%';
+      } else if (maxValue === playerValue) {
+        return '0%';
+      } else if ((1 - result).toFixed(2).substring(2, 3) === '0') {
+        return (1 - result).toFixed(2).substring(3, 4) + '%';
+      } else {
+        return (1 - result).toFixed(2).substring(2, 4) + '%';
+      }
     }
   }
 
@@ -255,25 +248,25 @@ const PlayerDropdown = ({ players }) => {
           <h2>{selectedPlayer['team']}</h2>
 
           <p>
-            Goals: <span>{getProductionPercentile('I_F_goals')}</span>
+            Goals: <span>{getProductionPercentile('I_F_goals', 'positive')}</span>
           </p>
           <p>
             Assists:{' '}
             <span>
               {combineCategories(
-                getProductionPercentile('I_F_primaryAssists'),
-                getProductionPercentile('I_F_secondaryAssists'),
+                getProductionPercentile('I_F_primaryAssists', 'positive'),
+                getProductionPercentile('I_F_secondaryAssists', 'positive'),
               )}
             </span>
           </p>
           <p>
-            Points: <span>{getProductionPercentile('I_F_points')}</span>
+            Points: <span>{getProductionPercentile('I_F_points', 'positive')}</span>
           </p>
           <p>
-            Expected Goals For: <span>{getProductionPercentile('I_F_xGoals')}</span>
+            Expected Goals For: <span>{getProductionPercentile('I_F_xGoals', 'positive')}</span>
           </p>
           <p>
-            🧊 Goals For: <span>{getProductionPercentile('OnIce_F_xGoals')}</span>
+            🧊 Goals For: <span>{getProductionPercentile('OnIce_F_xGoals', 'positive')}</span>
           </p>
           <p>
             🚨 Per 60: <span>{getTimePercentile('I_F_goals')}</span>
@@ -288,31 +281,31 @@ const PlayerDropdown = ({ players }) => {
             🥅 Per 60: <span>{getTimePercentile('I_F_points')}</span>
           </p>
           <p>
-            Expected Goals Against: <span>{getNegativePercentile('OnIce_A_xGoals')}</span>
+            Expected Goals Against: <span>{getProductionPercentile('OnIce_A_xGoals', 'negative')}</span>
           </p>
           <p>
-            🧊 Goals Against: <span>{getNegativePercentile('OnIce_A_goals')}</span>
+            🧊 Goals Against: <span>{getProductionPercentile('OnIce_A_goals', 'negative')}</span>
           </p>
           <p>
-            Shot Attempts: <span>{getProductionPercentile('I_F_shotAttempts')}</span>
+            Shot Attempts: <span>{getProductionPercentile('I_F_shotAttempts', 'positive')}</span>
           </p>
           <p>
-            Hits: <span>{getProductionPercentile('I_F_hits')}</span>
+            Hits: <span>{getProductionPercentile('I_F_hits', 'positive')}</span>
           </p>
           <p>
-            Blocks: <span>{getProductionPercentile('shotsBlockedByPlayer')}</span>
+            Blocks: <span>{getProductionPercentile('shotsBlockedByPlayer', 'positive')}</span>
           </p>
           <p>
-            Takeaways: <span>{getProductionPercentile('I_F_takeaways')}</span>
+            Takeaways: <span>{getProductionPercentile('I_F_takeaways', 'positive')}</span>
           </p>
           <p>
-            Giveaways: <span>{getProductionPercentile('I_F_giveaways')}</span>
+            Giveaways: <span>{getProductionPercentile('I_F_giveaways', 'negative')}</span>
           </p>
           <p>
-            Games: <span>{getProductionPercentile('games_played')}</span>
+            Games: <span>{getProductionPercentile('games_played', 'positive')}</span>
           </p>
           <p>
-            Time On Ice: <span>{getProductionPercentile('icetime')}</span>
+            Time On Ice: <span>{getProductionPercentile('icetime', 'positive')}</span>
           </p>
           {/* <p>
             Faceoffs: <span>{getFaceOffPercentage()}</span>
@@ -359,9 +352,6 @@ const PlayerDropdown = ({ players }) => {
                 .substring(2, 4) + '%'}
             </span>
           </p>
-          {/* <p>
-            Expected: <span>{getProductionPercentile('expectedCases')}</span>
-          </p> */}
           <div className="fullWidthChart">
             <h2 className="playerChart">Offense Per 60</h2>
             <LineChart
@@ -450,7 +440,7 @@ const PlayerDropdown = ({ players }) => {
   );
 };
 
-export default PlayerDropdown;
+export default PlayerCard;
 
 {
   /* Offensive */

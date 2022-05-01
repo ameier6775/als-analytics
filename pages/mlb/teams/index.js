@@ -2,7 +2,7 @@
 import React from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
-import TeamDropdown from '../../../components/mlb/TeamDropdown';
+import TeamCard from '../../../components/mlb/TeamCard';
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -32,7 +32,7 @@ export default function Teams() {
 
   return (
     <>
-      <TeamDropdown teams={teamCardArray}></TeamDropdown>
+      <TeamCard teams={teamCardArray}></TeamCard>
     </>
   );
 }

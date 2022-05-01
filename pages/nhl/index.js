@@ -194,7 +194,7 @@ export default function Teams() {
       <div className="teamCharts">
         {/* Custom Made Analytics */}
         <h1>Als Analytics</h1>
-        <h2>Decision Making</h2>
+        <h2 className="nhlSubHeaders">Decision Making</h2>
         <h3>Offensive Zone</h3>
         <BarChart
           width={1400}
@@ -217,10 +217,9 @@ export default function Teams() {
             ))}
           </Bar>
         </BarChart>
-
         {/* Radial Bar Chart */}
         {/* East */}
-        <h2>Points %</h2>
+        <h2 className="nhlSubHeaders">Points %</h2>
         <h3>Eastern Conference</h3>
         <RadialBarChart
           width={1400}
@@ -288,9 +287,8 @@ export default function Teams() {
           </RadialBar>
           <Tooltip />
         </RadialBarChart>
-
         {/* Even Strength */}
-        <h2>Even Strength</h2>
+        <h2 className="nhlSubHeaders">Even Strength</h2>
         {/* Area Chart */}
         {/* <h3>Expected Goals For By Type</h3>
         <AreaChart
@@ -313,7 +311,6 @@ export default function Teams() {
           <Area type="monotone" dataKey="mediumDangerxGoalsFor" stackId="1" stroke="#222831" fill={ZONECOLORS[1]} />
           <Area type="monotone" dataKey="highDangerxGoalsFor" stackId="1" stroke="#222831" fill={ZONECOLORS[0]} />
         </AreaChart> */}
-
         {/* Types of Goals */}
         <h3>Actual Goals For By Type</h3>
         <BarChart width={1400} height={600} data={evenStrength}>
@@ -326,7 +323,6 @@ export default function Teams() {
           <Bar dataKey="mediumDangerGoalsFor" stackId="a" fill={ZONECOLORS[1]} />
           <Bar dataKey="highDangerGoalsFor" stackId="a" fill={ZONECOLORS[0]} />
         </BarChart>
-
         {/* Offense */}
         <h3>Expected vs Actual Goals For</h3>
         <LineChart
@@ -371,7 +367,7 @@ export default function Teams() {
           <Line type="monotone" dataKey="goalsAgainst" stroke={COMPARISONCOLORS[1]} />
         </LineChart>
         {/* Power Play */}
-        <h2>Power Play</h2>
+        <h2 className="nhlSubHeaders">Power Play</h2>
         {/* Types of Goals */}
         <h3>Actual Goals For By Type</h3>
         <BarChart width={1400} height={600} data={powerPlay}>
@@ -384,7 +380,6 @@ export default function Teams() {
           <Bar dataKey="mediumDangerGoalsFor" stackId="a" fill={ZONECOLORS[1]} />
           <Bar dataKey="highDangerGoalsFor" stackId="a" fill={ZONECOLORS[0]} />
         </BarChart>
-
         {/* Offense */}
         <h3>Expected vs Actual Goals For</h3>
         <LineChart
@@ -402,7 +397,7 @@ export default function Teams() {
           <Line type="monotone" dataKey="goalsFor" stroke={COMPARISONCOLORS[1]} />
         </LineChart>
         {/* Short Handed */}
-        <h2>Short Handed</h2>
+        <h2 className="nhlSubHeaders">Short Handed</h2>
         {/* Types of Goals */}
         <h3>Actual Goals Against By Type</h3>
         <BarChart width={1400} height={600} data={shortHanded}>
@@ -415,7 +410,6 @@ export default function Teams() {
           <Bar dataKey="mediumDangerGoalsAgainst" stackId="a" fill={ZONECOLORS[1]} />
           <Bar dataKey="highDangerGoalsAgainst" stackId="a" fill={ZONECOLORS[0]} />
         </BarChart>
-
         {/* Defense */}
         <h3>Expected vs Actual Goals Against</h3>
         <LineChart

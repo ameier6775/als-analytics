@@ -19,14 +19,14 @@ import {
   ReferenceLine,
 } from 'recharts';
 
-const TeamDropdown = ({ teams }) => {
+const TeamCard = ({ teams }) => {
   const [selectedTeam, setSelectedTeam] = useState(teams[0]);
   const onChange = (e) => {
     setSelectedTeam(e);
   };
 
   // Gets the percentile for the given statistic
-  function getProductionPercentile(category) {
+  function getProductionPercentile(category, direction) {
     // Get the maximum player value for the statistic
     var positionalArr = teams;
     var maxValue = Math.max.apply(
@@ -45,47 +45,27 @@ const TeamDropdown = ({ teams }) => {
     var teamValue = selectedTeam[category];
     var result = (teamValue - minValue) / difference;
 
-    // Specific conditions (100% & 0&)
-    if (maxValue === teamValue) {
-      return '100%';
-    } else if (minValue === teamValue) {
-      return '0%';
-    } else if (result.toFixed(2).substring(2, 3) === '0') {
-      return result.toFixed(2).substring(3, 4) + '%';
-    } else {
-      return result.toFixed(2).substring(2, 4) + '%';
-    }
-  }
-
-  // Gets the percentile for the given negative statistic
-  function getNegativePercentile(category) {
-    // Get the maximum player value for the statistic
-    var positionalArr = teams;
-    var maxValue = Math.max.apply(
-      Math,
-      positionalArr.map((obj) => {
-        return obj[category];
-      }),
-    );
-    var minValue = Math.min.apply(
-      Math,
-      positionalArr.map((obj) => {
-        return obj[category];
-      }),
-    );
-    var difference = maxValue - minValue;
-    var teamValue = selectedTeam[category];
-    var result = (teamValue - minValue) / difference;
-
-    // Specific conditions (100% & 0%)
-    if (minValue === teamValue) {
-      return '100%';
-    } else if (maxValue === teamValue) {
-      return '0%';
-    } else if ((1 - result).toFixed(2).substring(2, 3) === '0') {
-      return (1 - result).toFixed(2).substring(3, 4) + '%';
-    } else {
-      return (1 - result).toFixed(2).substring(2, 4) + '%';
+    if (direction === 'positive') {
+      // Specific conditions (100% & 0&)
+      if (maxValue === teamValue) {
+        return '100%';
+      } else if (minValue === teamValue) {
+        return '0%';
+      } else if (result.toFixed(2).substring(2, 3) === '0') {
+        return result.toFixed(2).substring(3, 4) + '%';
+      } else {
+        return result.toFixed(2).substring(2, 4) + '%';
+      }
+    } else if (direction === 'negative') {
+      if (minValue === teamValue) {
+        return '100%';
+      } else if (maxValue === teamValue) {
+        return '0%';
+      } else if ((1 - result).toFixed(2).substring(2, 3) === '0') {
+        return (1 - result).toFixed(2).substring(3, 4) + '%';
+      } else {
+        return (1 - result).toFixed(2).substring(2, 4) + '%';
+      }
     }
   }
 
@@ -123,67 +103,67 @@ const TeamDropdown = ({ teams }) => {
 
   // Preparing offensive chart data goalsFor
   let goalsFor =
-    parseInt(getProductionPercentile('goalsFor').substring(0, 2)) === 10
+    parseInt(getProductionPercentile('goalsFor', 'positive').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('goalsFor').substring(0, 2)) === 0
+      : !parseInt(getProductionPercentile('goalsFor', 'positive').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('goalsFor').substring(0, 2));
+      : parseInt(getProductionPercentile('goalsFor', 'positive').substring(0, 2));
   let xGoalsFor =
-    parseInt(getProductionPercentile('xGoalsFor').substring(0, 2)) === 10
+    parseInt(getProductionPercentile('xGoalsFor', 'positive').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('xGoalsFor').substring(0, 2)) === 0
+      : !parseInt(getProductionPercentile('xGoalsFor', 'positive').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('xGoalsFor').substring(0, 2));
+      : parseInt(getProductionPercentile('xGoalsFor', 'positive').substring(0, 2));
   let shotAttemptsFor =
-    parseInt(getProductionPercentile('shotAttemptsFor').substring(0, 2)) === 10
+    parseInt(getProductionPercentile('shotAttemptsFor', 'positive').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('shotAttemptsFor').substring(0, 2)) === 0
+      : !parseInt(getProductionPercentile('shotAttemptsFor', 'positive').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('shotAttemptsFor').substring(0, 2));
+      : parseInt(getProductionPercentile('shotAttemptsFor', 'positive').substring(0, 2));
   let takeawaysFor =
-    parseInt(getProductionPercentile('takeawaysFor').substring(0, 2)) === 10
+    parseInt(getProductionPercentile('takeawaysFor', 'positive').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('takeawaysFor').substring(0, 2)) === 0
+      : !parseInt(getProductionPercentile('takeawaysFor', 'positive').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('takeawaysFor').substring(0, 2));
+      : parseInt(getProductionPercentile('takeawaysFor', 'positive').substring(0, 2));
   let reboundsFor =
-    parseInt(getProductionPercentile('reboundsFor').substring(0, 2)) === 10
+    parseInt(getProductionPercentile('reboundsFor', 'positive').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('reboundsFor').substring(0, 2)) === 0
+      : !parseInt(getProductionPercentile('reboundsFor', 'positive').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('reboundsFor').substring(0, 2));
+      : parseInt(getProductionPercentile('reboundsFor', 'positive').substring(0, 2));
 
   // Preparing defensive chart data
   let goalsAgainst =
-    parseInt(getProductionPercentile('goalsAgainst').substring(0, 2)) === 10
+    parseInt(getProductionPercentile('goalsAgainst', 'positive').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('goalsAgainst').substring(0, 2)) === 0
+      : !parseInt(getProductionPercentile('goalsAgainst', 'positive').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('goalsAgainst').substring(0, 2));
+      : parseInt(getProductionPercentile('goalsAgainst', 'positive').substring(0, 2));
   let xGoalsAgainst =
-    parseInt(getProductionPercentile('xGoalsAgainst').substring(0, 2)) === 10
+    parseInt(getProductionPercentile('xGoalsAgainst', 'positive').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('xGoalsAgainst').substring(0, 2)) === 0
+      : !parseInt(getProductionPercentile('xGoalsAgainst', 'positive').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('xGoalsAgainst').substring(0, 2));
+      : parseInt(getProductionPercentile('xGoalsAgainst', 'positive').substring(0, 2));
   let shotAttemptsAgainst =
-    parseInt(getProductionPercentile('shotAttemptsAgainst').substring(0, 2)) === 10
+    parseInt(getProductionPercentile('shotAttemptsAgainst', 'positive').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('shotAttemptsAgainst').substring(0, 2)) === 0
+      : !parseInt(getProductionPercentile('shotAttemptsAgainst', 'positive').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('shotAttemptsAgainst').substring(0, 2));
+      : parseInt(getProductionPercentile('shotAttemptsAgainst', 'positive').substring(0, 2));
   let giveawaysFor =
-    parseInt(getProductionPercentile('giveawaysFor').substring(0, 2)) === 10
+    parseInt(getProductionPercentile('giveawaysFor', 'positive').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('giveawaysFor').substring(0, 2)) === 0
+      : !parseInt(getProductionPercentile('giveawaysFor', 'positive').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('giveawaysFor').substring(0, 2));
+      : parseInt(getProductionPercentile('giveawaysFor', 'positive').substring(0, 2));
   let reboundsAgainst =
-    parseInt(getProductionPercentile('reboundsAgainst').substring(0, 2)) === 10
+    parseInt(getProductionPercentile('reboundsAgainst', 'positive').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('reboundsAgainst').substring(0, 2)) === 0
+      : !parseInt(getProductionPercentile('reboundsAgainst', 'positive').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('reboundsAgainst').substring(0, 2));
+      : parseInt(getProductionPercentile('reboundsAgainst', 'positive').substring(0, 2));
 
   // Plotting chart data
   var offensiveGraphData = [
@@ -251,16 +231,16 @@ const TeamDropdown = ({ teams }) => {
         <div id={selectedTeam.playerId} className="playerCard">
           <h1>{selectedTeam.name}</h1>
           <p>
-            Goals For: <span>{getProductionPercentile('goalsFor')}</span>
+            Goals For: <span>{getProductionPercentile('goalsFor', 'positive')}</span>
           </p>
           <p>
-            Expected Goals For: <span>{getProductionPercentile('xGoalsFor')}</span>
+            Expected Goals For: <span>{getProductionPercentile('xGoalsFor', 'positive')}</span>
           </p>
           <p>
-            Takeaways: <span>{getProductionPercentile('takeawaysFor')}</span>
+            Takeaways: <span>{getProductionPercentile('takeawaysFor', 'positive')}</span>
           </p>
           <p>
-            Shot Attempts For: <span>{getProductionPercentile('shotAttemptsFor')}</span>
+            Shot Attempts For: <span>{getProductionPercentile('shotAttemptsFor', 'positive')}</span>
           </p>
           <p>
             Faceoffs:{' '}
@@ -271,18 +251,18 @@ const TeamDropdown = ({ teams }) => {
             </span>
           </p>
           <p>
-            Goals Against: <span>{getNegativePercentile('goalsAgainst')}</span>
+            Goals Against: <span>{getProductionPercentile('goalsAgainst', 'negative')}</span>
           </p>
 
           <p>
-            Expected Goals Against: <span>{getNegativePercentile('xGoalsAgainst')}</span>
+            Expected Goals Against: <span>{getProductionPercentile('xGoalsAgainst', 'negative')}</span>
           </p>
 
           <p>
-            Giveaways: <span>{getNegativePercentile('giveawaysFor')}</span>
+            Giveaways: <span>{getProductionPercentile('giveawaysFor', 'negative')}</span>
           </p>
           <p>
-            Shot Attempts Against: <span>{getNegativePercentile('shotAttemptsAgainst')}</span>
+            Shot Attempts Against: <span>{getProductionPercentile('shotAttemptsAgainst', 'negative')}</span>
           </p>
 
           <p>
@@ -376,7 +356,7 @@ const TeamDropdown = ({ teams }) => {
   );
 };
 
-export default TeamDropdown;
+export default TeamCard;
 
 // Offensive
 // xGoalsPercentage

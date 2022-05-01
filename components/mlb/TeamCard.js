@@ -19,7 +19,7 @@ import {
   ReferenceLine,
 } from 'recharts';
 
-const TeamDropdown = ({ teams }) => {
+const TeamCard = ({ teams }) => {
   const [selectedTeam, setSelectedTeam] = useState(teams[0]);
   const onChange = (e) => {
     setSelectedTeam(e);
@@ -202,27 +202,7 @@ const TeamDropdown = ({ teams }) => {
           <p>
             Walk Per Strikeout: <span>{getProductionPercentile('BBPerK', 'positive')}</span>
           </p>
-          {/* <p>
-            Goals For: <span>{getProductionPercentile('goalsFor')}</span>
-          </p>
-          <p>
-            Expected Goals For: <span>{getProductionPercentile('xGoalsFor')}</span>
-          </p>
-          <p>
-            Takeaways: <span>{getProductionPercentile('takeawaysFor')}</span>
-          </p>
-          <p>
-            Shot Attempts For: <span>{getProductionPercentile('shotAttemptsFor')}</span>
-          </p>
-          <p>
-            Faceoffs:{' '}
-            <span>
-              {(selectedTeam['faceOffsWonFor'] / (selectedTeam['faceOffsWonAgainst'] + selectedTeam['faceOffsWonFor']))
-                .toFixed(2)
-                .substring(2, 4) + '%'}
-            </span>
-          </p>
-          <div className="fullWidthChart">
+          {/*<div className="fullWidthChart">
             <h2 className="playerChart">Offense</h2>
             <LineChart
               width={1200}
@@ -270,4 +250,4 @@ const TeamDropdown = ({ teams }) => {
   );
 };
 
-export default TeamDropdown;
+export default TeamCard;

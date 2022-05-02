@@ -60,63 +60,64 @@ export default async function handler(req, res) {
   });
 
   // Pitchers Fan Graphs Standard Data
-  // const columnArrayPitcherFGStandard = 'Team G AB PA H 1B 2B 3B HR R RBI BB IBB SO HBP SF SH GDP SB CS AVG'.split(
-  //   /\s+/,
-  // );
+  const columnArrayPitcherFGStandard = 'Team W L ERA G GS CG ShO SV HLD BS IP TBF H R ER HR BB IBB HBP WP BK SO'.split(
+    /\s+/,
+  );
 
-  // type ColumnHeaderForPitcherFGStandard = { [C in typeof columnArrayPitcherFGStandard[number]]: number };
-  // const columnHeaderMapPitcherFGStandard: ColumnHeaderForPitcherFGStandard = columnArrayPitcherFGStandard.reduce(
-  //   (acc, value, index) => ({ ...acc, [value]: index + 1 }),
-  //   {},
-  // );
+  type ColumnHeaderForPitcherFGStandard = { [C in typeof columnArrayPitcherFGStandard[number]]: number };
+  const columnHeaderMapPitcherFGStandard: ColumnHeaderForPitcherFGStandard = columnArrayPitcherFGStandard.reduce(
+    (acc, value, index) => ({ ...acc, [value]: index + 1 }),
+    {},
+  );
 
-  // const workbookPitcherFGStandard = new Excel.Workbook();
-  // await workbookPitcherFGStandard.csv.readFile(`${dir}/PitcherFGStandard.csv`);
-  // const worksheetPitcherFGStandard = workbookPitcherFGStandard.worksheets[0];
-  // const dataPitcherFGStandard = [];
+  const workbookPitcherFGStandard = new Excel.Workbook();
+  await workbookPitcherFGStandard.csv.readFile(`${dir}/PitcherFGStandard.csv`);
+  const worksheetPitcherFGStandard = workbookPitcherFGStandard.worksheets[0];
+  const dataPitcherFGStandard = [];
 
-  // worksheetPitcherFGStandard.eachRow((row, rowNumber) => {
-  //   const rowObject = Object.entries(columnHeaderMapPitcherFGStandard).reduce((acc, value) => {
-  //     return {
-  //       ...acc,
-  //       [value[0]]: row.values[value[1]],
-  //     };
-  //   }, {});
+  worksheetPitcherFGStandard.eachRow((row, rowNumber) => {
+    const rowObject = Object.entries(columnHeaderMapPitcherFGStandard).reduce((acc, value) => {
+      return {
+        ...acc,
+        [value[0]]: row.values[value[1]],
+      };
+    }, {});
 
-  //   if (rowNumber !== 1) {
-  //     dataPitcherFGStandard.push(rowObject);
-  //   }
-  // });
+    if (rowNumber !== 1) {
+      dataPitcherFGStandard.push(rowObject);
+    }
+  });
   // Pitchers Fan Graphs Advanced Data
-  // const columnArrayPitcherFGAdvanced =
-  //   'Team PA BBRate KRate BBPerK AVG OBP SLG OPS ISO Spd BABIP UBR wGDP wSB wRC wRAA wOBA wRC'.split(/\s+/);
+  const columnArrayPitcherFGAdvanced =
+    'Team K/9 BB/9 K/BB HR/9 KPer BBPer K-BBPer AVG WHIP BABIP LOBPer ERA- FIP- xFIP- ERA FIP E-F xFIP SIERA'.split(
+      /\s+/,
+    );
+  type ColumnHeaderForPitcherFGAdvanced = { [C in typeof columnArrayPitcherFGAdvanced[number]]: number };
+  const columnHeaderMapPitcherFGAdvanced: ColumnHeaderForPitcherFGAdvanced = columnArrayPitcherFGAdvanced.reduce(
+    (acc, value, index) => ({ ...acc, [value]: index + 1 }),
+    {},
+  );
 
-  // type ColumnHeaderForPitcherFGAdvanced = { [C in typeof columnArrayPitcherFGAdvanced[number]]: number };
-  // const columnHeaderMapPitcherFGAdvanced: ColumnHeaderForPitcherFGAdvanced = columnArrayPitcherFGAdvanced.reduce(
-  //   (acc, value, index) => ({ ...acc, [value]: index + 1 }),
-  //   {},
-  // );
+  const workbookPitcherFGAdvanced = new Excel.Workbook();
+  await workbookPitcherFGAdvanced.csv.readFile(`${dir}/PitcherFGAdvanced.csv`);
+  const worksheetPitcherFGAdvanced = workbookPitcherFGAdvanced.worksheets[0];
+  const dataPitcherFGAdvanced = [];
 
-  // const workbookPitcherFGAdvanced = new Excel.Workbook();
-  // await workbookPitcherFGAdvanced.csv.readFile(`${dir}/PitcherFGAdvanced.csv`);
-  // const worksheetPitcherFGAdvanced = workbookPitcherFGAdvanced.worksheets[0];
-  // const dataPitcherFGAdvanced = [];
+  worksheetPitcherFGAdvanced.eachRow((row, rowNumber) => {
+    const rowObject = Object.entries(columnHeaderMapPitcherFGAdvanced).reduce((acc, value) => {
+      return {
+        ...acc,
+        [value[0]]: row.values[value[1]],
+      };
+    }, {});
 
-  // worksheetPitcherFGAdvanced.eachRow((row, rowNumber) => {
-  //   const rowObject = Object.entries(columnHeaderMapPitcherFGAdvanced).reduce((acc, value) => {
-  //     return {
-  //       ...acc,
-  //       [value[0]]: row.values[value[1]],
-  //     };
-  //   }, {});
-
-  //   if (rowNumber !== 1) {
-  //     dataPitcherFGAdvanced.push(rowObject);
-  //   }
-  // });
+    if (rowNumber !== 1) {
+      dataPitcherFGAdvanced.push(rowObject);
+    }
+  });
 
   // Joining the two hitter fan graphs tables by team name
-  const data = [];
+  const hittingData = [];
   for (let i = 0; i < 30; i++) {
     const standardElement = dataHitterFGStandard[i];
 
@@ -129,11 +130,29 @@ export default async function handler(req, res) {
 
     // Putting both objects values into one & inserting it into the array
     const element = { ...standardElement, ...advancedElement };
-    data.push(element);
+    hittingData.push(element);
+  }
+
+  // Joining the two pitcher fan graphs tables by team name
+  const pitchingData = [];
+  for (let i = 0; i < 30; i++) {
+    const standardElement = dataPitcherFGStandard[i];
+
+    // Adding these two fields for the dropdown
+    standardElement.value = standardElement['Team'];
+    standardElement.label = standardElement['Team'];
+
+    // Finding advanced data object by the standards team name
+    const advancedElement = dataPitcherFGAdvanced.find((obj) => obj['Team'] === standardElement['Team']);
+
+    // Putting both objects values into one & inserting it into the array
+    const element = { ...standardElement, ...advancedElement };
+    pitchingData.push(element);
   }
 
   // Response
   res.status(200).json({
-    hittingData: data,
+    hittingData: hittingData,
+    pitchingData: pitchingData,
   });
 }

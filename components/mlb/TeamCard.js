@@ -69,43 +69,75 @@ const TeamCard = ({ teams }) => {
     }
   }
 
-  // Preparing hitters chart data
-  let runs =
+  // Preparing hitters chart data (all positive valued fields)
+  let runsFor =
     parseInt(getProductionPercentile('RFor').substring(0, 2)) === 10
       ? 100
       : !parseInt(getProductionPercentile('RFor').substring(0, 2)) === 0
       ? 0
       : parseInt(getProductionPercentile('RFor').substring(0, 2));
-  let onBase =
-    parseInt(getProductionPercentile('OBP').substring(0, 2)) === 10
+  let BBperK =
+    parseInt(getProductionPercentile('BBPerK').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('OBP').substring(0, 2)) === 0
+      : !parseInt(getProductionPercentile('BBPerK').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('OBP').substring(0, 2));
+      : parseInt(getProductionPercentile('BBPerK').substring(0, 2));
   let average =
     parseInt(getProductionPercentile('AVGFor').substring(0, 2)) === 10
       ? 100
       : !parseInt(getProductionPercentile('AVGFor').substring(0, 2)) === 0
       ? 0
       : parseInt(getProductionPercentile('AVGFor').substring(0, 2));
-  let slug =
-    parseInt(getProductionPercentile('SLG').substring(0, 2)) === 10
+  let ops =
+    parseInt(getProductionPercentile('OPS').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('SLG').substring(0, 2)) === 0
+      : !parseInt(getProductionPercentile('OPS').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('SLG').substring(0, 2));
-  let strikeouts =
-    parseInt(getProductionPercentile('SOFor', 'negative').substring(0, 2)) === 10
+      : parseInt(getProductionPercentile('OPS').substring(0, 2));
+  let homeRunsFor =
+    parseInt(getProductionPercentile('HRFor').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('SOFor', 'negative').substring(0, 2)) === 0
+      : !parseInt(getProductionPercentile('HRFor').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('SOFor', 'negative').substring(0, 2));
+      : parseInt(getProductionPercentile('HRFor').substring(0, 2));
+
+  // Preparing pitchers chart data (all negative valued fields)
+  let runsAgainst =
+    parseInt(getProductionPercentile('RAgainst').substring(0, 2)) === 10
+      ? 100
+      : !parseInt(getProductionPercentile('RAgainst').substring(0, 2)) === 0
+      ? 0
+      : parseInt(getProductionPercentile('RAgainst').substring(0, 2));
+  let era =
+    parseInt(getProductionPercentile('ERA').substring(0, 2)) === 10
+      ? 100
+      : !parseInt(getProductionPercentile('ERA').substring(0, 2)) === 0
+      ? 0
+      : parseInt(getProductionPercentile('ERA').substring(0, 2));
+  let whip =
+    parseInt(getProductionPercentile('WHIP').substring(0, 2)) === 10
+      ? 100
+      : !parseInt(getProductionPercentile('WHIP').substring(0, 2)) === 0
+      ? 0
+      : parseInt(getProductionPercentile('WHIP').substring(0, 2));
+  let averageAgainst =
+    parseInt(getProductionPercentile('AVGAgainst').substring(0, 2)) === 10
+      ? 100
+      : !parseInt(getProductionPercentile('AVGAgainst').substring(0, 2)) === 0
+      ? 0
+      : parseInt(getProductionPercentile('AVGAgainst').substring(0, 2));
+  let homeRunsAgainst =
+    parseInt(getProductionPercentile('HRAgainst').substring(0, 2)) === 10
+      ? 100
+      : !parseInt(getProductionPercentile('HRAgainst').substring(0, 2)) === 0
+      ? 0
+      : parseInt(getProductionPercentile('HRAgainst').substring(0, 2));
 
   // Plotting chart data
   var hittersGraphData = [
     {
       category: 'Runs',
-      score: runs,
+      score: runsFor,
       fullMark: 100,
     },
     {
@@ -114,18 +146,47 @@ const TeamCard = ({ teams }) => {
       fullMark: 100,
     },
     {
-      category: 'Strikeouts',
-      score: strikeouts,
+      category: 'OPS',
+      score: ops,
       fullMark: 100,
     },
     {
-      category: 'On Base',
-      score: onBase,
+      category: 'Walk Per Strikeout',
+      score: BBperK,
       fullMark: 100,
     },
     {
-      category: 'Slug',
-      score: slug,
+      category: 'Home Runs',
+      score: homeRunsFor,
+      fullMark: 100,
+    },
+  ];
+  // Plotting chart data
+  var pitchersGraphData = [
+    {
+      category: 'Runs',
+      score: runsAgainst,
+      fullMark: 100,
+    },
+    {
+      category: 'Average',
+      score: averageAgainst,
+      fullMark: 100,
+    },
+
+    {
+      category: 'ERA',
+      score: era,
+      fullMark: 100,
+    },
+    {
+      category: 'WHIP',
+      score: whip,
+      fullMark: 100,
+    },
+    {
+      category: 'Home Runs',
+      score: homeRunsAgainst,
       fullMark: 100,
     },
   ];
@@ -137,6 +198,7 @@ const TeamCard = ({ teams }) => {
       {selectedTeam ? (
         <div id={selectedTeam.playerId} className="playerCard">
           <h1>{selectedTeam.Team}</h1>
+          <h2>Batting</h2>
           <p>
             Average: <span>{getProductionPercentile('AVGFor')}</span>
           </p>
@@ -168,7 +230,7 @@ const TeamCard = ({ teams }) => {
             Walk Per Strikeout: <span>{getProductionPercentile('BBPerK')}</span>
           </p>
           <div className="fullWidthChart">
-            <h2 className="playerChart">Hitting</h2>
+            {/* <h2 className="playerChart">Batting</h2> */}
             <LineChart
               width={1200}
               height={280}
@@ -195,6 +257,77 @@ const TeamCard = ({ teams }) => {
               />
               <ReferenceLine
                 y={0}
+                label={{ value: 'Worst', angle: 0, position: 'top', fill: 'red', fontSize: 12 }}
+                stroke="red"
+              />
+              <Line
+                type="monotone"
+                dataKey="score"
+                stroke="white"
+                fill="rgb(255, 174, 0)"
+                label={{ angle: 0, position: 'bottom', fill: 'white', fontSize: 9 }}
+              />
+            </LineChart>
+          </div>
+          <h2>Pitching</h2>
+          <p>
+            Earned Run Average: <span>{getProductionPercentile('ERA', 'negative')}</span>
+          </p>
+          <p>
+            WHIP: <span>{getProductionPercentile('WHIP', 'negative')}</span>
+          </p>
+          <p>
+            Strikeouts: <span>{getProductionPercentile('SOAgainst')}</span>
+          </p>
+          <p>
+            Walks: <span>{getProductionPercentile('BBAgainst', 'negative')}</span>
+          </p>
+          <p>
+            Home Runs: <span>{getProductionPercentile('HRAgainst', 'negative')}</span>
+          </p>
+          <p>
+            Runs: <span>{getProductionPercentile('RAgainst', 'negative')}</span>
+          </p>
+          <p>
+            Hits: <span>{getProductionPercentile('HAgainst', 'negative')}</span>
+          </p>
+          <p>
+            Strikeouts Per 9: <span>{getProductionPercentile('KPer9')}</span>
+          </p>
+          <p>
+            Walks Per 9: <span>{getProductionPercentile('BBAgainst', 'negative')}</span>
+          </p>
+          <p>
+            Home Runs Per 9: <span>{getProductionPercentile('HRPer9', 'negative')}</span>
+          </p>
+          <div className="fullWidthChart">
+            {/* <h2 className="playerChart">Pitching</h2> */}
+            <LineChart
+              width={1200}
+              height={280}
+              data={pitchersGraphData}
+              margin={{
+                top: 15,
+                right: 10,
+                left: 5,
+                bottom: 5,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="category" stroke="white" />
+              <YAxis stroke="white" />
+              <ReferenceLine
+                y={0}
+                label={{ value: 'Best', angle: 0, position: 'top', fill: 'lightgreen', fontSize: 12 }}
+                stroke="lightgreen"
+              />
+              <ReferenceLine
+                y={50}
+                label={{ value: 'Average', angle: 0, position: 'top', fill: 'gold', fontSize: 12 }}
+                stroke="gold"
+              />
+              <ReferenceLine
+                y={100}
                 label={{ value: 'Worst', angle: 0, position: 'top', fill: 'red', fontSize: 12 }}
                 stroke="red"
               />

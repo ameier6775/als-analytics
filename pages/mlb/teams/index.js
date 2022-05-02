@@ -12,11 +12,11 @@ export default function Teams() {
   if (!data) return <div>loading...</div>;
   console.log(data);
 
-  const hittingData = data.hittingData;
+  const teamData = data.data;
 
   return (
     <>
-      <TeamCard teams={hittingData}></TeamCard>
+      <TeamCard teams={teamData}></TeamCard>
     </>
   );
 }

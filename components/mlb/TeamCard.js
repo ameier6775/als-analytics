@@ -71,11 +71,11 @@ const TeamCard = ({ teams }) => {
 
   // Preparing hitters chart data
   let runs =
-    parseInt(getProductionPercentile('R').substring(0, 2)) === 10
+    parseInt(getProductionPercentile('RFor').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('R').substring(0, 2)) === 0
+      : !parseInt(getProductionPercentile('RFor').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('R').substring(0, 2));
+      : parseInt(getProductionPercentile('RFor').substring(0, 2));
   let onBase =
     parseInt(getProductionPercentile('OBP').substring(0, 2)) === 10
       ? 100
@@ -83,11 +83,11 @@ const TeamCard = ({ teams }) => {
       ? 0
       : parseInt(getProductionPercentile('OBP').substring(0, 2));
   let average =
-    parseInt(getProductionPercentile('AVG').substring(0, 2)) === 10
+    parseInt(getProductionPercentile('AVGFor').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('AVG').substring(0, 2)) === 0
+      : !parseInt(getProductionPercentile('AVGFor').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('AVG').substring(0, 2));
+      : parseInt(getProductionPercentile('AVGFor').substring(0, 2));
   let slug =
     parseInt(getProductionPercentile('SLG').substring(0, 2)) === 10
       ? 100
@@ -95,11 +95,11 @@ const TeamCard = ({ teams }) => {
       ? 0
       : parseInt(getProductionPercentile('SLG').substring(0, 2));
   let strikeouts =
-    parseInt(getProductionPercentile('SO', 'negative').substring(0, 2)) === 10
+    parseInt(getProductionPercentile('SOFor', 'negative').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('SO', 'negative').substring(0, 2)) === 0
+      : !parseInt(getProductionPercentile('SOFor', 'negative').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('SO', 'negative').substring(0, 2));
+      : parseInt(getProductionPercentile('SOFor', 'negative').substring(0, 2));
 
   // Plotting chart data
   var hittersGraphData = [
@@ -138,7 +138,7 @@ const TeamCard = ({ teams }) => {
         <div id={selectedTeam.playerId} className="playerCard">
           <h1>{selectedTeam.Team}</h1>
           <p>
-            Average: <span>{getProductionPercentile('AVG')}</span>
+            Average: <span>{getProductionPercentile('AVGFor')}</span>
           </p>
           <p>
             Singles: <span>{getProductionPercentile('1B')}</span>
@@ -150,25 +150,25 @@ const TeamCard = ({ teams }) => {
             Triples: <span>{getProductionPercentile('3B')}</span>
           </p>
           <p>
-            Home Runs: <span>{getProductionPercentile('HR')}</span>
+            Home Runs: <span>{getProductionPercentile('HRFor')}</span>
           </p>
           <p>
-            Runs: <span>{getProductionPercentile('R')}</span>
+            Runs: <span>{getProductionPercentile('RFor')}</span>
           </p>
           <p>
-            Hits: <span>{getProductionPercentile('H')}</span>
+            Hits: <span>{getProductionPercentile('HFor')}</span>
           </p>
           <p>
-            Walks: <span>{getProductionPercentile('BB')}</span>
+            Walks: <span>{getProductionPercentile('BBFor')}</span>
           </p>
           <p>
-            Strikeouts: <span>{getProductionPercentile('SO', 'negative')}</span>
+            Strikeouts: <span>{getProductionPercentile('SOFor', 'negative')}</span>
           </p>
           <p>
             Walk Per Strikeout: <span>{getProductionPercentile('BBPerK')}</span>
           </p>
           <div className="fullWidthChart">
-            <h2 className="playerChart">Hitters</h2>
+            <h2 className="playerChart">Hitting</h2>
             <LineChart
               width={1200}
               height={280}

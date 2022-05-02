@@ -36,8 +36,6 @@ export default function Players() {
   if (error) return <div>failed to load</div>;
   if (!data) return <div>loading...</div>;
 
-  console.log(data.dataMoneyPuck);
-
   const allSituationsComposedChart = data.dataMoneyPuck.filter((player) => player.situation === 'all');
   const allSituationsBarChart = data.dataMoneyPuck.filter((player) => player.situation === 'all');
   const allSituationsScatterChart = data.dataMoneyPuck.filter((player) => player.situation === 'all');

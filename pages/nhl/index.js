@@ -142,8 +142,6 @@ export default function Teams() {
     if (keyA < keyB) return 1;
   });
 
-  console.log(allSituations);
-
   // Need this for even strength area chart
   const renderTooltipContent = (o) => {
     const { payload, label } = o;

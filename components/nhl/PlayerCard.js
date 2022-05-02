@@ -115,7 +115,6 @@ const PlayerCard = ({ players }) => {
   function combineCategories(categoryOne, categoryTwo) {
     let category1 = parseInt(categoryOne.substring(0, categoryOne.length - 1));
     let category2 = parseInt(categoryTwo.substring(0, categoryTwo.length - 1));
-    console.log(category1, category2);
     let avg = ((category1 + category2) / 2).toString() + '%';
     return avg;
   }

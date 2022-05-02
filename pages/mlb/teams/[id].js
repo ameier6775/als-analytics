@@ -12,9 +12,6 @@ export default function Team() {
   if (error) return <div>failed to load</div>;
   if (!data) return <div>loading...</div>;
 
-  console.log(data);
-  console.log(data.splits.hitting.overall[0].venue);
-
   return (
     <>
       <h1 className="font-mono ">

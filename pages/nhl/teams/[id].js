@@ -12,8 +12,6 @@ export default function Team() {
   if (error) return <div>failed to load</div>;
   if (!data) return <div>loading...</div>;
 
-  console.log(data);
-
   return (
     <>
       <h1 className="font-mono ">

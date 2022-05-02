@@ -10,29 +10,13 @@ export default function Teams() {
   const { data, error } = useSWR('../api/mlb/teams/', fetcher);
   if (error) return <div>failed to load</div>;
   if (!data) return <div>loading...</div>;
-
   console.log(data);
-  const teamData = data.data;
 
-  var teamCardArray = [];
-  for (let i = 0; i < teamData.length; i++) {
-    teamCardArray.push(teamData[i]);
-  }
-
-  {
-    teamCardArray
-      ? teamCardArray.forEach((team) => {
-          team.value = team.Team;
-          team.label = team.Team;
-        })
-      : teams;
-  }
-
-  console.log(teamCardArray);
+  const hittingData = data.hittingData;
 
   return (
     <>
-      <TeamCard teams={teamCardArray}></TeamCard>
+      <TeamCard teams={hittingData}></TeamCard>
     </>
   );
 }

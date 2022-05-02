@@ -4,13 +4,6 @@ import path from 'path';
 import excuteQuery from '../../../../db';
 
 export default async function handler(req, res) {
-  // console.log('req nom', req.body);
-  // const result = await excuteQuery({
-  //   query: 'INSERT INTO post(content) VALUES(?)',
-  //   values: [req.body.content],
-  // });
-  // console.log('ttt', result);
-
   const dir = path.resolve('../stats-app/data/nhl/players/2022');
 
   // Money Puck Data

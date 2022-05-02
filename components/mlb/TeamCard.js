@@ -23,18 +23,18 @@ const TeamCard = ({ teams }) => {
   const [selectedTeam, setSelectedTeam] = useState(teams[0]);
   const onChange = (e) => {
     setSelectedTeam(e);
-    console.log(e);
   };
 
   function getProductionPercentile(category, direction = 'positive') {
-    // Get the maximum player value for the statistic
     var positionalArr = teams;
+    // Get the maximum player value for the statistic
     var maxValue = Math.max.apply(
       Math,
       positionalArr.map((obj) => {
         return obj[category];
       }),
     );
+    // Get the minimum player value for the statistic
     var minValue = Math.min.apply(
       Math,
       positionalArr.map((obj) => {
@@ -45,8 +45,8 @@ const TeamCard = ({ teams }) => {
     var teamValue = selectedTeam[category];
     var result = (teamValue - minValue) / difference;
 
+    // Specific conditions (100% & 0&) based off if its a positive or negative statistic
     if (direction === 'positive') {
-      // Specific conditions (100% & 0&)
       if (maxValue === teamValue) {
         return '100%';
       } else if (minValue === teamValue) {

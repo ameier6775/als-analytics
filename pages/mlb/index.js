@@ -21,8 +21,6 @@ export default function mlb() {
   const alcentral = data.league.season.leagues[1].divisions[1];
   const aleast = data.league.season.leagues[1].divisions[2];
 
-  console.log(data);
-
   return (
     <>
       <div className="sideBySide">

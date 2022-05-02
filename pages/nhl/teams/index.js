@@ -31,8 +31,6 @@ export default function Teams() {
       : teams;
   }
 
-  console.log(teamCardArray);
-
   return (
     <>
       <TeamCard teams={teamCardArray}></TeamCard>

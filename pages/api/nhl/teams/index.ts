@@ -138,7 +138,7 @@ export default async function handler(req, res) {
     team.averageOffensiveAwareness = parseFloat(team.offensiveAwareness) / averageOffensiveAwareness;
   });
 
-  // Joining the two hockey-reference tables
+  // Joining the two hockey-reference tables (right by, joining by index position)
   const data = [];
   for (let i = 0; i < 32; i++) {
     const analyticElement = dataAnalytics[i];

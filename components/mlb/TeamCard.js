@@ -198,7 +198,7 @@ const TeamCard = ({ teams }) => {
       {selectedTeam ? (
         <div id={selectedTeam.playerId} className="playerCard">
           <h1>{selectedTeam.Team}</h1>
-          <h2>Batting</h2>
+          {/* <h2>Batting</h2> */}
           <p>
             Average: <span>{getProductionPercentile('AVGFor')}</span>
           </p>
@@ -230,15 +230,15 @@ const TeamCard = ({ teams }) => {
             Walk Per Strikeout: <span>{getProductionPercentile('BBPerK')}</span>
           </p>
           <div className="fullWidthChart">
-            {/* <h2 className="playerChart">Batting</h2> */}
+            <h2 className="playerChart">Batting</h2>
             <LineChart
               width={1200}
               height={280}
               data={hittersGraphData}
               margin={{
                 top: 15,
-                right: 10,
-                left: 5,
+                right: 0,
+                left: 50,
                 bottom: 5,
               }}
             >
@@ -269,7 +269,7 @@ const TeamCard = ({ teams }) => {
               />
             </LineChart>
           </div>
-          <h2>Pitching</h2>
+          {/* <h2>Pitching</h2> */}
           <p>
             Earned Run Average: <span>{getProductionPercentile('ERA', 'negative')}</span>
           </p>
@@ -301,7 +301,7 @@ const TeamCard = ({ teams }) => {
             Home Runs Per 9: <span>{getProductionPercentile('HRPer9', 'negative')}</span>
           </p>
           <div className="fullWidthChart">
-            {/* <h2 className="playerChart">Pitching</h2> */}
+            <h2 className="playerChart">Pitching</h2>
             <LineChart
               width={1200}
               height={280}

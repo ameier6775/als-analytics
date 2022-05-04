@@ -237,8 +237,6 @@ const TeamCard = ({ teams }) => {
               data={hittersGraphData}
               margin={{
                 top: 15,
-                right: 0,
-                left: 50,
                 bottom: 5,
               }}
             >
@@ -308,8 +306,6 @@ const TeamCard = ({ teams }) => {
               data={pitchersGraphData}
               margin={{
                 top: 15,
-                right: 10,
-                left: 5,
                 bottom: 5,
               }}
             >

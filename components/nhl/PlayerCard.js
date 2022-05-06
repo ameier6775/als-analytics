@@ -25,6 +25,29 @@ const PlayerCard = ({ players }) => {
     setSelectedPlayer(e);
   };
 
+  // Goals Ranking
+  // const rankArr = players.slice();
+  // rankArr.sort((a, b) => b['I_F_goals'] - a['I_F_goals']);
+  // let goalsRank = rankArr.indexOf(selectedPlayer) + 1;
+  // console.log(goalsRank);
+
+  function getRank(category, order = 'desc') {
+    const rankArr = players.slice();
+
+    // Group forwards & defensemen separately
+    if (selectedPlayer['position'] === 'D') {
+      rankArr.filter((player) => player.position === 'D');
+    } else {
+      rankArr.filter((player) => player.position != 'D');
+    }
+
+    // Sorting by the category
+    rankArr.sort((a, b) => b[category] - a[category]);
+    let goalsRank = rankArr.indexOf(selectedPlayer) + 1;
+
+    return goalsRank;
+  }
+
   // Gets the percentile for the given statistic
   function getProductionPercentile(category, direction = 'positive') {
     // Group forwards & defensemen separately
@@ -33,6 +56,13 @@ const PlayerCard = ({ players }) => {
     } else {
       var positionalArr = players.filter((player) => player.position != 'D');
     }
+
+    let indexArr = positionalArr.sort(function (a, b) {
+      return a[category] - b[category];
+    });
+
+    let index = indexArr.indexOf(selectedPlayer) + 1;
+    // console.log('category: ' + category + ', rank: ' + index);
 
     // Get the maximum & minimum player values for the statistic
     var maxValue = Math.max.apply(
@@ -131,6 +161,7 @@ const PlayerCard = ({ players }) => {
     colorPercentage = colorPercentage < 0.2 ? colorPercentage + 0.15 : colorPercentage;
 
     let resultColor = 'rgba(' + color + ', ' + colorPercentage + ')';
+    // let resultColor = 'rgb(' + color + ')';
 
     return resultColor;
   }
@@ -278,7 +309,8 @@ const PlayerCard = ({ players }) => {
           <p>
             Goals:{' '}
             <span style={{ backgroundColor: getColor(getProductionPercentile('I_F_goals')) }}>
-              {getProductionPercentile('I_F_goals')}
+              {/* {getProductionPercentile('I_F_goals')} */}
+              {getRank('I_F_goals')}
             </span>
           </p>
           <p>
@@ -302,7 +334,8 @@ const PlayerCard = ({ players }) => {
           <p>
             Points:{' '}
             <span style={{ backgroundColor: getColor(getProductionPercentile('I_F_points')) }}>
-              {getProductionPercentile('I_F_points')}
+              {/* {getProductionPercentile('I_F_points')} */}
+              {getRank('I_F_points')}
             </span>
           </p>
           <p>
@@ -343,7 +376,7 @@ const PlayerCard = ({ players }) => {
           </p>
           <p>
             Expected Goals Against:{' '}
-            <span style={{ backgroundColor: getColor(getTimePercentile('OnIce_A_xGoals', 'negative')) }}>
+            <span style={{ backgroundColor: getColor(getProductionPercentile('OnIce_A_xGoals', 'negative')) }}>
               {getProductionPercentile('OnIce_A_xGoals', 'negative')}
             </span>
           </p>

@@ -69,6 +69,29 @@ const TeamCard = ({ teams }) => {
     }
   }
 
+  // Set field color based off of incoming value
+  function getColor(value) {
+    let percentage = parseFloat(value.substring(-1));
+
+    let color =
+      percentage <= 33 ? '255, 51, 51' : percentage <= 66 ? '255, 205, 0' : percentage > 66 ? '51, 255, 74' : '0, 0, 0';
+    let colorPercentage =
+      percentage <= 33
+        ? percentage * 3
+        : percentage <= 66
+        ? ((percentage - 33) * 3) / 100
+        : percentage > 66
+        ? ((percentage - 67) * 3) / 100
+        : 0;
+
+    // Color is too dark, need to fix this eventually (is this a good solution?)
+    colorPercentage = colorPercentage < 0.2 ? colorPercentage + 0.15 : colorPercentage;
+
+    let resultColor = 'rgba(' + color + ', ' + colorPercentage + ')';
+
+    return resultColor;
+  }
+
   // Preparing offensive chart data goalsFor
   let goalsFor =
     parseInt(getProductionPercentile('goalsFor').substring(0, 2)) === 10
@@ -199,42 +222,80 @@ const TeamCard = ({ teams }) => {
         <div id={selectedTeam.playerId} className="playerCard">
           <h1>{selectedTeam.name}</h1>
           <p>
-            Goals For: <span>{getProductionPercentile('goalsFor')}</span>
+            Goals For:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('goalsFor')) }}>
+              {getProductionPercentile('goalsFor')}
+            </span>
           </p>
           <p>
-            Expected Goals For: <span>{getProductionPercentile('xGoalsFor')}</span>
+            Expected Goals For:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('xGoalsFor')) }}>
+              {getProductionPercentile('xGoalsFor')}
+            </span>
           </p>
           <p>
-            Takeaways: <span>{getProductionPercentile('takeawaysFor')}</span>
+            Takeaways:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('takeawaysFor')) }}>
+              {getProductionPercentile('takeawaysFor')}
+            </span>
           </p>
           <p>
-            Shot Attempts For: <span>{getProductionPercentile('shotAttemptsFor')}</span>
+            Shot Attempts For:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('shotAttemptsFor')) }}>
+              {getProductionPercentile('shotAttemptsFor')}
+            </span>
           </p>
           <p>
             Faceoffs:{' '}
-            <span>
+            <span
+              style={{
+                backgroundColor: getColor(
+                  (
+                    selectedTeam['faceOffsWonFor'] /
+                    (selectedTeam['faceOffsWonAgainst'] + selectedTeam['faceOffsWonFor'])
+                  )
+                    .toFixed(2)
+                    .substring(2, 4) + '%',
+                ),
+              }}
+            >
               {(selectedTeam['faceOffsWonFor'] / (selectedTeam['faceOffsWonAgainst'] + selectedTeam['faceOffsWonFor']))
                 .toFixed(2)
                 .substring(2, 4) + '%'}
             </span>
           </p>
           <p>
-            Goals Against: <span>{getProductionPercentile('goalsAgainst', 'negative')}</span>
+            Goals Against:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('goalsAgainst', 'negative')) }}>
+              {getProductionPercentile('goalsAgainst', 'negative')}
+            </span>
           </p>
 
           <p>
-            Expected Goals Against: <span>{getProductionPercentile('xGoalsAgainst', 'negative')}</span>
+            Expected Goals Against:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('xGoalsAgainst', 'negative')) }}>
+              {getProductionPercentile('xGoalsAgainst', 'negative')}
+            </span>
           </p>
 
           <p>
-            Giveaways: <span>{getProductionPercentile('giveawaysFor', 'negative')}</span>
+            Giveaways:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('giveawaysFor', 'negative')) }}>
+              {getProductionPercentile('giveawaysFor', 'negative')}
+            </span>
           </p>
           <p>
-            Shot Attempts Against: <span>{getProductionPercentile('shotAttemptsAgainst', 'negative')}</span>
+            Shot Attempts Against:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('shotAttemptsAgainst', 'negative')) }}>
+              {getProductionPercentile('shotAttemptsAgainst', 'negative')}
+            </span>
           </p>
 
           <p>
-            Penalty Differential: <span>{selectedTeam['penaltiesAgainst'] - selectedTeam['penaltiesFor']}</span>
+            Penalty Differential:{' '}
+            <span style={{ backgroundColor: '1% blue' }}>
+              {selectedTeam['penaltiesAgainst'] - selectedTeam['penaltiesFor']}
+            </span>
           </p>
           <div className="fullWidthChart">
             <h2 className="playerChart">Offense</h2>

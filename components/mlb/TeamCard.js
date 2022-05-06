@@ -74,13 +74,7 @@ const TeamCard = ({ teams }) => {
     let percentage = parseFloat(value.substring(-1));
 
     let color =
-      percentage <= 33
-        ? '255, 51, 51'
-        : percentage <= 66
-        ? '255, 240, 51'
-        : percentage > 66
-        ? '51, 255, 74'
-        : '0, 0, 0';
+      percentage <= 33 ? '255, 51, 51' : percentage <= 66 ? '255, 205, 0' : percentage > 66 ? '51, 255, 74' : '0, 0, 0';
     let colorPercentage =
       percentage <= 33
         ? percentage * 3
@@ -90,10 +84,8 @@ const TeamCard = ({ teams }) => {
         ? ((percentage - 67) * 3) / 100
         : 0;
 
-    // Color is too dark, need to fix this eventually
-    colorPercentage = colorPercentage < 0.2 ? colorPercentage + 0.05 : colorPercentage;
-
-    console.log(colorPercentage);
+    // Color is too dark, need to fix this eventually (is this a good solution?)
+    colorPercentage = colorPercentage < 0.2 ? colorPercentage + 0.15 : colorPercentage;
 
     let resultColor = 'rgba(' + color + ', ' + colorPercentage + ')';
 

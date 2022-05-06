@@ -112,6 +112,29 @@ const PlayerCard = ({ players }) => {
     }
   }
 
+  // Set field color based off of incoming value
+  function getColor(value) {
+    let percentage = parseFloat(value.substring(-1));
+
+    let color =
+      percentage <= 33 ? '255, 51, 51' : percentage <= 66 ? '255, 205, 0' : percentage > 66 ? '51, 255, 74' : '0, 0, 0';
+    let colorPercentage =
+      percentage <= 33
+        ? percentage * 3
+        : percentage <= 66
+        ? ((percentage - 33) * 3) / 100
+        : percentage > 66
+        ? ((percentage - 67) * 3) / 100
+        : 0;
+
+    // Color is too dark, need to fix this eventually (is this a good solution?)
+    colorPercentage = colorPercentage < 0.2 ? colorPercentage + 0.15 : colorPercentage;
+
+    let resultColor = 'rgba(' + color + ', ' + colorPercentage + ')';
+
+    return resultColor;
+  }
+
   function combineCategories(categoryOne, categoryTwo) {
     let category1 = parseInt(categoryOne.substring(0, categoryOne.length - 1));
     let category2 = parseInt(categoryTwo.substring(0, categoryTwo.length - 1));
@@ -253,11 +276,23 @@ const PlayerCard = ({ players }) => {
           <h2>{selectedPlayer['team']}</h2>
 
           <p>
-            Goals: <span>{getProductionPercentile('I_F_goals')}</span>
+            Goals:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('I_F_goals')) }}>
+              {getProductionPercentile('I_F_goals')}
+            </span>
           </p>
           <p>
             Assists:{' '}
-            <span>
+            <span
+              style={{
+                backgroundColor: getColor(
+                  combineCategories(
+                    getProductionPercentile('I_F_primaryAssists'),
+                    getProductionPercentile('I_F_secondaryAssists'),
+                  ),
+                ),
+              }}
+            >
               {combineCategories(
                 getProductionPercentile('I_F_primaryAssists'),
                 getProductionPercentile('I_F_secondaryAssists'),
@@ -265,62 +300,104 @@ const PlayerCard = ({ players }) => {
             </span>
           </p>
           <p>
-            Points: <span>{getProductionPercentile('I_F_points')}</span>
+            Points:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('I_F_points')) }}>
+              {getProductionPercentile('I_F_points')}
+            </span>
           </p>
           <p>
-            Expected Goals For: <span>{getProductionPercentile('I_F_xGoals')}</span>
+            Expected Goals For:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('I_F_xGoals')) }}>
+              {getProductionPercentile('I_F_xGoals')}
+            </span>
           </p>
           <p>
-            🧊 Goals For: <span>{getProductionPercentile('OnIce_F_xGoals')}</span>
+            🧊 Goals For:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('OnIce_F_xGoals')) }}>
+              {getProductionPercentile('OnIce_F_xGoals')}
+            </span>
           </p>
           <p>
-            🚨 Per 60: <span>{getTimePercentile('I_F_goals')}</span>
+            🚨 Per 60:{' '}
+            <span style={{ backgroundColor: getColor(getTimePercentile('I_F_goals')) }}>
+              {getTimePercentile('I_F_goals')}
+            </span>
           </p>
           <p>
             🍏 Per 60:{' '}
-            <span>
+            <span
+              style={{
+                backgroundColor: getColor(
+                  combineCategories(getTimePercentile('I_F_primaryAssists'), getTimePercentile('I_F_secondaryAssists')),
+                ),
+              }}
+            >
               {combineCategories(getTimePercentile('I_F_primaryAssists'), getTimePercentile('I_F_secondaryAssists'))}
             </span>
           </p>
           <p>
-            🥅 Per 60: <span>{getTimePercentile('I_F_points')}</span>
+            🥅 Per 60:{' '}
+            <span style={{ backgroundColor: getColor(getTimePercentile('I_F_points')) }}>
+              {getTimePercentile('I_F_points')}
+            </span>
           </p>
           <p>
-            Expected Goals Against: <span>{getProductionPercentile('OnIce_A_xGoals', 'negative')}</span>
+            Expected Goals Against:{' '}
+            <span style={{ backgroundColor: getColor(getTimePercentile('OnIce_A_xGoals', 'negative')) }}>
+              {getProductionPercentile('OnIce_A_xGoals', 'negative')}
+            </span>
           </p>
           <p>
-            🧊 Goals Against: <span>{getProductionPercentile('OnIce_A_goals', 'negative')}</span>
+            🧊 Goals Against:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('OnIce_A_goals', 'negative')) }}>
+              {getProductionPercentile('OnIce_A_goals', 'negative')}
+            </span>
           </p>
           <p>
-            Shot Attempts: <span>{getProductionPercentile('I_F_shotAttempts')}</span>
+            Shot Attempts:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('I_F_shotAttempts')) }}>
+              {getProductionPercentile('I_F_shotAttempts')}
+            </span>
           </p>
           <p>
-            Hits: <span>{getProductionPercentile('I_F_hits')}</span>
+            Hits:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('I_F_hits')) }}>
+              {getProductionPercentile('I_F_hits')}
+            </span>
           </p>
           <p>
-            Blocks: <span>{getProductionPercentile('shotsBlockedByPlayer')}</span>
+            Blocks:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('shotsBlockedByPlayer')) }}>
+              {getProductionPercentile('shotsBlockedByPlayer')}
+            </span>
           </p>
           <p>
-            Takeaways: <span>{getProductionPercentile('I_F_takeaways')}</span>
+            Takeaways:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('I_F_takeaways')) }}>
+              {getProductionPercentile('I_F_takeaways')}
+            </span>
           </p>
           <p>
-            Giveaways: <span>{getProductionPercentile('I_F_giveaways', 'negative')}</span>
+            Giveaways:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('I_F_giveaways', 'negative')) }}>
+              {getProductionPercentile('I_F_giveaways', 'negative')}
+            </span>
           </p>
           <p>
-            Games: <span>{getProductionPercentile('games_played')}</span>
+            Games:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('games_played')) }}>
+              {getProductionPercentile('games_played')}
+            </span>
           </p>
           <p>
-            Time On Ice: <span>{getProductionPercentile('icetime')}</span>
+            Time On Ice:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('icetime')) }}>
+              {getProductionPercentile('icetime')}
+            </span>
           </p>
-          {/* <p>
-            Faceoffs: <span>{getFaceOffPercentage()}</span>
-          </p>
-          <p>
-            Game Score: <span>{getProductionPercentile('gameScore')}</span>
-          </p> */}
           <p>
             Offensive Zone Starts:{' '}
-            <span>
+            <span style={{ backgroundColor: 'blue' }}>
               {parseFloat(
                 selectedPlayer['I_F_oZoneShiftStarts'] /
                   (selectedPlayer['I_F_oZoneShiftStarts'] +
@@ -333,7 +410,7 @@ const PlayerCard = ({ players }) => {
           </p>
           <p>
             Neutral Zone Starts:{' '}
-            <span>
+            <span style={{ backgroundColor: 'blue' }}>
               {parseFloat(
                 selectedPlayer['I_F_neutralZoneShiftStarts'] /
                   (selectedPlayer['I_F_oZoneShiftStarts'] +
@@ -346,7 +423,7 @@ const PlayerCard = ({ players }) => {
           </p>
           <p>
             Defensive Zone Starts:{' '}
-            <span>
+            <span style={{ backgroundColor: 'blue' }}>
               {parseFloat(
                 selectedPlayer['I_F_dZoneShiftStarts'] /
                   (selectedPlayer['I_F_oZoneShiftStarts'] +

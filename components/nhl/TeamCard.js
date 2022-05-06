@@ -293,7 +293,7 @@ const TeamCard = ({ teams }) => {
 
           <p>
             Penalty Differential:{' '}
-            <span style={{ backgroundColor: '1% blue' }}>
+            <span style={{ backgroundColor: 'blue' }}>
               {selectedTeam['penaltiesAgainst'] - selectedTeam['penaltiesFor']}
             </span>
           </p>

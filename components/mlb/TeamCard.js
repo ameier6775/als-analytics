@@ -69,6 +69,37 @@ const TeamCard = ({ teams }) => {
     }
   }
 
+  // Set field color based off of incoming value
+  function getColor(value) {
+    let percentage = parseFloat(value.substring(-1));
+
+    let color =
+      percentage <= 33
+        ? '255, 51, 51'
+        : percentage <= 66
+        ? '255, 240, 51'
+        : percentage > 66
+        ? '51, 255, 74'
+        : '0, 0, 0';
+    let colorPercentage =
+      percentage <= 33
+        ? percentage * 3
+        : percentage <= 66
+        ? ((percentage - 33) * 3) / 100
+        : percentage > 66
+        ? ((percentage - 67) * 3) / 100
+        : 0;
+
+    // Color is too dark, need to fix this eventually
+    colorPercentage = colorPercentage < 0.2 ? colorPercentage + 0.05 : colorPercentage;
+
+    console.log(colorPercentage);
+
+    let resultColor = 'rgba(' + color + ', ' + colorPercentage + ')';
+
+    return resultColor;
+  }
+
   // Preparing hitters chart data (all positive valued fields)
   let runsFor =
     parseInt(getProductionPercentile('RFor').substring(0, 2)) === 10
@@ -200,34 +231,64 @@ const TeamCard = ({ teams }) => {
           <h1>{selectedTeam.Team}</h1>
           {/* <h2>Batting</h2> */}
           <p>
-            Average: <span>{getProductionPercentile('AVGFor')}</span>
+            Average:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('AVGFor')) }}>
+              {getProductionPercentile('AVGFor')}
+            </span>
           </p>
           <p>
-            Singles: <span>{getProductionPercentile('1B')}</span>
+            Singles:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('1B')) }}>
+              {getProductionPercentile('1B')}
+            </span>
           </p>
           <p>
-            Doubles: <span>{getProductionPercentile('2B')}</span>
+            Doubles:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('2B')) }}>
+              {getProductionPercentile('2B')}
+            </span>
           </p>
           <p>
-            Triples: <span>{getProductionPercentile('3B')}</span>
+            Triples:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('3B')) }}>
+              {getProductionPercentile('3B')}
+            </span>
           </p>
           <p>
-            Home Runs: <span>{getProductionPercentile('HRFor')}</span>
+            Home Runs:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('HRFor')) }}>
+              {getProductionPercentile('HRFor')}
+            </span>
           </p>
           <p>
-            Runs: <span>{getProductionPercentile('RFor')}</span>
+            Runs:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('RFor')) }}>
+              {getProductionPercentile('RFor')}
+            </span>
           </p>
           <p>
-            Hits: <span>{getProductionPercentile('HFor')}</span>
+            Hits:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('HFor')) }}>
+              {getProductionPercentile('HFor')}
+            </span>
           </p>
           <p>
-            Walks: <span>{getProductionPercentile('BBFor')}</span>
+            Walks:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('BBFor')) }}>
+              {getProductionPercentile('BBFor')}
+            </span>
           </p>
           <p>
-            Strikeouts: <span>{getProductionPercentile('SOFor', 'negative')}</span>
+            Strikeouts:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('SOFor', 'negative')) }}>
+              {getProductionPercentile('SOFor', 'negative')}
+            </span>
           </p>
           <p>
-            Walk Per Strikeout: <span>{getProductionPercentile('BBPerK')}</span>
+            Walk Per Strikeout:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('BBPerK')) }}>
+              {getProductionPercentile('BBPerK')}
+            </span>
           </p>
           <div className="fullWidthChart">
             <h2 className="playerChart">Batting</h2>
@@ -269,34 +330,64 @@ const TeamCard = ({ teams }) => {
           </div>
           {/* <h2>Pitching</h2> */}
           <p>
-            Earned Run Average: <span>{getProductionPercentile('ERA', 'negative')}</span>
+            Earned Run Average:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('ERA', 'negative')) }}>
+              {getProductionPercentile('ERA', 'negative')}
+            </span>
           </p>
           <p>
-            WHIP: <span>{getProductionPercentile('WHIP', 'negative')}</span>
+            WHIP:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('WHIP', 'negative')) }}>
+              {getProductionPercentile('WHIP', 'negative')}
+            </span>
           </p>
           <p>
-            Strikeouts: <span>{getProductionPercentile('SOAgainst')}</span>
+            Strikeouts:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('SOAgainst')) }}>
+              {getProductionPercentile('SOAgainst')}
+            </span>
           </p>
           <p>
-            Walks: <span>{getProductionPercentile('BBAgainst', 'negative')}</span>
+            Walks:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('BBAgainst', 'negative')) }}>
+              {getProductionPercentile('BBAgainst', 'negative')}
+            </span>
           </p>
           <p>
-            Home Runs: <span>{getProductionPercentile('HRAgainst', 'negative')}</span>
+            Home Runs:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('HRAgainst', 'negative')) }}>
+              {getProductionPercentile('HRAgainst', 'negative')}
+            </span>
           </p>
           <p>
-            Runs: <span>{getProductionPercentile('RAgainst', 'negative')}</span>
+            Runs:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('RAgainst', 'negative')) }}>
+              {getProductionPercentile('RAgainst', 'negative')}
+            </span>
           </p>
           <p>
-            Hits: <span>{getProductionPercentile('HAgainst', 'negative')}</span>
+            Hits:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('HAgainst', 'negative')) }}>
+              {getProductionPercentile('HAgainst', 'negative')}
+            </span>
           </p>
           <p>
-            Strikeouts Per 9: <span>{getProductionPercentile('KPer9')}</span>
+            Strikeouts Per 9:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('KPer9')) }}>
+              {getProductionPercentile('KPer9')}
+            </span>
           </p>
           <p>
-            Walks Per 9: <span>{getProductionPercentile('BBAgainst', 'negative')}</span>
+            Walks Per 9:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('BBAgainst', 'negative')) }}>
+              {getProductionPercentile('BBAgainst', 'negative')}
+            </span>
           </p>
           <p>
-            Home Runs Per 9: <span>{getProductionPercentile('HRPer9', 'negative')}</span>
+            Home Runs Per 9:{' '}
+            <span style={{ backgroundColor: getColor(getProductionPercentile('HRPer9', 'negative')) }}>
+              {getProductionPercentile('HRPer9', 'negative')}
+            </span>
           </p>
           <div className="fullWidthChart">
             <h2 className="playerChart">Pitching</h2>

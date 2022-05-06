@@ -26,7 +26,6 @@ h2 {
   font-style: inherit;
   font-weight: 600;
   width: fit-content;
-  /* float: left; */
   margin-left: 10px;
   margin-right: 10px;
   color: rgb(255, 174, 0);
@@ -125,15 +124,6 @@ tr {
   border-bottom: 0.5px solid rgb(255, 174, 0);
 }
 
-/* .leaguesSubHeader {
-  color: steelblue;
-  font-weight: 200;
-  float: right;
-  margin: 0 15px;
-  font-style: italic;
-  border-bottom: 1px solid steelblue;
-} */
-
 .mlbTeamCardSubHeader {
   float: left;
 }
@@ -154,7 +144,6 @@ tr {
 .playerCard {
   width: 100%;
   color: rgb(255, 174, 0);
-  background: #333333;
 }
 
 .playerCard h1 {
@@ -187,8 +176,7 @@ tr {
 .playerCard span {
   display: flex;
   justify-content: center;
-  color: #333333;
-  background: rgb(255, 174, 0);
+  color: white;
   font-family: Marker Felt, fantasy;
   font-weight: 600;
   font-size: large;

@@ -25,47 +25,6 @@ const PlayerCard = ({ players }) => {
     setSelectedPlayer(e);
   };
 
-  // Gets the ranking for the given statistic
-  function getRank(category, order = 'desc', model = 'production') {
-    // Duplicate the players array
-    var resultArr = players.slice();
-    var rankArr = resultArr;
-
-    // Group forwards & defensemen separately
-    if (selectedPlayer['position'] === 'D') {
-      rankArr = resultArr.filter((player) => player.position === 'D');
-    } else {
-      rankArr = resultArr.filter((player) => player.position != 'D');
-    }
-
-    // Sorting by the category
-    if (order === 'desc' && model === 'production') {
-      rankArr.sort((a, b) => b[category] - a[category]);
-    } else if (order === 'asc' && model === 'production') {
-      rankArr.sort((a, b) => a[category] - b[category]);
-    } else if (order === 'desc' && model === 'time') {
-      rankArr.sort((a, b) => b[category] / b['icetime'] - a[category] / a['icetime']);
-    } else if (order === 'asc' && model === 'time') {
-      rankArr.sort((a, b) => a[category] / a['icetime'] - b[category] / b['icetime']);
-    }
-    let categoryRank = rankArr.indexOf(selectedPlayer) + 1;
-    let rankString = categoryRank.toString();
-    let lastDigit = categoryRank % 10;
-
-    // Pronunciation of the ranking
-    if ((lastDigit >= 10 && lastDigit <= 20) || (lastDigit >= 4 && lastDigit <= 9) || lastDigit === 0) {
-      rankString = rankString + 'th';
-    } else if (lastDigit === 1) {
-      rankString = rankString + 'st';
-    } else if (lastDigit === 2) {
-      rankString = rankString + 'nd';
-    } else if (lastDigit === 3) {
-      rankString = rankString + 'rd';
-    }
-
-    return rankString;
-  }
-
   // Gets the percentile for the given statistic
   function getProductionPercentile(category, direction = 'positive') {
     // Group forwards & defensemen separately
@@ -119,6 +78,47 @@ const PlayerCard = ({ players }) => {
         return (1 - result).toFixed(2).substring(2, 4) + '%';
       }
     }
+  }
+
+  // Gets the ranking for the given statistic
+  function getRank(category, order = 'desc', model = 'production') {
+    // Duplicate the players array
+    var resultArr = players.slice();
+    var rankArr = resultArr;
+
+    // Group forwards & defensemen separately
+    if (selectedPlayer['position'] === 'D') {
+      rankArr = resultArr.filter((player) => player.position === 'D');
+    } else {
+      rankArr = resultArr.filter((player) => player.position != 'D');
+    }
+
+    // Sorting by the category
+    if (order === 'desc' && model === 'production') {
+      rankArr.sort((a, b) => b[category] - a[category]);
+    } else if (order === 'asc' && model === 'production') {
+      rankArr.sort((a, b) => a[category] - b[category]);
+    } else if (order === 'desc' && model === 'time') {
+      rankArr.sort((a, b) => b[category] / b['icetime'] - a[category] / a['icetime']);
+    } else if (order === 'asc' && model === 'time') {
+      rankArr.sort((a, b) => a[category] / a['icetime'] - b[category] / b['icetime']);
+    }
+    let categoryRank = rankArr.indexOf(selectedPlayer) + 1;
+    let rankString = categoryRank.toString();
+    let lastDigit = categoryRank % 10;
+
+    // Pronunciation of the ranking
+    if ((lastDigit >= 10 && lastDigit <= 20) || (lastDigit >= 4 && lastDigit <= 9) || lastDigit === 0) {
+      rankString = rankString + 'th';
+    } else if (lastDigit === 1) {
+      rankString = rankString + 'st';
+    } else if (lastDigit === 2) {
+      rankString = rankString + 'nd';
+    } else if (lastDigit === 3) {
+      rankString = rankString + 'rd';
+    }
+
+    return rankString;
   }
 
   // Gets the time percentile for the given statistic

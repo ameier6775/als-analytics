@@ -85,6 +85,7 @@ export default function Players() {
       ? playerCardArray.forEach((player) => {
           player.value = player.name;
           player.label = player.name;
+          player.I_F_assists = player.I_F_primaryAssists + player.I_F_secondaryAssists;
         })
       : teams;
   }

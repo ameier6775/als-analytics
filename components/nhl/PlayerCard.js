@@ -183,13 +183,6 @@ const PlayerCard = ({ players }) => {
     return resultColor;
   }
 
-  function combineCategories(categoryOne, categoryTwo) {
-    let category1 = parseInt(categoryOne.substring(0, categoryOne.length - 1));
-    let category2 = parseInt(categoryTwo.substring(0, categoryTwo.length - 1));
-    let avg = ((category1 + category2) / 2).toString() + '%';
-    return avg;
-  }
-
   function getFaceOffPercentage() {
     let faceOffPercentage =
       (selectedPlayer['faceoffsWon'] / (selectedPlayer['faceoffsWon'] + selectedPlayer['faceoffsLost']))
@@ -336,18 +329,10 @@ const PlayerCard = ({ players }) => {
             <div className="fieldRank">{getRank('I_F_assists')}</div>
             <span
               style={{
-                backgroundColor: getColor(
-                  combineCategories(
-                    getProductionPercentile('I_F_primaryAssists'),
-                    getProductionPercentile('I_F_secondaryAssists'),
-                  ),
-                ),
+                backgroundColor: getColor(getProductionPercentile('I_F_assists')),
               }}
             >
-              {combineCategories(
-                getProductionPercentile('I_F_primaryAssists'),
-                getProductionPercentile('I_F_secondaryAssists'),
-              )}
+              {getProductionPercentile('I_F_assists')}
             </span>
           </p>
           <p>
@@ -377,15 +362,13 @@ const PlayerCard = ({ players }) => {
             </span>
           </p>
           <p>
-            🍏 Per 60:<div className="fieldRank">{getRank('I_F_goals', 'desc', 'time')}</div>
+            🍏 Per 60:<div className="fieldRank">{getRank('I_F_assists', 'desc', 'time')}</div>
             <span
               style={{
-                backgroundColor: getColor(
-                  combineCategories(getTimePercentile('I_F_primaryAssists'), getTimePercentile('I_F_secondaryAssists')),
-                ),
+                backgroundColor: getColor(getTimePercentile('I_F_assists')),
               }}
             >
-              {combineCategories(getTimePercentile('I_F_primaryAssists'), getTimePercentile('I_F_secondaryAssists'))}
+              {getTimePercentile('I_F_assists')}
             </span>
           </p>
           <p>

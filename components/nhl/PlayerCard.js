@@ -48,9 +48,9 @@ const PlayerCard = ({ players }) => {
     } else if (order === 'asc' && model === 'time') {
       rankArr.sort((a, b) => a[category] / a['icetime'] - b[category] / b['icetime']);
     }
-    let goalsRank = rankArr.indexOf(selectedPlayer) + 1;
-    let rankString = goalsRank.toString();
-    let lastDigit = goalsRank % 10;
+    let categoryRank = rankArr.indexOf(selectedPlayer) + 1;
+    let rankString = categoryRank.toString();
+    let lastDigit = categoryRank % 10;
 
     // Pronunciation of the ranking
     if ((lastDigit >= 10 && lastDigit <= 20) || (lastDigit >= 4 && lastDigit <= 9) || lastDigit === 0) {
@@ -325,7 +325,6 @@ const PlayerCard = ({ players }) => {
           </p>
           <p>
             Assists:
-            {/* This is not right */}
             <div className="fieldRank">{getRank('I_F_assists')}</div>
             <span
               style={{

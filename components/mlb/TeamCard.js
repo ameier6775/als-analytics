@@ -69,6 +69,37 @@ const TeamCard = ({ teams }) => {
     }
   }
 
+  // Gets the ranking for the given statistic
+  function getRank(category, order = 'desc') {
+    // Duplicate the players array
+    var resultArr = teams.slice();
+    var rankArr = resultArr;
+
+    // Sorting by the category
+    if (order === 'desc') {
+      rankArr.sort((a, b) => b[category] - a[category]);
+    } else if (order === 'asc') {
+      rankArr.sort((a, b) => a[category] - b[category]);
+    }
+
+    let categoryRank = rankArr.indexOf(selectedTeam) + 1;
+    let rankString = categoryRank.toString();
+    let lastDigit = categoryRank % 10;
+
+    // Pronunciation of the ranking
+    if ((lastDigit >= 10 && lastDigit <= 20) || (lastDigit >= 4 && lastDigit <= 9) || lastDigit === 0) {
+      rankString = rankString + 'th';
+    } else if (lastDigit === 1) {
+      rankString = rankString + 'st';
+    } else if (lastDigit === 2) {
+      rankString = rankString + 'nd';
+    } else if (lastDigit === 3) {
+      rankString = rankString + 'rd';
+    }
+
+    return rankString;
+  }
+
   // Set field color based off of incoming value
   function getColor(value) {
     let percentage = parseFloat(value.substring(-1));
@@ -151,9 +182,9 @@ const TeamCard = ({ teams }) => {
       : parseInt(getProductionPercentile('AVGAgainst').substring(0, 2));
   let homeRunsAgainst =
     parseInt(getProductionPercentile('HRAgainst').substring(0, 2)) === 10
-      ? 100
-      : !parseInt(getProductionPercentile('HRAgainst').substring(0, 2)) === 0
       ? 0
+      : !parseInt(getProductionPercentile('HRAgainst').substring(0, 2)) === 0
+      ? 100
       : parseInt(getProductionPercentile('HRAgainst').substring(0, 2));
 
   // Plotting chart data
@@ -223,61 +254,62 @@ const TeamCard = ({ teams }) => {
           <h1>{selectedTeam.Team}</h1>
           {/* <h2>Batting</h2> */}
           <p>
-            Average:{' '}
+            Average:
+            <div className="fieldRank">{getRank('AVGFor')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('AVGFor')) }}>
               {getProductionPercentile('AVGFor')}
             </span>
           </p>
           <p>
-            Singles:{' '}
+            Singles:<div className="fieldRank">{getRank('1B')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('1B')) }}>
               {getProductionPercentile('1B')}
             </span>
           </p>
           <p>
-            Doubles:{' '}
+            Doubles:<div className="fieldRank">{getRank('2B')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('2B')) }}>
               {getProductionPercentile('2B')}
             </span>
           </p>
           <p>
-            Triples:{' '}
+            Triples:<div className="fieldRank">{getRank('3B')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('3B')) }}>
               {getProductionPercentile('3B')}
             </span>
           </p>
           <p>
-            Home Runs:{' '}
+            Home Runs:<div className="fieldRank">{getRank('HRFor')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('HRFor')) }}>
               {getProductionPercentile('HRFor')}
             </span>
           </p>
           <p>
-            Runs:{' '}
+            Runs:<div className="fieldRank">{getRank('RFor')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('RFor')) }}>
               {getProductionPercentile('RFor')}
             </span>
           </p>
           <p>
-            Hits:{' '}
+            Hits:<div className="fieldRank">{getRank('HFor')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('HFor')) }}>
               {getProductionPercentile('HFor')}
             </span>
           </p>
           <p>
-            Walks:{' '}
+            Walks:<div className="fieldRank">{getRank('BBFor')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('BBFor')) }}>
               {getProductionPercentile('BBFor')}
             </span>
           </p>
           <p>
-            Strikeouts:{' '}
+            Strikeouts:<div className="fieldRank">{getRank('SOFor', 'asc')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('SOFor', 'negative')) }}>
               {getProductionPercentile('SOFor', 'negative')}
             </span>
           </p>
           <p>
-            Walk Per Strikeout:{' '}
+            Walk Per Strikeout:<div className="fieldRank">{getRank('BBPerK')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('BBPerK')) }}>
               {getProductionPercentile('BBPerK')}
             </span>
@@ -322,61 +354,61 @@ const TeamCard = ({ teams }) => {
           </div>
           {/* <h2>Pitching</h2> */}
           <p>
-            Earned Run Average:{' '}
+            Earned Run Average:<div className="fieldRank">{getRank('ERA', 'asc')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('ERA', 'negative')) }}>
               {getProductionPercentile('ERA', 'negative')}
             </span>
           </p>
           <p>
-            WHIP:{' '}
+            WHIP:<div className="fieldRank">{getRank('WHIP', 'asc')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('WHIP', 'negative')) }}>
               {getProductionPercentile('WHIP', 'negative')}
             </span>
           </p>
           <p>
-            Strikeouts:{' '}
+            Strikeouts:<div className="fieldRank">{getRank('SOAgainst')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('SOAgainst')) }}>
               {getProductionPercentile('SOAgainst')}
             </span>
           </p>
           <p>
-            Walks:{' '}
+            Walks:<div className="fieldRank">{getRank('BBAgainst', 'asc')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('BBAgainst', 'negative')) }}>
               {getProductionPercentile('BBAgainst', 'negative')}
             </span>
           </p>
           <p>
-            Home Runs:{' '}
+            Home Runs:<div className="fieldRank">{getRank('HRAgainst', 'asc')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('HRAgainst', 'negative')) }}>
               {getProductionPercentile('HRAgainst', 'negative')}
             </span>
           </p>
           <p>
-            Runs:{' '}
+            Runs:<div className="fieldRank">{getRank('RAgainst', 'asc')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('RAgainst', 'negative')) }}>
               {getProductionPercentile('RAgainst', 'negative')}
             </span>
           </p>
           <p>
-            Hits:{' '}
+            Hits:<div className="fieldRank">{getRank('HAgainst', 'asc')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('HAgainst', 'negative')) }}>
               {getProductionPercentile('HAgainst', 'negative')}
             </span>
           </p>
           <p>
-            Strikeouts Per 9:{' '}
+            Strikeouts Per 9:<div className="fieldRank">{getRank('KPer9')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('KPer9')) }}>
               {getProductionPercentile('KPer9')}
             </span>
           </p>
           <p>
-            Walks Per 9:{' '}
+            Walks Per 9:<div className="fieldRank">{getRank('BBAgainst', 'asc')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('BBAgainst', 'negative')) }}>
               {getProductionPercentile('BBAgainst', 'negative')}
             </span>
           </p>
           <p>
-            Home Runs Per 9:{' '}
+            Home Runs Per 9:<div className="fieldRank">{getRank('HRPer9', 'asc')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('HRPer9', 'negative')) }}>
               {getProductionPercentile('HRPer9', 'negative')}
             </span>

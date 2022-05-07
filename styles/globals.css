@@ -179,9 +179,9 @@ tr {
 .playerCard span {
   display: flex;
   justify-content: center;
-  color: white;
+  color: whitesmoke;
   font-family: Marker Felt, fantasy;
-  font-weight: 600;
+  font-weight: 300;
   font-size: large;
 }
 

@@ -85,7 +85,7 @@ const TeamCard = ({ teams }) => {
         : 0;
 
     // Color is too dark, need to fix this eventually (is this a good solution?)
-    colorPercentage = colorPercentage < 0.2 ? colorPercentage + 0.15 : colorPercentage;
+    colorPercentage = colorPercentage < 0.2 ? colorPercentage + 0.2 : colorPercentage;
 
     let resultColor = 'rgba(' + color + ', ' + colorPercentage + ')';
 

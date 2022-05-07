@@ -32,20 +32,32 @@ const PlayerCard = ({ players }) => {
   // console.log(goalsRank);
 
   function getRank(category, order = 'desc') {
-    const rankArr = players.slice();
+    var resultArr = players.slice();
+    var rankArr = resultArr;
 
     // Group forwards & defensemen separately
     if (selectedPlayer['position'] === 'D') {
-      rankArr.filter((player) => player.position === 'D');
+      rankArr = resultArr.filter((player) => player.position === 'D');
     } else {
-      rankArr.filter((player) => player.position != 'D');
+      rankArr = resultArr.filter((player) => player.position != 'D');
     }
 
     // Sorting by the category
     rankArr.sort((a, b) => b[category] - a[category]);
     let goalsRank = rankArr.indexOf(selectedPlayer) + 1;
+    let rankString = goalsRank.toString();
+    let lastDigit = goalsRank % 10;
 
-    return goalsRank;
+    // Pronunciation of the ranking
+    if ((lastDigit >= 10 && lastDigit <= 20) || (lastDigit >= 4 && lastDigit <= 9) || lastDigit === 0) {
+      rankString = rankString + 'th';
+    } else if (lastDigit === 1) {
+      rankString = rankString + 'st';
+    } else if (lastDigit === 2) {
+      rankString = rankString + 'nd';
+    }
+
+    return rankString;
   }
 
   // Gets the percentile for the given statistic
@@ -158,7 +170,7 @@ const PlayerCard = ({ players }) => {
         : 0;
 
     // Color is too dark, need to fix this eventually (is this a good solution?)
-    colorPercentage = colorPercentage < 0.2 ? colorPercentage + 0.15 : colorPercentage;
+    colorPercentage = colorPercentage < 0.2 ? colorPercentage + 0.2 : colorPercentage;
 
     let resultColor = 'rgba(' + color + ', ' + colorPercentage + ')';
     // let resultColor = 'rgb(' + color + ')';
@@ -307,10 +319,10 @@ const PlayerCard = ({ players }) => {
           <h2>{selectedPlayer['team']}</h2>
 
           <p>
-            Goals:{' '}
+            Goals:
+            <div className="fieldRank">{getRank('I_F_goals')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('I_F_goals')) }}>
-              {/* {getProductionPercentile('I_F_goals')} */}
-              {getRank('I_F_goals')}
+              {getProductionPercentile('I_F_goals')}
             </span>
           </p>
           <p>

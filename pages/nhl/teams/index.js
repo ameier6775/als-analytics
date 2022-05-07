@@ -18,6 +18,7 @@ export default function Teams() {
     teamCardArray.push(teamData[i]);
   }
 
+  // Adding fields to the array
   {
     teamCardArray
       ? teamCardArray.forEach((team) => {

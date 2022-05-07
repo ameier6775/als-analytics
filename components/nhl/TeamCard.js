@@ -69,6 +69,36 @@ const TeamCard = ({ teams }) => {
     }
   }
 
+  // Gets the ranking for the given statistic
+  function getRank(category, order = 'desc') {
+    // Duplicate the players array
+    var resultArr = teams.slice();
+    var rankArr = resultArr;
+
+    // Sorting by the category
+    if (order === 'desc') {
+      rankArr.sort((a, b) => b[category] - a[category]);
+    } else if (order === 'asc') {
+      rankArr.sort((a, b) => a[category] - b[category]);
+    }
+    let categoryRank = rankArr.indexOf(selectedTeam) + 1;
+    let rankString = categoryRank.toString();
+    let lastDigit = categoryRank % 10;
+
+    // Pronunciation of the ranking
+    if ((lastDigit >= 10 && lastDigit <= 20) || (lastDigit >= 4 && lastDigit <= 9) || lastDigit === 0) {
+      rankString = rankString + 'th';
+    } else if (lastDigit === 1) {
+      rankString = rankString + 'st';
+    } else if (lastDigit === 2) {
+      rankString = rankString + 'nd';
+    } else if (lastDigit === 3) {
+      rankString = rankString + 'rd';
+    }
+
+    return rankString;
+  }
+
   // Set field color based off of incoming value
   function getColor(value) {
     let percentage = parseFloat(value.substring(-1));
@@ -222,31 +252,36 @@ const TeamCard = ({ teams }) => {
         <div id={selectedTeam.playerId} className="playerCard">
           <h1>{selectedTeam.name}</h1>
           <p>
-            Goals For:{' '}
+            Goals For:
+            <div className="fieldRank">{getRank('goalsFor')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('goalsFor')) }}>
               {getProductionPercentile('goalsFor')}
             </span>
           </p>
           <p>
-            Expected Goals For:{' '}
+            Expected Goals For:
+            <div className="fieldRank">{getRank('xGoalsFor')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('xGoalsFor')) }}>
               {getProductionPercentile('xGoalsFor')}
             </span>
           </p>
           <p>
-            Takeaways:{' '}
+            Takeaways:
+            <div className="fieldRank">{getRank('takeawaysFor')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('takeawaysFor')) }}>
               {getProductionPercentile('takeawaysFor')}
             </span>
           </p>
           <p>
-            Shot Attempts For:{' '}
+            Shot Attempts For:
+            <div className="fieldRank">{getRank('shotAttemptsFor')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('shotAttemptsFor')) }}>
               {getProductionPercentile('shotAttemptsFor')}
             </span>
           </p>
           <p>
-            Faceoffs:{' '}
+            Faceoffs:
+            {/* <div className="fieldRank">{getRank('shotAttemptsFor')}</div> */}
             <span
               style={{
                 backgroundColor: getColor(
@@ -265,27 +300,31 @@ const TeamCard = ({ teams }) => {
             </span>
           </p>
           <p>
-            Goals Against:{' '}
+            Goals Against:
+            <div className="fieldRank">{getRank('goalsAgainst', 'asc')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('goalsAgainst', 'negative')) }}>
               {getProductionPercentile('goalsAgainst', 'negative')}
             </span>
           </p>
 
           <p>
-            Expected Goals Against:{' '}
+            Expected Goals Against:
+            <div className="fieldRank">{getRank('xGoalsAgainst', 'asc')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('xGoalsAgainst', 'negative')) }}>
               {getProductionPercentile('xGoalsAgainst', 'negative')}
             </span>
           </p>
 
           <p>
-            Giveaways:{' '}
+            Giveaways:
+            <div className="fieldRank">{getRank('giveawaysFor', 'asc')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('giveawaysFor', 'negative')) }}>
               {getProductionPercentile('giveawaysFor', 'negative')}
             </span>
           </p>
           <p>
-            Shot Attempts Against:{' '}
+            Shot Attempts Against:
+            <div className="fieldRank">{getRank('shotAttemptsAgainst', 'asc')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('shotAttemptsAgainst', 'negative')) }}>
               {getProductionPercentile('shotAttemptsAgainst', 'negative')}
             </span>

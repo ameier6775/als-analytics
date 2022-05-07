@@ -6,10 +6,6 @@ import TeamCard from '../../../components/nhl/TeamCard';
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
-// const COLORS = ['#FFADAD', '#CAFFBF', '#BDB2FF', '#FFD6A5', '#9BF6FF', '#FFC6FF', '#FDFFB6', '#A0C4FF', '#FFFFFC'];
-// const ZONECOLORS = ['#fe2712', '#ff7e00', '#ffbe00'];
-// const COMPARISONCOLORS = ['#ff1b6b', '#45caff'];
-
 export default function Teams() {
   const { data, error } = useSWR('../api/nhl/teams/', fetcher);
   if (error) return <div>failed to load</div>;
@@ -27,6 +23,8 @@ export default function Teams() {
       ? teamCardArray.forEach((team) => {
           team.value = team.name;
           team.label = team.name;
+          team.penaltyDifferential = team.penaltiesAgainst - team.penaltiesFor;
+          team.faceoffPercentage = team.faceOffsWonFor / (team.faceOffsWonFor + team.faceOffsWonAgainst);
         })
       : teams;
   }

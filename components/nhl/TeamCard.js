@@ -81,6 +81,7 @@ const TeamCard = ({ teams }) => {
     } else if (order === 'asc') {
       rankArr.sort((a, b) => a[category] - b[category]);
     }
+
     let categoryRank = rankArr.indexOf(selectedTeam) + 1;
     let rankString = categoryRank.toString();
     let lastDigit = categoryRank % 10;
@@ -281,7 +282,7 @@ const TeamCard = ({ teams }) => {
           </p>
           <p>
             Faceoffs:
-            {/* <div className="fieldRank">{getRank('shotAttemptsFor')}</div> */}
+            <div className="fieldRank">{getRank('faceoffPercentage')}</div>
             <span
               style={{
                 backgroundColor: getColor(
@@ -331,10 +332,9 @@ const TeamCard = ({ teams }) => {
           </p>
 
           <p>
-            Penalty Differential:{' '}
-            <span style={{ backgroundColor: 'blue' }}>
-              {selectedTeam['penaltiesAgainst'] - selectedTeam['penaltiesFor']}
-            </span>
+            Penalty Differential:
+            <div className="fieldRank">{getRank('penaltyDifferential')}</div>
+            <span style={{ backgroundColor: 'blue' }}>{selectedTeam['penaltyDifferential']}</span>
           </p>
           <div className="fullWidthChart">
             <h2 className="playerChart">Offense</h2>

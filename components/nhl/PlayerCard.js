@@ -25,7 +25,9 @@ const PlayerCard = ({ players }) => {
     setSelectedPlayer(e);
   };
 
-  function getRank(category, order = 'desc') {
+  // Gets the ranking for the given statistic
+  function getRank(category, order = 'desc', model = 'production') {
+    // Duplicate the players array
     var resultArr = players.slice();
     var rankArr = resultArr;
 
@@ -37,10 +39,14 @@ const PlayerCard = ({ players }) => {
     }
 
     // Sorting by the category
-    if (order === 'desc') {
+    if (order === 'desc' && model === 'production') {
       rankArr.sort((a, b) => b[category] - a[category]);
-    } else if (order === 'asc') {
+    } else if (order === 'asc' && model === 'production') {
       rankArr.sort((a, b) => a[category] - b[category]);
+    } else if (order === 'desc' && model === 'time') {
+      rankArr.sort((a, b) => b[category] / b['icetime'] - a[category] / a['icetime']);
+    } else if (order === 'asc' && model === 'time') {
+      rankArr.sort((a, b) => a[category] / a['icetime'] - b[category] / b['icetime']);
     }
     let goalsRank = rankArr.indexOf(selectedPlayer) + 1;
     let rankString = goalsRank.toString();
@@ -53,6 +59,8 @@ const PlayerCard = ({ players }) => {
       rankString = rankString + 'st';
     } else if (lastDigit === 2) {
       rankString = rankString + 'nd';
+    } else if (lastDigit === 3) {
+      rankString = rankString + 'rd';
     }
 
     return rankString;
@@ -70,9 +78,6 @@ const PlayerCard = ({ players }) => {
     let indexArr = positionalArr.sort(function (a, b) {
       return a[category] - b[category];
     });
-
-    let index = indexArr.indexOf(selectedPlayer) + 1;
-    // console.log('category: ' + category + ', rank: ' + index);
 
     // Get the maximum & minimum player values for the statistic
     var maxValue = Math.max.apply(
@@ -92,8 +97,8 @@ const PlayerCard = ({ players }) => {
     var playerValue = selectedPlayer[category];
     var result = (playerValue - minValue) / difference;
 
+    // Is the field supposed to be a positive or negative value?
     if (direction === 'positive') {
-      // Specific conditions (100% & 0&)
       if (maxValue === playerValue) {
         return '100%';
       } else if (minValue === playerValue) {
@@ -116,7 +121,7 @@ const PlayerCard = ({ players }) => {
     }
   }
 
-  // Gets the percentile for the given statistic
+  // Gets the time percentile for the given statistic
   function getTimePercentile(category, direction) {
     // Group forwards & defensemen together
     if (selectedPlayer['position'] === 'D') {
@@ -156,8 +161,11 @@ const PlayerCard = ({ players }) => {
   function getColor(value) {
     let percentage = parseFloat(value.substring(-1));
 
+    // Setting color based off percentage grouping
     let color =
       percentage <= 33 ? '255, 51, 51' : percentage <= 66 ? '255, 205, 0' : percentage > 66 ? '51, 255, 74' : '0, 0, 0';
+
+    // Setting percentage of the color based off how close it is to the next grouping
     let colorPercentage =
       percentage <= 33
         ? percentage * 3
@@ -167,12 +175,11 @@ const PlayerCard = ({ players }) => {
         ? ((percentage - 67) * 3) / 100
         : 0;
 
-    // Color is too dark, need to fix this eventually (is this a good solution?)
+    // Accounting for colors that are too dark
     colorPercentage = colorPercentage < 0.2 ? colorPercentage + 0.2 : colorPercentage;
 
+    // Set RGBA colors based off which
     let resultColor = 'rgba(' + color + ', ' + colorPercentage + ')';
-    // let resultColor = 'rgb(' + color + ')';
-
     return resultColor;
   }
 
@@ -364,13 +371,13 @@ const PlayerCard = ({ players }) => {
             </span>
           </p>
           <p>
-            🚨 Per 60:<div className="fieldRank">{getRank('I_F_goals')}</div>
+            🚨 Per 60:<div className="fieldRank">{getRank('I_F_goals', 'desc', 'time')}</div>
             <span style={{ backgroundColor: getColor(getTimePercentile('I_F_goals')) }}>
               {getTimePercentile('I_F_goals')}
             </span>
           </p>
           <p>
-            🍏 Per 60:<div className="fieldRank">{getRank('I_F_goals')}</div>
+            🍏 Per 60:<div className="fieldRank">{getRank('I_F_goals', 'desc', 'time')}</div>
             <span
               style={{
                 backgroundColor: getColor(
@@ -382,7 +389,7 @@ const PlayerCard = ({ players }) => {
             </span>
           </p>
           <p>
-            🥅 Per 60:<div className="fieldRank">{getRank('I_F_goals')}</div>
+            🥅 Per 60:<div className="fieldRank">{getRank('I_F_points', 'desc', 'time')}</div>
             <span style={{ backgroundColor: getColor(getTimePercentile('I_F_points')) }}>
               {getTimePercentile('I_F_points')}
             </span>

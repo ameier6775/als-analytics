@@ -377,98 +377,19 @@ const PlayerCard = ({ players }) => {
             </span>
           </p>
           <p>
-            Expected Goals Against:<div className="fieldRank">{getRank('OnIce_A_xGoals', 'asc')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('OnIce_A_xGoals', 'negative')) }}>
-              {getProductionPercentile('OnIce_A_xGoals', 'negative')}
-            </span>
-          </p>
-          <p>
-            🧊 Goals Against:<div className="fieldRank">{getRank('OnIce_A_goals', 'asc')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('OnIce_A_goals', 'negative')) }}>
-              {getProductionPercentile('OnIce_A_goals', 'negative')}
-            </span>
-          </p>
-          <p>
             Shot Attempts:<div className="fieldRank">{getRank('I_F_shotAttempts')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('I_F_shotAttempts')) }}>
               {getProductionPercentile('I_F_shotAttempts')}
             </span>
           </p>
-          <p>
-            Hits:<div className="fieldRank">{getRank('I_F_hits')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('I_F_hits')) }}>
-              {getProductionPercentile('I_F_hits')}
-            </span>
-          </p>
-          <p>
-            Blocks:<div className="fieldRank">{getRank('shotsBlockedByPlayer')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('shotsBlockedByPlayer')) }}>
-              {getProductionPercentile('shotsBlockedByPlayer')}
-            </span>
-          </p>
-          <p>
-            Takeaways:<div className="fieldRank">{getRank('I_F_takeaways')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('I_F_takeaways')) }}>
-              {getProductionPercentile('I_F_takeaways')}
-            </span>
-          </p>
-          <p>
-            Giveaways:<div className="fieldRank">{getRank('I_F_giveaways', 'asc')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('I_F_giveaways', 'negative')) }}>
-              {getProductionPercentile('I_F_giveaways', 'negative')}
-            </span>
-          </p>
-          <p>
-            Games:<div className="fieldRank">{getRank('games_played')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('games_played')) }}>
-              {getProductionPercentile('games_played')}
-            </span>
-          </p>
-          <p>
-            Time On Ice:<div className="fieldRank">{getRank('icetime')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('icetime')) }}>
-              {getProductionPercentile('icetime')}
-            </span>
-          </p>
+
           <p>
             Offensive Zone Starts:{' '}
             <span style={{ backgroundColor: 'blue' }}>
-              {parseFloat(
-                selectedPlayer['I_F_oZoneShiftStarts'] /
-                  (selectedPlayer['I_F_oZoneShiftStarts'] +
-                    selectedPlayer['I_F_dZoneShiftStarts'] +
-                    selectedPlayer['I_F_neutralZoneShiftStarts']),
-              )
-                .toFixed(2)
-                .substring(2, 4) + '%'}
+              {parseFloat(selectedPlayer.oZoneStartsPercentage).toFixed(2).substring(2, 4) + '%'}
             </span>
           </p>
-          <p>
-            Neutral Zone Starts:{' '}
-            <span style={{ backgroundColor: 'blue' }}>
-              {parseFloat(
-                selectedPlayer['I_F_neutralZoneShiftStarts'] /
-                  (selectedPlayer['I_F_oZoneShiftStarts'] +
-                    selectedPlayer['I_F_dZoneShiftStarts'] +
-                    selectedPlayer['I_F_neutralZoneShiftStarts']),
-              )
-                .toFixed(2)
-                .substring(2, 4) + '%'}
-            </span>
-          </p>
-          <p>
-            Defensive Zone Starts:{' '}
-            <span style={{ backgroundColor: 'blue' }}>
-              {parseFloat(
-                selectedPlayer['I_F_dZoneShiftStarts'] /
-                  (selectedPlayer['I_F_oZoneShiftStarts'] +
-                    selectedPlayer['I_F_dZoneShiftStarts'] +
-                    selectedPlayer['I_F_neutralZoneShiftStarts']),
-              )
-                .toFixed(2)
-                .substring(2, 4) + '%'}
-            </span>
-          </p>
+
           <div className="fullWidthChart">
             <h2 className="playerChart">Offense Per 60</h2>
             <LineChart
@@ -509,6 +430,85 @@ const PlayerCard = ({ players }) => {
               />
             </LineChart>
           </div>
+          <p>
+            Takeaways:<div className="fieldRank">{getRank('I_F_takeaways')}</div>
+            <span style={{ backgroundColor: getColor(getProductionPercentile('I_F_takeaways')) }}>
+              {getProductionPercentile('I_F_takeaways')}
+            </span>
+          </p>
+          <p>
+            Giveaways:<div className="fieldRank">{getRank('I_F_giveaways', 'asc')}</div>
+            <span style={{ backgroundColor: getColor(getProductionPercentile('I_F_giveaways', 'negative')) }}>
+              {getProductionPercentile('I_F_giveaways', 'negative')}
+            </span>
+          </p>
+          <p>
+            Hits:<div className="fieldRank">{getRank('I_F_hits')}</div>
+            <span style={{ backgroundColor: getColor(getProductionPercentile('I_F_hits')) }}>
+              {getProductionPercentile('I_F_hits')}
+            </span>
+          </p>
+          <p>
+            Expected Goals Against:<div className="fieldRank">{getRank('OnIce_A_xGoals', 'asc')}</div>
+            <span style={{ backgroundColor: getColor(getProductionPercentile('OnIce_A_xGoals', 'negative')) }}>
+              {getProductionPercentile('OnIce_A_xGoals', 'negative')}
+            </span>
+          </p>
+
+          <p>
+            🧊 Goals Against:<div className="fieldRank">{getRank('OnIce_A_goals', 'asc')}</div>
+            <span style={{ backgroundColor: getColor(getProductionPercentile('OnIce_A_goals', 'negative')) }}>
+              {getProductionPercentile('OnIce_A_goals', 'negative')}
+            </span>
+          </p>
+          <p>
+            Blocks:<div className="fieldRank">{getRank('shotsBlockedByPlayer')}</div>
+            <span style={{ backgroundColor: getColor(getProductionPercentile('shotsBlockedByPlayer')) }}>
+              {getProductionPercentile('shotsBlockedByPlayer')}
+            </span>
+          </p>
+          <p>
+            D-Zone Giveaways:<div className="fieldRank">{getRank('I_F_dZoneGiveaways', 'asc')}</div>
+            <span style={{ backgroundColor: getColor(getProductionPercentile('I_F_dZoneGiveaways', 'negative')) }}>
+              {getProductionPercentile('I_F_dZoneGiveaways', 'negative')}
+            </span>
+          </p>
+          <p>
+            Blocked Shot Attempts:<div className="fieldRank">{getRank('I_F_blockedShotAttempts')}</div>
+            <span style={{ backgroundColor: getColor(getProductionPercentile('I_F_blockedShotAttempts')) }}>
+              {getProductionPercentile('I_F_blockedShotAttempts')}
+            </span>
+          </p>
+          <p>
+            Shot Attempts:<div className="fieldRank">{getRank('OnIce_A_shotAttempts')}</div>
+            <span style={{ backgroundColor: getColor(getProductionPercentile('OnIce_A_shotAttempts')) }}>
+              {getProductionPercentile('OnIce_A_shotAttempts')}
+            </span>
+          </p>
+          {/* <p>
+            Games:<div className="fieldRank">{getRank('games_played')}</div>
+            <span style={{ backgroundColor: getColor(getProductionPercentile('games_played')) }}>
+              {getProductionPercentile('games_played')}
+            </span>
+          </p>
+          <p>
+            Time On Ice:<div className="fieldRank">{getRank('icetime')}</div>
+            <span style={{ backgroundColor: getColor(getProductionPercentile('icetime')) }}>
+              {getProductionPercentile('icetime')}
+            </span>
+          </p>
+          <p>
+            Neutral Zone Starts:{' '}
+            <span style={{ backgroundColor: 'blue' }}>
+              {parseFloat(selectedPlayer.nZoneStartsPercentage).toFixed(2).substring(2, 4) + '%'}
+            </span>
+          </p> */}
+          <p>
+            Defensive Zone Starts:{' '}
+            <span style={{ backgroundColor: 'blue' }}>
+              {parseFloat(selectedPlayer.dZoneStartsPercentage).toFixed(2).substring(2, 4) + '%'}
+            </span>
+          </p>
           <div className="fullWidthChart">
             <h2 className="playerChart">Defense Per 60</h2>
             <LineChart

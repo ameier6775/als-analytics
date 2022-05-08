@@ -86,6 +86,15 @@ export default function Players() {
           player.value = player.name;
           player.label = player.name;
           player.I_F_assists = player.I_F_primaryAssists + player.I_F_secondaryAssists;
+          player.oZoneStartsPercentage =
+            player.I_F_oZoneShiftStarts /
+            (player.I_F_oZoneShiftStarts + player.I_F_dZoneShiftStarts + player.I_F_neutralZoneShiftStarts);
+          player.dZoneStartsPercentage =
+            player.I_F_dZoneShiftStarts /
+            (player.I_F_oZoneShiftStarts + player.I_F_dZoneShiftStarts + player.I_F_neutralZoneShiftStarts);
+          player.nZoneStartsPercentage =
+            player.I_F_neutralZoneShiftStarts /
+            (player.I_F_oZoneShiftStarts + player.I_F_dZoneShiftStarts + player.I_F_neutralZoneShiftStarts);
         })
       : teams;
   }

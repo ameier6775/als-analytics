@@ -186,12 +186,12 @@ const HitterCard = ({ players }) => {
 
   return (
     <div>
-      {/* <h2 className="mlbTeamCardSubHeader">Batting:</h2> */}
+      <h2 className="mlbTeamCardSubHeader">Hitter:</h2>
       <Select onChange={onChange} options={players} />
       {selectedPlayer ? (
         <div id={selectedPlayer.playerId} className="playerCard">
           <h1>{selectedPlayer.Player}</h1>
-          {/* <h2>Batting</h2> */}
+          <h2>{selectedPlayer.Team}</h2>
           <p>
             Average:
             <div className="fieldRank">{getRank('AVG')}</div>

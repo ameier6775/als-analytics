@@ -33,11 +33,40 @@ export default async function handler(req, res) {
     }
   });
 
+  // Pitchers Standard Data
+  const columnArrayPitcherStandard = 'Player Team Age G GS CG SHO IP H ER K BB HR W L SV BS HLD ERA WHIP'.split(/\s+/);
+
+  type ColumnHeaderForPitcherStandard = { [C in typeof columnArrayPitcherStandard[number]]: number };
+  const columnHeaderMapPitcherStandard: ColumnHeaderForPitcherStandard = columnArrayPitcherStandard.reduce(
+    (acc, value, index) => ({ ...acc, [value]: index + 1 }),
+    {},
+  );
+
+  const workbookPitcherStandard = new Excel.Workbook();
+  await workbookPitcherStandard.csv.readFile(`${dir}/Pitchers.csv`);
+  const worksheetPitcherStandard = workbookPitcherStandard.worksheets[0];
+  const dataPitcherStandard = [];
+
+  worksheetPitcherStandard.eachRow((row, rowNumber) => {
+    const rowObject = Object.entries(columnHeaderMapPitcherStandard).reduce((acc, value) => {
+      return {
+        ...acc,
+        [value[0]]: row.values[value[1]],
+      };
+    }, {});
+
+    if (rowNumber !== 1) {
+      dataPitcherStandard.push(rowObject);
+    }
+  });
+
   // Filter out hitters with very few at bats
   const hittersArray = dataHitterStandard.filter((player) => parseInt(player.AB) > 50);
+  // Filter out pitchers with very few innings
+  const pitchersArray = dataPitcherStandard.filter((player) => parseInt(player.IP) > 10);
 
-  //   Joining the two hitter fan graphs tables by team name
-  const data = [];
+  // Adding new fields to the hitters array
+  const hittersData = [];
   for (let i = 0; i < hittersArray.length; i++) {
     const standardHitterElement = hittersArray[i];
 
@@ -49,11 +78,27 @@ export default async function handler(req, res) {
     const element = {
       ...standardHitterElement,
     };
-    data.push(element);
+    hittersData.push(element);
+  }
+  // Adding new fields to the pitchers array
+  const pitchersData = [];
+  for (let i = 0; i < pitchersArray.length; i++) {
+    const standardPitcherElement = pitchersArray[i];
+
+    // Adding these two fields for the dropdown
+    standardPitcherElement.value = standardPitcherElement['Player'];
+    standardPitcherElement.label = standardPitcherElement['Player'];
+
+    // Putting both objects values into one & inserting it into the array
+    const element = {
+      ...standardPitcherElement,
+    };
+    pitchersData.push(element);
   }
 
   // Response
   res.status(200).json({
-    data: data,
+    hittersData: hittersData,
+    pitchersData: pitchersData,
   });
 }

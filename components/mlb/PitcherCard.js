@@ -191,6 +191,7 @@ const PitcherCard = ({ players }) => {
       {selectedPlayer ? (
         <div id={selectedPlayer.playerId} className="playerCard">
           <h1>{selectedPlayer.Player}</h1>
+          <h2>{selectedPlayer.Team}</h2>
           <p>
             ERA:
             <div className="fieldRank">{getRank('ERA')}</div>

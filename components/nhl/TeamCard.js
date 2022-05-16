@@ -313,7 +313,6 @@ const TeamCard = ({ teams }) => {
               {getProductionPercentile('goalsAgainst', 'negative')}
             </span>
           </p>
-
           <p>
             Expected Goals Against:
             <div className="fieldRank">{getRank('xGoalsAgainst', 'asc')}</div>
@@ -321,7 +320,6 @@ const TeamCard = ({ teams }) => {
               {getProductionPercentile('xGoalsAgainst', 'negative')}
             </span>
           </p>
-
           <p>
             Giveaways:
             <div className="fieldRank">{getRank('giveawaysFor', 'asc')}</div>
@@ -336,7 +334,6 @@ const TeamCard = ({ teams }) => {
               {getProductionPercentile('shotAttemptsAgainst', 'negative')}
             </span>
           </p>
-
           <p>
             Penalty Differential:
             <div className="fieldRank">{getRank('penaltyDifferential')}</div>

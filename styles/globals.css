@@ -250,3 +250,12 @@ tr {
 .teamCharts h2 {
   color: lightgray;
 }
+
+.teamLogo {
+  height: 75px;
+  width: min-content;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 15px;
+}

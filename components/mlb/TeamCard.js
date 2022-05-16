@@ -18,6 +18,7 @@ import {
   Legend,
   ReferenceLine,
 } from 'recharts';
+import teamLogos from '../../data/mlb/teams/2022/logos';
 
 const TeamCard = ({ teams }) => {
   const [selectedTeam, setSelectedTeam] = useState(teams[0]);
@@ -245,6 +246,10 @@ const TeamCard = ({ teams }) => {
     },
   ];
 
+  console.log(selectedTeam);
+
+  var logo = teamLogos.find((obj) => obj.team === selectedTeam['Team']);
+
   return (
     <div>
       {/* <h2 className="mlbTeamCardSubHeader">Batting:</h2> */}
@@ -252,6 +257,7 @@ const TeamCard = ({ teams }) => {
       {selectedTeam ? (
         <div id={selectedTeam.playerId} className="playerCard">
           <h1>{selectedTeam.Team}</h1>
+          <img className="teamLogo" height="10" src={logo.logo} />
           {/* <h2>Batting</h2> */}
           <p>
             Average:

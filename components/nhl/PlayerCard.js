@@ -18,6 +18,7 @@ import {
   Legend,
   ReferenceLine,
 } from 'recharts';
+import teamLogos from '../../data/nhl/teams/2022/logos';
 
 const PlayerCard = ({ players }) => {
   const [selectedPlayer, setSelectedPlayer] = useState(players[0]);
@@ -303,6 +304,8 @@ const PlayerCard = ({ players }) => {
     },
   ];
 
+  var logo = teamLogos.find((obj) => obj.team === selectedPlayer['team']);
+
   return (
     <div>
       <Select onChange={onChange} options={players} />
@@ -315,7 +318,7 @@ const PlayerCard = ({ players }) => {
               : selectedPlayer.position}
           </h2>
           <h2>{selectedPlayer['team']}</h2>
-
+          <img className="teamLogo" height="10" src={logo.logo} />
           <p>
             Goals:
             <div className="fieldRank">{getRank('I_F_goals')}</div>

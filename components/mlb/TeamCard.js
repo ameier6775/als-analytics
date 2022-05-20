@@ -246,8 +246,6 @@ const TeamCard = ({ teams }) => {
     },
   ];
 
-  console.log(selectedTeam);
-
   var logo = teamLogos.find((obj) => obj.team === selectedTeam['Team']);
 
   return (

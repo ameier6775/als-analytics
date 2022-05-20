@@ -11,7 +11,6 @@ export default function Teams() {
   const { data, error } = useSWR('../api/mlb/players/', fetcher);
   if (error) return <div>failed to load</div>;
   if (!data) return <div>loading...</div>;
-  console.log(data);
 
   return (
     <>

@@ -114,7 +114,7 @@ export default async function handler(req, res) {
   });
   // Pitchers Advanced Data - Fan Graphs
   const columnArrayPitcherAdvanced =
-    'Name Team KPer9 BBPer9 KPerBB HRPer9 KRate BBRate KBBRate AVG WHIP BABIP LOBRate ERA- FIP- xFIP- ERA FIP E-F xFIP SIERA playerid'.split(
+    'Name Team KPer9 BBPer9 KPerBB HRPer9 KRate BBRate KBBRate AVG WHIP BABIP LOBRate ERAadjusted FIPadjusted xFIPadjusted ERA FIP EadjustedF xFIP SIERA playerid'.split(
       /\s+/,
     );
 
@@ -142,15 +142,11 @@ export default async function handler(req, res) {
     }
   });
 
-  // Filter out pitchers with very few innings
-  const pitchersStandardArray = dataPitcherStandard.filter((player) => parseInt(player.IP) > 10);
-  const pitchersAdvancedArray = dataPitcherAdvanced.filter((player) => parseInt(player.IP) > 10);
-
   // Adding new fields to the pitchers array
   const pitchersData = [];
-  for (let i = 0; i < pitchersStandardArray.length; i++) {
-    const standardPitcherElement = pitchersStandardArray[i];
-    const advancedPitcherElement = pitchersAdvancedArray.find((obj) => obj.Name === standardPitcherElement.Name);
+  for (let i = 0; i < dataPitcherStandard.length; i++) {
+    const standardPitcherElement = dataPitcherStandard[i];
+    const advancedPitcherElement = dataPitcherAdvanced.find((obj) => obj.playerid === standardPitcherElement.playerid);
 
     // Adding these two fields for the dropdown
     standardPitcherElement.value = standardPitcherElement.Name;

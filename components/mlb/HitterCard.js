@@ -193,7 +193,7 @@ const HitterCard = ({ players }) => {
       <h2 className="mlbTeamCardSubHeader">Hitter:</h2>
       <Select onChange={onChange} options={players} />
       {selectedPlayer ? (
-        <div id={selectedPlayer.playerId} className="playerCard">
+        <div id={selectedPlayer.playerid} className="playerCard">
           <h1>{selectedPlayer.Player}</h1>
           <h2>{selectedPlayer.Team}</h2>
           <img className="teamLogo" height="10" src={logo.logo} />

@@ -192,8 +192,8 @@ const PitcherCard = ({ players }) => {
       <h2 className="mlbTeamCardSubHeader">Pitcher:</h2>
       <Select onChange={onChange} options={players} />
       {selectedPlayer ? (
-        <div id={selectedPlayer.playerId} className="playerCard">
-          <h1>{selectedPlayer.Player}</h1>
+        <div id={selectedPlayer.playerid} className="playerCard">
+          <h1>{selectedPlayer.Name}</h1>
           <h2>{selectedPlayer.Team}</h2>
           <img className="teamLogo" height="10" src={logo.logo} />
           <p>
@@ -210,9 +210,9 @@ const PitcherCard = ({ players }) => {
             </span>
           </p>
           <p>
-            Strikeouts:<div className="fieldRank">{getRank('K', 'positive')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('K', 'positive')) }}>
-              {getProductionPercentile('K', 'positive')}
+            Strikeouts:<div className="fieldRank">{getRank('SO', 'positive')}</div>
+            <span style={{ backgroundColor: getColor(getProductionPercentile('SO', 'positive')) }}>
+              {getProductionPercentile('SO', 'positive')}
             </span>
           </p>
           <p>

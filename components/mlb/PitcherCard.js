@@ -20,7 +20,7 @@ import {
 } from 'recharts';
 import teamLogos from '../../data/mlb/teams/2022/logos';
 
-const PitcherCard = ({ players }) => {
+const PitcherCard = ({ players }, type) => {
   const [selectedPlayer, setSelectedPlayer] = useState(players[0]);
   const onChange = (e) => {
     setSelectedPlayer(e);
@@ -189,7 +189,7 @@ const PitcherCard = ({ players }) => {
 
   return (
     <div>
-      <h2 className="mlbTeamCardSubHeader">Pitcher:</h2>
+      <h2 className="mlbTeamCardSubHeader">{selectedPlayer['position']} Pitcher:</h2>
       <Select onChange={onChange} options={players} />
       {selectedPlayer ? (
         <div id={selectedPlayer.playerid} className="playerCard">
@@ -198,61 +198,61 @@ const PitcherCard = ({ players }) => {
           <img className="teamLogo" height="10" src={logo.logo} />
           <p>
             ERA:
-            <div className="fieldRank">{getRank('ERA')}</div>
+            <div className="fieldRank">{getRank('ERA', 'asc')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('ERA')) }}>
               {getProductionPercentile('ERA')}
             </span>
           </p>
           <p>
-            WHIP:<div className="fieldRank">{getRank('WHIP')}</div>
+            WHIP:<div className="fieldRank">{getRank('WHIP', 'asc')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('WHIP')) }}>
               {getProductionPercentile('WHIP')}
             </span>
           </p>
           <p>
-            Strikeouts:<div className="fieldRank">{getRank('SO', 'positive')}</div>
+            Strikeouts:<div className="fieldRank">{getRank('SO')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('SO', 'positive')) }}>
               {getProductionPercentile('SO', 'positive')}
             </span>
           </p>
           <p>
-            Wins:<div className="fieldRank">{getRank('W', 'positive')}</div>
+            Wins:<div className="fieldRank">{getRank('W')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('W', 'positive')) }}>
               {getProductionPercentile('W', 'positive')}
             </span>
           </p>
           <p>
-            Losses:<div className="fieldRank">{getRank('L')}</div>
+            Losses:<div className="fieldRank">{getRank('L', 'asc')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('L')) }}>
               {getProductionPercentile('L')}
             </span>
           </p>
           <p>
-            Games:<div className="fieldRank">{getRank('G', 'positive')}</div>
+            Games:<div className="fieldRank">{getRank('G')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('G', 'positive')) }}>
               {getProductionPercentile('G', 'positive')}
             </span>
           </p>
           <p>
-            Innings:<div className="fieldRank">{getRank('IP', 'positive')}</div>
+            Innings:<div className="fieldRank">{getRank('IP')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('IP', 'positive')) }}>
               {getProductionPercentile('IP', 'positive')}
             </span>
           </p>
           <p>
-            Walks:<div className="fieldRank">{getRank('BB')}</div>
+            Walks:<div className="fieldRank">{getRank('BB', 'asc')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('BB')) }}>
               {getProductionPercentile('BB')}
             </span>
           </p>
           <p>
-            Hits:<div className="fieldRank">{getRank('H')}</div>
+            Hits:<div className="fieldRank">{getRank('H', 'asc')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('H')) }}>
               {getProductionPercentile('H')}
             </span>
           </p>
           <p>
-            Home Runs:<div className="fieldRank">{getRank('HR')}</div>
+            Home Runs:<div className="fieldRank">{getRank('HR', 'asc')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('HR')) }}>
               {getProductionPercentile('HR')}
             </span>

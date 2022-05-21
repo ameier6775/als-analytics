@@ -86,22 +86,22 @@ export default async function handler(req, res) {
   }
 
   // Pitchers Standard Data - Fan Graphs
-  const columnArrayPitcherStandard =
+  const columnArrayPitcherStandardSP =
     'Name Team W L ERA G GS CG ShO SV HLD BS IP TBF H R ER HR BB IBB HBP WP BK SO playerid'.split(/\s+/);
 
-  type ColumnHeaderForPitcherStandard = { [C in typeof columnArrayPitcherStandard[number]]: number };
-  const columnHeaderMapPitcherStandard: ColumnHeaderForPitcherStandard = columnArrayPitcherStandard.reduce(
+  type ColumnHeaderForPitcherStandardSP = { [C in typeof columnArrayPitcherStandardSP[number]]: number };
+  const columnHeaderMapPitcherStandardSP: ColumnHeaderForPitcherStandardSP = columnArrayPitcherStandardSP.reduce(
     (acc, value, index) => ({ ...acc, [value]: index + 1 }),
     {},
   );
 
-  const workbookPitcherStandard = new Excel.Workbook();
-  await workbookPitcherStandard.csv.readFile(`${dir}/PitcherFGStandard.csv`);
-  const worksheetPitcherStandard = workbookPitcherStandard.worksheets[0];
-  const dataPitcherStandard = [];
+  const workbookPitcherStandardSP = new Excel.Workbook();
+  await workbookPitcherStandardSP.csv.readFile(`${dir}/SPitcherFGStandard.csv`);
+  const worksheetPitcherStandardSP = workbookPitcherStandardSP.worksheets[0];
+  const dataPitcherStandardSP = [];
 
-  worksheetPitcherStandard.eachRow((row, rowNumber) => {
-    const rowObject = Object.entries(columnHeaderMapPitcherStandard).reduce((acc, value) => {
+  worksheetPitcherStandardSP.eachRow((row, rowNumber) => {
+    const rowObject = Object.entries(columnHeaderMapPitcherStandardSP).reduce((acc, value) => {
       return {
         ...acc,
         [value[0]]: row.values[value[1]],
@@ -109,28 +109,28 @@ export default async function handler(req, res) {
     }, {});
 
     if (rowNumber !== 1) {
-      dataPitcherStandard.push(rowObject);
+      dataPitcherStandardSP.push(rowObject);
     }
   });
-  // Pitchers Advanced Data - Fan Graphs
-  const columnArrayPitcherAdvanced =
+  // Starting Pitchers Advanced Data - Fan Graphs
+  const columnArrayPitcherAdvancedSP =
     'Name Team KPer9 BBPer9 KPerBB HRPer9 KRate BBRate KBBRate AVG WHIP BABIP LOBRate ERAadjusted FIPadjusted xFIPadjusted ERA FIP EadjustedF xFIP SIERA playerid'.split(
       /\s+/,
     );
 
-  type ColumnHeaderForPitcherAdvanced = { [C in typeof columnArrayPitcherAdvanced[number]]: number };
-  const columnHeaderMapPitcherAdvanced: ColumnHeaderForPitcherAdvanced = columnArrayPitcherAdvanced.reduce(
+  type ColumnHeaderForPitcherAdvancedSP = { [C in typeof columnArrayPitcherAdvancedSP[number]]: number };
+  const columnHeaderMapPitcherAdvancedSP: ColumnHeaderForPitcherAdvancedSP = columnArrayPitcherAdvancedSP.reduce(
     (acc, value, index) => ({ ...acc, [value]: index + 1 }),
     {},
   );
 
-  const workbookPitcherAdvanced = new Excel.Workbook();
-  await workbookPitcherAdvanced.csv.readFile(`${dir}/PitcherFGAdvanced.csv`);
-  const worksheetPitcherAdvanced = workbookPitcherAdvanced.worksheets[0];
-  const dataPitcherAdvanced = [];
+  const workbookPitcherAdvancedSP = new Excel.Workbook();
+  await workbookPitcherAdvancedSP.csv.readFile(`${dir}/SPitcherFGAdvanced.csv`);
+  const worksheetPitcherAdvancedSP = workbookPitcherAdvancedSP.worksheets[0];
+  const dataPitcherAdvancedSP = [];
 
-  worksheetPitcherAdvanced.eachRow((row, rowNumber) => {
-    const rowObject = Object.entries(columnHeaderMapPitcherAdvanced).reduce((acc, value) => {
+  worksheetPitcherAdvancedSP.eachRow((row, rowNumber) => {
+    const rowObject = Object.entries(columnHeaderMapPitcherAdvancedSP).reduce((acc, value) => {
       return {
         ...acc,
         [value[0]]: row.values[value[1]],
@@ -138,31 +138,113 @@ export default async function handler(req, res) {
     }, {});
 
     if (rowNumber !== 1) {
-      dataPitcherAdvanced.push(rowObject);
+      dataPitcherAdvancedSP.push(rowObject);
     }
   });
 
   // Adding new fields to the pitchers array
-  const pitchersData = [];
-  for (let i = 0; i < dataPitcherStandard.length; i++) {
-    const standardPitcherElement = dataPitcherStandard[i];
-    const advancedPitcherElement = dataPitcherAdvanced.find((obj) => obj.playerid === standardPitcherElement.playerid);
+  const pitchersDataSP = [];
+  for (let i = 0; i < dataPitcherStandardSP.length; i++) {
+    const standardPitcherElement = dataPitcherStandardSP[i];
+    const advancedPitcherElement = dataPitcherAdvancedSP.find(
+      (obj) => obj.playerid === standardPitcherElement.playerid,
+    );
 
     // Adding these two fields for the dropdown
     standardPitcherElement.value = standardPitcherElement.Name;
     standardPitcherElement.label = standardPitcherElement.Name;
+    standardPitcherElement.position = 'Starting';
 
     // Putting both objects values into one & inserting it into the array
     const element = {
       ...standardPitcherElement,
       ...advancedPitcherElement,
     };
-    pitchersData.push(element);
+    pitchersDataSP.push(element);
+  }
+
+  // Relief Pitchers Standard Data - Fan Graphs
+  const columnArrayPitcherStandardRP =
+    'Name Team W L ERA G GS CG ShO SV HLD BS IP TBF H R ER HR BB IBB HBP WP BK SO playerid'.split(/\s+/);
+
+  type ColumnHeaderForPitcherStandardRP = { [C in typeof columnArrayPitcherStandardRP[number]]: number };
+  const columnHeaderMapPitcherStandardRP: ColumnHeaderForPitcherStandardRP = columnArrayPitcherStandardRP.reduce(
+    (acc, value, index) => ({ ...acc, [value]: index + 1 }),
+    {},
+  );
+
+  const workbookPitcherStandardRP = new Excel.Workbook();
+  await workbookPitcherStandardRP.csv.readFile(`${dir}/RPitcherFGStandard.csv`);
+  const worksheetPitcherStandardRP = workbookPitcherStandardRP.worksheets[0];
+  const dataPitcherStandardRP = [];
+
+  worksheetPitcherStandardRP.eachRow((row, rowNumber) => {
+    const rowObject = Object.entries(columnHeaderMapPitcherStandardRP).reduce((acc, value) => {
+      return {
+        ...acc,
+        [value[0]]: row.values[value[1]],
+      };
+    }, {});
+
+    if (rowNumber !== 1) {
+      dataPitcherStandardRP.push(rowObject);
+    }
+  });
+  // Pitchers Advanced Data - Fan Graphs
+  const columnArrayPitcherAdvancedRP =
+    'Name Team KPer9 BBPer9 KPerBB HRPer9 KRate BBRate KBBRate AVG WHIP BABIP LOBRate ERAadjusted FIPadjusted xFIPadjusted ERA FIP EadjustedF xFIP SIERA playerid'.split(
+      /\s+/,
+    );
+
+  type ColumnHeaderForPitcherAdvancedRP = { [C in typeof columnArrayPitcherAdvancedRP[number]]: number };
+  const columnHeaderMapPitcherAdvancedRP: ColumnHeaderForPitcherAdvancedRP = columnArrayPitcherAdvancedRP.reduce(
+    (acc, value, index) => ({ ...acc, [value]: index + 1 }),
+    {},
+  );
+
+  const workbookPitcherAdvancedRP = new Excel.Workbook();
+  await workbookPitcherAdvancedRP.csv.readFile(`${dir}/RPitcherFGAdvanced.csv`);
+  const worksheetPitcherAdvancedRP = workbookPitcherAdvancedRP.worksheets[0];
+  const dataPitcherAdvancedRP = [];
+
+  worksheetPitcherAdvancedRP.eachRow((row, rowNumber) => {
+    const rowObject = Object.entries(columnHeaderMapPitcherAdvancedRP).reduce((acc, value) => {
+      return {
+        ...acc,
+        [value[0]]: row.values[value[1]],
+      };
+    }, {});
+
+    if (rowNumber !== 1) {
+      dataPitcherAdvancedRP.push(rowObject);
+    }
+  });
+
+  // Adding new fields to the pitchers array
+  const pitchersDataRP = [];
+  for (let i = 0; i < dataPitcherStandardRP.length; i++) {
+    const standardPitcherElement = dataPitcherStandardRP[i];
+    const advancedPitcherElement = dataPitcherAdvancedRP.find(
+      (obj) => obj.playerid === standardPitcherElement.playerid,
+    );
+
+    // Adding these two fields for the dropdown
+    standardPitcherElement.value = standardPitcherElement.Name;
+    standardPitcherElement.label = standardPitcherElement.Name;
+    standardPitcherElement.position = 'Relief';
+
+    // Putting both objects values into one & inserting it into the array
+    const element = {
+      ...standardPitcherElement,
+      ...advancedPitcherElement,
+    };
+    pitchersDataRP.push(element);
   }
 
   // Response
   res.status(200).json({
     hittersData: hittersData,
-    pitchersData: pitchersData,
+    pitchersDataSP: pitchersDataSP,
+    pitchersDataRP: pitchersDataRP,
   });
 }

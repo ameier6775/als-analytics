@@ -12,6 +12,8 @@ export default function Teams() {
   if (error) return <div>failed to load</div>;
   if (!data) return <div>loading...</div>;
 
+  console.log(data);
+
   return (
     <>
       <HitterCard players={data.hittersData}></HitterCard>

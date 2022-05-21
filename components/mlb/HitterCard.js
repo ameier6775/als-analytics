@@ -24,6 +24,7 @@ const HitterCard = ({ players }) => {
   const [selectedPlayer, setSelectedPlayer] = useState(players[0]);
   const onChange = (e) => {
     setSelectedPlayer(e);
+    console.log(selectedPlayer);
   };
 
   function getProductionPercentile(category, direction = 'positive') {
@@ -43,14 +44,14 @@ const HitterCard = ({ players }) => {
       }),
     );
     var difference = maxValue - minValue;
-    var teamValue = selectedPlayer[category];
-    var result = (teamValue - minValue) / difference;
+    var playerValue = selectedPlayer[category];
+    var result = (playerValue - minValue) / difference;
 
     // Specific conditions (100% & 0&) based off if its a positive or negative statistic
     if (direction === 'positive') {
-      if (maxValue === teamValue) {
+      if (maxValue === playerValue) {
         return '100%';
-      } else if (minValue === teamValue) {
+      } else if (minValue === playerValue) {
         return '0%';
       } else if (result.toFixed(2).substring(2, 3) === '0') {
         return result.toFixed(2).substring(3, 4) + '%';
@@ -58,9 +59,9 @@ const HitterCard = ({ players }) => {
         return result.toFixed(2).substring(2, 4) + '%';
       }
     } else if (direction === 'negative') {
-      if (minValue === teamValue) {
+      if (minValue === playerValue) {
         return '100%';
-      } else if (maxValue === teamValue) {
+      } else if (maxValue === playerValue) {
         return '0%';
       } else if ((1 - result).toFixed(2).substring(2, 3) === '0') {
         return (1 - result).toFixed(2).substring(3, 4) + '%';
@@ -88,14 +89,14 @@ const HitterCard = ({ players }) => {
     let lastDigit = categoryRank % 10;
 
     // Pronunciation of the ranking
-    if ((lastDigit >= 10 && lastDigit <= 20) || (lastDigit >= 4 && lastDigit <= 9) || lastDigit === 0) {
-      rankString = rankString + 'th';
-    } else if (lastDigit === 1) {
+    if (lastDigit === 1) {
       rankString = rankString + 'st';
     } else if (lastDigit === 2) {
       rankString = rankString + 'nd';
     } else if (lastDigit === 3) {
       rankString = rankString + 'rd';
+    } else {
+      rankString = rankString + 'th';
     }
 
     return rankString;
@@ -224,7 +225,7 @@ const HitterCard = ({ players }) => {
           <p>
             Home Runs:<div className="fieldRank">{getRank('HR')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('HR')) }}>
-              {getProductionPercentile('3B')}
+              {getProductionPercentile('HR')}
             </span>
           </p>
           <p>

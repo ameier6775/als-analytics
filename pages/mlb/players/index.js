@@ -16,7 +16,7 @@ export default function Teams() {
 
   return (
     <>
-      <HitterCard players={data.hittersData} type="Starting"></HitterCard>
+      <HitterCard players={data.hittersData}></HitterCard>
       <PitcherCard players={data.pitchersDataSP}></PitcherCard>
       <PitcherCard players={data.pitchersDataRP}></PitcherCard>
     </>

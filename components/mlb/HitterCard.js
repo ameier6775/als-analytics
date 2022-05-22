@@ -241,11 +241,17 @@ const HitterCard = ({ players }) => {
             </span>
           </p>
           <p>
+            wRC+:<div className="fieldRank">{getRank('wRC')}</div>
+            <span style={{ backgroundColor: getColor(getProductionPercentile('wRC')) }}>
+              {getProductionPercentile('wRC')}
+            </span>
+          </p>
+          {/* <p>
             Stolen Bases:<div className="fieldRank">{getRank('SB')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('SB')) }}>
               {getProductionPercentile('SB')}
             </span>
-          </p>
+          </p> */}
           <p>
             On Base %:<div className="fieldRank">{getRank('OBP')}</div>
             <span style={{ backgroundColor: getColor(getProductionPercentile('OBP')) }}>

@@ -138,11 +138,11 @@ const PitcherCard = ({ players }, type) => {
       ? 0
       : parseInt(getProductionPercentile('WHIP').substring(0, 2));
   let walks =
-    parseInt(getProductionPercentile('BB').substring(0, 2)) === 10
+    parseInt(getProductionPercentile('BBPer9').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('BB').substring(0, 2)) === 0
+      : !parseInt(getProductionPercentile('BBPer9').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('BB').substring(0, 2));
+      : parseInt(getProductionPercentile('BBPer9').substring(0, 2));
   let losses =
     parseInt(getProductionPercentile('L').substring(0, 2)) === 10
       ? 100
@@ -150,11 +150,11 @@ const PitcherCard = ({ players }, type) => {
       ? 0
       : parseInt(getProductionPercentile('L').substring(0, 2));
   let homeRunsAgainst =
-    parseInt(getProductionPercentile('HR').substring(0, 2)) === 10
+    parseInt(getProductionPercentile('HRPer9').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('HR').substring(0, 2)) === 0
+      : !parseInt(getProductionPercentile('HRPer9').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('HR').substring(0, 2));
+      : parseInt(getProductionPercentile('HRPer9').substring(0, 2));
 
   // Plotting chart data
   var hittersGraphData = [
@@ -258,7 +258,7 @@ const PitcherCard = ({ players }, type) => {
             </span>
           </p>
           <div className="fullWidthChart">
-            <h2 className="playerChart">Pitching</h2>
+            <h2 className="playerChart">Pitching Per 9</h2>
             <LineChart
               width={1200}
               height={280}

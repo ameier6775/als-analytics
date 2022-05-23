@@ -24,60 +24,36 @@ const PlayerCard = ({ players }) => {
   const [selectedPlayer, setSelectedPlayer] = useState(players[0]);
   const onChange = (e) => {
     setSelectedPlayer(e);
+    console.log(selectedPlayer);
   };
 
-  // Gets the percentile for the given statistic
-  function getProductionPercentile(category, direction = 'positive') {
+  function getPercentile(category, direction = 'positive') {
     // Group forwards & defensemen separately
     if (selectedPlayer['position'] === 'D') {
       var positionalArr = players.filter((player) => player.position === 'D');
     } else {
       var positionalArr = players.filter((player) => player.position != 'D');
     }
-
-    let indexArr = positionalArr.sort(function (a, b) {
-      return a[category] - b[category];
-    });
-
-    // Get the maximum & minimum player values for the statistic
-    var maxValue = Math.max.apply(
-      Math,
-      positionalArr.map((obj) => {
-        return obj[category];
-      }),
-    );
-    var minValue = Math.min.apply(
-      Math,
-      positionalArr.map((obj) => {
-        return obj[category];
-      }),
-    );
-
-    var difference = maxValue - minValue;
-    var playerValue = selectedPlayer[category];
-    var result = (playerValue - minValue) / difference;
-
-    // Is the field supposed to be a positive or negative value?
+    // Duplicate the players array
+    var resultArr = positionalArr.slice();
+    var rankArr = resultArr;
+    // Sorting by the category
     if (direction === 'positive') {
-      if (maxValue === playerValue) {
-        return '100%';
-      } else if (minValue === playerValue) {
-        return '0%';
-      } else if (result.toFixed(2).substring(2, 3) === '0') {
-        return result.toFixed(2).substring(3, 4) + '%';
-      } else {
-        return result.toFixed(2).substring(2, 4) + '%';
-      }
+      rankArr.sort((a, b) => b[category] - a[category]);
     } else if (direction === 'negative') {
-      if (minValue === playerValue) {
-        return '100%';
-      } else if (maxValue === playerValue) {
-        return '0%';
-      } else if ((1 - result).toFixed(2).substring(2, 3) === '0') {
-        return (1 - result).toFixed(2).substring(3, 4) + '%';
-      } else {
-        return (1 - result).toFixed(2).substring(2, 4) + '%';
-      }
+      rankArr.sort((a, b) => a[category] - b[category]);
+    }
+    let categoryRank = rankArr.indexOf(selectedPlayer);
+    let result = (rankArr.length - categoryRank) / rankArr.length;
+    // Specific conditions (100%, 0%, single digit percentile vs double digit percentile)
+    if (result >= 0.995) {
+      return '100%';
+    } else if (result === 0) {
+      return '0%';
+    } else if (result.toFixed(2).substring(2, 3) === '0') {
+      return result.toFixed(2).substring(3, 4) + '%';
+    } else {
+      return result.toFixed(2).substring(2, 4) + '%';
     }
   }
 
@@ -86,14 +62,12 @@ const PlayerCard = ({ players }) => {
     // Duplicate the players array
     var resultArr = players.slice();
     var rankArr = resultArr;
-
     // Group forwards & defensemen separately
     if (selectedPlayer['position'] === 'D') {
       rankArr = resultArr.filter((player) => player.position === 'D');
     } else {
       rankArr = resultArr.filter((player) => player.position != 'D');
     }
-
     // Sorting by the category
     if (order === 'desc' && model === 'production') {
       rankArr.sort((a, b) => b[category] - a[category]);
@@ -107,7 +81,6 @@ const PlayerCard = ({ players }) => {
     let categoryRank = rankArr.indexOf(selectedPlayer) + 1;
     let rankString = categoryRank.toString();
     let lastDigit = categoryRank % 10;
-
     // Pronunciation of the ranking
     if ((lastDigit >= 10 && lastDigit <= 20) || (lastDigit >= 4 && lastDigit <= 9) || lastDigit === 0) {
       rankString = rankString + 'th';
@@ -118,54 +91,45 @@ const PlayerCard = ({ players }) => {
     } else if (lastDigit === 3) {
       rankString = rankString + 'rd';
     }
-
     return rankString;
   }
 
-  // Gets the time percentile for the given statistic
-  function getTimePercentile(category, direction) {
-    // Group forwards & defensemen together
+  function getTimePercentile(category, direction = 'positive') {
+    // Group forwards & defensemen separately
     if (selectedPlayer['position'] === 'D') {
       var positionalArr = players.filter((player) => player.position === 'D');
     } else {
       var positionalArr = players.filter((player) => player.position != 'D');
     }
-
-    // Get the maximum player value for the statistic
-    var maxValue = Math.max.apply(
-      Math,
-      positionalArr.map((obj) => {
-        return obj[category] / obj['icetime'];
-      }),
-    );
-    var minValue = Math.min.apply(
-      Math,
-      positionalArr.map((obj) => {
-        return obj[category] / obj['icetime'];
-      }),
-    );
-
-    let result = (selectedPlayer[category] / selectedPlayer['icetime'] / maxValue).toFixed(2);
-    // Specific conditions (100% & 0&)
-    if (result === '1.00') {
+    // Duplicate the players array
+    var resultArr = positionalArr.slice();
+    var rankArr = resultArr;
+    // Sorting by the category
+    if (direction === 'positive') {
+      rankArr.sort((a, b) => b[category] / b['icetime'] - a[category] / a['icetime']);
+    } else if (direction === 'negative') {
+      rankArr.sort((a, b) => a[category] / a['icetime'] - b[category] / b['icetime']);
+    }
+    let categoryRank = rankArr.indexOf(selectedPlayer) + 1;
+    let result = (rankArr.length - categoryRank + 1) / rankArr.length;
+    // Specific conditions (100%, 0%, single digit percentile vs double digit percentile)
+    if (result >= 0.995) {
       return '100%';
-    } else if (selectedPlayer[category] === 0) {
+    } else if (result === 0) {
       return '0%';
-    } else if (result.substring(2, 3) === '0') {
-      return result.substring(0, 4) + '%';
+    } else if (result.toFixed(2).substring(2, 3) === '0') {
+      return result.toFixed(2).substring(3, 4) + '%';
     } else {
-      return result.substring(2, 4) + '%';
+      return result.toFixed(2).substring(2, 4) + '%';
     }
   }
 
   // Set field color based off of incoming value
   function getColor(value) {
-    let percentage = parseFloat(value.substring(-1));
-
     // Setting color based off percentage grouping
+    let percentage = parseFloat(value.substring(-1));
     let color =
       percentage <= 33 ? '255, 51, 51' : percentage <= 66 ? '255, 205, 0' : percentage > 66 ? '51, 255, 74' : '0, 0, 0';
-
     // Setting percentage of the color based off how close it is to the next grouping
     let colorPercentage =
       percentage <= 33
@@ -175,11 +139,8 @@ const PlayerCard = ({ players }) => {
         : percentage > 66
         ? ((percentage - 67) * 3) / 100
         : 0;
-
-    // Accounting for colors that are too dark
+    // Accounting for colors that are too dark & setting RGBA values
     colorPercentage = colorPercentage < 0.2 ? colorPercentage + 0.2 : colorPercentage;
-
-    // Set RGBA colors based off which
     let resultColor = 'rgba(' + color + ', ' + colorPercentage + ')';
     return resultColor;
   }
@@ -196,7 +157,55 @@ const PlayerCard = ({ players }) => {
     }
   }
 
-  // Preparing offensive chart data
+  // Gets the percentile for the given statistic
+  // function getProductionPercentile(category, direction = 'positive') {
+  //   if (selectedPlayer['position'] === 'D') {
+  //     var positionalArr = players.filter((player) => player.position === 'D');
+  //   } else {
+  //     var positionalArr = players.filter((player) => player.position != 'D');
+  //   }
+  //   let indexArr = positionalArr.sort(function (a, b) {
+  //     return a[category] - b[category];
+  //   });
+  //   var maxValue = Math.max.apply(
+  //     Math,
+  //     positionalArr.map((obj) => {
+  //       return obj[category];
+  //     }),
+  //   );
+  //   var minValue = Math.min.apply(
+  //     Math,
+  //     positionalArr.map((obj) => {
+  //       return obj[category];
+  //     }),
+  //   );
+  //   var difference = maxValue - minValue;
+  //   var playerValue = selectedPlayer[category];
+  //   var result = (playerValue - minValue) / difference;
+  //   if (direction === 'positive') {
+  //     if (maxValue === playerValue) {
+  //       return '100%';
+  //     } else if (minValue === playerValue) {
+  //       return '0%';
+  //     } else if (result.toFixed(2).substring(2, 3) === '0') {
+  //       return result.toFixed(2).substring(3, 4) + '%';
+  //     } else {
+  //       return result.toFixed(2).substring(2, 4) + '%';
+  //     }
+  //   } else if (direction === 'negative') {
+  //     if (minValue === playerValue) {
+  //       return '100%';
+  //     } else if (maxValue === playerValue) {
+  //       return '0%';
+  //     } else if ((1 - result).toFixed(2).substring(2, 3) === '0') {
+  //       return (1 - result).toFixed(2).substring(3, 4) + '%';
+  //     } else {
+  //       return (1 - result).toFixed(2).substring(2, 4) + '%';
+  //     }
+  //   }
+  // }
+
+  // Preparing chart data
   let xGF =
     parseInt(getTimePercentile('OnIce_F_xGoals').substring(0, 2)) === 10
       ? 100
@@ -219,8 +228,6 @@ const PlayerCard = ({ players }) => {
     parseInt(getTimePercentile('I_F_rebounds').substring(0, 2)) === 10
       ? 100
       : parseInt(getTimePercentile('I_F_rebounds').substring(0, 2));
-
-  // Preparing defensive chart data
   let xGA =
     parseInt(getTimePercentile('OnIce_A_xGoals').substring(0, 2)) === 10
       ? 100
@@ -322,39 +329,37 @@ const PlayerCard = ({ players }) => {
           <p>
             Goals:
             <div className="fieldRank">{getRank('I_F_goals')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('I_F_goals')) }}>
-              {getProductionPercentile('I_F_goals')}
-            </span>
+            <span style={{ backgroundColor: getColor(getPercentile('I_F_goals')) }}>{getPercentile('I_F_goals')}</span>
           </p>
           <p>
             Assists:
             <div className="fieldRank">{getRank('I_F_assists')}</div>
             <span
               style={{
-                backgroundColor: getColor(getProductionPercentile('I_F_assists')),
+                backgroundColor: getColor(getPercentile('I_F_assists')),
               }}
             >
-              {getProductionPercentile('I_F_assists')}
+              {getPercentile('I_F_assists')}
             </span>
           </p>
           <p>
             Points:
             <div className="fieldRank">{getRank('I_F_points')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('I_F_points')) }}>
-              {getProductionPercentile('I_F_points')}
+            <span style={{ backgroundColor: getColor(getPercentile('I_F_points')) }}>
+              {getPercentile('I_F_points')}
             </span>
           </p>
           <p>
             Expected Goals For:
             <div className="fieldRank">{getRank('I_F_xGoals')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('I_F_xGoals')) }}>
-              {getProductionPercentile('I_F_xGoals')}
+            <span style={{ backgroundColor: getColor(getPercentile('I_F_xGoals')) }}>
+              {getPercentile('I_F_xGoals')}
             </span>
           </p>
           <p>
             🧊 Goals For:<div className="fieldRank">{getRank('OnIce_F_xGoals')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('OnIce_F_xGoals')) }}>
-              {getProductionPercentile('OnIce_F_xGoals')}
+            <span style={{ backgroundColor: getColor(getPercentile('OnIce_F_xGoals')) }}>
+              {getPercentile('OnIce_F_xGoals')}
             </span>
           </p>
           <p>
@@ -381,18 +386,16 @@ const PlayerCard = ({ players }) => {
           </p>
           <p>
             Shot Attempts:<div className="fieldRank">{getRank('I_F_shotAttempts')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('I_F_shotAttempts')) }}>
-              {getProductionPercentile('I_F_shotAttempts')}
+            <span style={{ backgroundColor: getColor(getPercentile('I_F_shotAttempts')) }}>
+              {getPercentile('I_F_shotAttempts')}
             </span>
           </p>
-
           <p>
             Offensive Zone Starts:{' '}
             <span style={{ backgroundColor: 'blue' }}>
               {parseFloat(selectedPlayer.oZoneStartsPercentage).toFixed(2).substring(2, 4) + '%'}
             </span>
           </p>
-
           <div className="fullWidthChart">
             <h2 className="playerChart">Offense Per 60</h2>
             <LineChart
@@ -435,77 +438,56 @@ const PlayerCard = ({ players }) => {
           </div>
           <p>
             Takeaways:<div className="fieldRank">{getRank('I_F_takeaways')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('I_F_takeaways')) }}>
-              {getProductionPercentile('I_F_takeaways')}
+            <span style={{ backgroundColor: getColor(getPercentile('I_F_takeaways')) }}>
+              {getPercentile('I_F_takeaways')}
             </span>
           </p>
           <p>
             Giveaways:<div className="fieldRank">{getRank('I_F_giveaways', 'asc')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('I_F_giveaways', 'negative')) }}>
-              {getProductionPercentile('I_F_giveaways', 'negative')}
+            <span style={{ backgroundColor: getColor(getPercentile('I_F_giveaways', 'negative')) }}>
+              {getPercentile('I_F_giveaways', 'negative')}
             </span>
           </p>
           <p>
             Hits:<div className="fieldRank">{getRank('I_F_hits')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('I_F_hits')) }}>
-              {getProductionPercentile('I_F_hits')}
-            </span>
+            <span style={{ backgroundColor: getColor(getPercentile('I_F_hits')) }}>{getPercentile('I_F_hits')}</span>
           </p>
           <p>
             Expected Goals Against:<div className="fieldRank">{getRank('OnIce_A_xGoals', 'asc')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('OnIce_A_xGoals', 'negative')) }}>
-              {getProductionPercentile('OnIce_A_xGoals', 'negative')}
+            <span style={{ backgroundColor: getColor(getPercentile('OnIce_A_xGoals', 'negative')) }}>
+              {getPercentile('OnIce_A_xGoals', 'negative')}
             </span>
           </p>
-
           <p>
             🧊 Goals Against:<div className="fieldRank">{getRank('OnIce_A_goals', 'asc')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('OnIce_A_goals', 'negative')) }}>
-              {getProductionPercentile('OnIce_A_goals', 'negative')}
+            <span style={{ backgroundColor: getColor(getPercentile('OnIce_A_goals', 'negative')) }}>
+              {getPercentile('OnIce_A_goals', 'negative')}
             </span>
           </p>
           <p>
             Blocks:<div className="fieldRank">{getRank('shotsBlockedByPlayer')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('shotsBlockedByPlayer')) }}>
-              {getProductionPercentile('shotsBlockedByPlayer')}
+            <span style={{ backgroundColor: getColor(getPercentile('shotsBlockedByPlayer')) }}>
+              {getPercentile('shotsBlockedByPlayer')}
             </span>
           </p>
           <p>
             D-Zone Giveaways:<div className="fieldRank">{getRank('I_F_dZoneGiveaways', 'asc')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('I_F_dZoneGiveaways', 'negative')) }}>
-              {getProductionPercentile('I_F_dZoneGiveaways', 'negative')}
+            <span style={{ backgroundColor: getColor(getPercentile('I_F_dZoneGiveaways', 'negative')) }}>
+              {getPercentile('I_F_dZoneGiveaways', 'negative')}
             </span>
           </p>
           <p>
             Blocked Shot Attempts:<div className="fieldRank">{getRank('I_F_blockedShotAttempts')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('I_F_blockedShotAttempts')) }}>
-              {getProductionPercentile('I_F_blockedShotAttempts')}
+            <span style={{ backgroundColor: getColor(getPercentile('I_F_blockedShotAttempts')) }}>
+              {getPercentile('I_F_blockedShotAttempts')}
             </span>
           </p>
           <p>
             Shot Attempts:<div className="fieldRank">{getRank('OnIce_A_shotAttempts')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('OnIce_A_shotAttempts')) }}>
-              {getProductionPercentile('OnIce_A_shotAttempts')}
+            <span style={{ backgroundColor: getColor(getPercentile('OnIce_A_shotAttempts')) }}>
+              {getPercentile('OnIce_A_shotAttempts')}
             </span>
           </p>
-          {/* <p>
-            Games:<div className="fieldRank">{getRank('games_played')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('games_played')) }}>
-              {getProductionPercentile('games_played')}
-            </span>
-          </p>
-          <p>
-            Time On Ice:<div className="fieldRank">{getRank('icetime')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('icetime')) }}>
-              {getProductionPercentile('icetime')}
-            </span>
-          </p>
-          <p>
-            Neutral Zone Starts:{' '}
-            <span style={{ backgroundColor: 'blue' }}>
-              {parseFloat(selectedPlayer.nZoneStartsPercentage).toFixed(2).substring(2, 4) + '%'}
-            </span>
-          </p> */}
           <p>
             Defensive Zone Starts:{' '}
             <span style={{ backgroundColor: 'blue' }}>
@@ -559,9 +541,7 @@ const PlayerCard = ({ players }) => {
     </div>
   );
 };
-
 export default PlayerCard;
-
 {
   /* Offensive */
 }

@@ -153,7 +153,7 @@ export default async function handler(req, res) {
     // Adding these two fields for the dropdown
     standardPitcherElement.value = standardPitcherElement.Name;
     standardPitcherElement.label = standardPitcherElement.Name;
-    standardPitcherElement.position = 'Starting';
+    standardPitcherElement.position = 'Starters';
 
     // Putting both objects values into one & inserting it into the array
     const element = {
@@ -231,7 +231,7 @@ export default async function handler(req, res) {
     // Adding these two fields for the dropdown
     standardPitcherElement.value = standardPitcherElement.Name;
     standardPitcherElement.label = standardPitcherElement.Name;
-    standardPitcherElement.position = 'Relief';
+    standardPitcherElement.position = 'Relievers';
 
     // Putting both objects values into one & inserting it into the array
     const element = {

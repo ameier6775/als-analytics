@@ -24,50 +24,31 @@ const HitterCard = ({ players }) => {
   const [selectedPlayer, setSelectedPlayer] = useState(players[0]);
   const onChange = (e) => {
     setSelectedPlayer(e);
-    console.log(selectedPlayer);
   };
 
-  function getProductionPercentile(category, direction = 'positive') {
-    var positionalArr = players;
-    // Get the maximum player value for the statistic
-    var maxValue = Math.max.apply(
-      Math,
-      positionalArr.map((obj) => {
-        return obj[category];
-      }),
-    );
-    // Get the minimum player value for the statistic
-    var minValue = Math.min.apply(
-      Math,
-      positionalArr.map((obj) => {
-        return obj[category];
-      }),
-    );
-    var difference = maxValue - minValue;
-    var playerValue = selectedPlayer[category];
-    var result = (playerValue - minValue) / difference;
+  function getPercentile(category, direction = 'positive') {
+    // Duplicate the players array
+    var resultArr = players.slice();
+    var rankArr = resultArr;
 
-    // Specific conditions (100% & 0&) based off if its a positive or negative statistic
+    // Sorting by the category
     if (direction === 'positive') {
-      if (maxValue === playerValue) {
-        return '100%';
-      } else if (minValue === playerValue) {
-        return '0%';
-      } else if (result.toFixed(2).substring(2, 3) === '0') {
-        return result.toFixed(2).substring(3, 4) + '%';
-      } else {
-        return result.toFixed(2).substring(2, 4) + '%';
-      }
+      rankArr.sort((a, b) => b[category] - a[category]);
     } else if (direction === 'negative') {
-      if (minValue === playerValue) {
-        return '100%';
-      } else if (maxValue === playerValue) {
-        return '0%';
-      } else if ((1 - result).toFixed(2).substring(2, 3) === '0') {
-        return (1 - result).toFixed(2).substring(3, 4) + '%';
-      } else {
-        return (1 - result).toFixed(2).substring(2, 4) + '%';
-      }
+      rankArr.sort((a, b) => a[category] - b[category]);
+    }
+    let categoryRank = rankArr.indexOf(selectedPlayer) + 1;
+    let result = (rankArr.length - categoryRank + 1) / rankArr.length;
+
+    // Specific conditions (100%, 0%, single digit percentile vs double digit percentile)
+    if (result === 1) {
+      return '100%';
+    } else if (result === 0) {
+      return '0%';
+    } else if (result.toFixed(2).substring(2, 3) === '0') {
+      return result.toFixed(2).substring(3, 4) + '%';
+    } else {
+      return result.toFixed(2).substring(2, 4) + '%';
     }
   }
 
@@ -83,7 +64,6 @@ const HitterCard = ({ players }) => {
     } else if (order === 'asc') {
       rankArr.sort((a, b) => a[category] - b[category]);
     }
-
     let categoryRank = rankArr.indexOf(selectedPlayer) + 1;
     let rankString = categoryRank.toString();
     let lastDigit = categoryRank % 10;
@@ -98,14 +78,12 @@ const HitterCard = ({ players }) => {
     } else {
       rankString = rankString + 'th';
     }
-
     return rankString;
   }
 
   // Set field color based off of incoming value
   function getColor(value) {
     let percentage = parseFloat(value.substring(-1));
-
     let color =
       percentage <= 33 ? '255, 51, 51' : percentage <= 66 ? '255, 205, 0' : percentage > 66 ? '51, 255, 74' : '0, 0, 0';
     let colorPercentage =
@@ -116,46 +94,43 @@ const HitterCard = ({ players }) => {
         : percentage > 66
         ? ((percentage - 67) * 3) / 100
         : 0;
-
     // Color is too dark, need to fix this eventually (is this a good solution?)
     colorPercentage = colorPercentage < 0.2 ? colorPercentage + 0.2 : colorPercentage;
-
     let resultColor = 'rgba(' + color + ', ' + colorPercentage + ')';
-
     return resultColor;
   }
 
   // Preparing hitters chart data (all positive valued fields)
   let runsFor =
-    parseInt(getProductionPercentile('R').substring(0, 2)) === 10
+    parseInt(getPercentile('R').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('R').substring(0, 2)) === 0
+      : !parseInt(getPercentile('R').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('R').substring(0, 2));
-  let BB =
-    parseInt(getProductionPercentile('BB').substring(0, 2)) === 10
+      : parseInt(getPercentile('R').substring(0, 2));
+  let BBperK =
+    parseInt(getPercentile('BBPerK').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('BB').substring(0, 2)) === 0
+      : !parseInt(getPercentile('BBPerK').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('BB').substring(0, 2));
+      : parseInt(getPercentile('BBPerK').substring(0, 2));
   let average =
-    parseInt(getProductionPercentile('AVG').substring(0, 2)) === 10
+    parseInt(getPercentile('AVG').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('AVG').substring(0, 2)) === 0
+      : !parseInt(getPercentile('AVG').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('AVG').substring(0, 2));
+      : parseInt(getPercentile('AVG').substring(0, 2));
   let ops =
-    parseInt(getProductionPercentile('OPS').substring(0, 2)) === 10
+    parseInt(getPercentile('OPS').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('OPS').substring(0, 2)) === 0
+      : !parseInt(getPercentile('OPS').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('OPS').substring(0, 2));
+      : parseInt(getPercentile('OPS').substring(0, 2));
   let homeRunsFor =
-    parseInt(getProductionPercentile('HR').substring(0, 2)) === 10
+    parseInt(getPercentile('HR').substring(0, 2)) === 10
       ? 100
-      : !parseInt(getProductionPercentile('HR').substring(0, 2)) === 0
+      : !parseInt(getPercentile('HR').substring(0, 2)) === 0
       ? 0
-      : parseInt(getProductionPercentile('HR').substring(0, 2));
+      : parseInt(getPercentile('HR').substring(0, 2));
 
   // Plotting chart data
   var hittersGraphData = [
@@ -176,7 +151,7 @@ const HitterCard = ({ players }) => {
     },
     {
       category: 'Walk Per Strikeout',
-      score: BB,
+      score: BBperK,
       fullMark: 100,
     },
     {
@@ -190,7 +165,7 @@ const HitterCard = ({ players }) => {
 
   return (
     <div>
-      <h2 className="mlbTeamCardSubHeader">Hitter:</h2>
+      <h2 className="mlbTeamCardSubHeader">Players:</h2>
       <Select onChange={onChange} options={players} />
       {selectedPlayer ? (
         <div id={selectedPlayer.playerid} className="playerCard">
@@ -200,70 +175,67 @@ const HitterCard = ({ players }) => {
           <p>
             Average:
             <div className="fieldRank">{getRank('AVG')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('AVG')) }}>
-              {getProductionPercentile('AVG')}
-            </span>
+            <span style={{ backgroundColor: getColor(getPercentile('AVG')) }}>{getPercentile('AVG')}</span>
           </p>
           <p>
-            Average:<div className="fieldRank">{getRank('H')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('H')) }}>
-              {getProductionPercentile('H')}
-            </span>
+            Hits:<div className="fieldRank">{getRank('H')}</div>
+            <span style={{ backgroundColor: getColor(getPercentile('H')) }}>{getPercentile('H')}</span>
           </p>
           <p>
             Doubles:<div className="fieldRank">{getRank('2B')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('2B')) }}>
-              {getProductionPercentile('2B')}
-            </span>
+            <span style={{ backgroundColor: getColor(getPercentile('2B')) }}>{getPercentile('2B')}</span>
           </p>
           <p>
             Triples:<div className="fieldRank">{getRank('3B')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('3B')) }}>
-              {getProductionPercentile('3B')}
-            </span>
+            <span style={{ backgroundColor: getColor(getPercentile('3B')) }}>{getPercentile('3B')}</span>
           </p>
           <p>
             Home Runs:<div className="fieldRank">{getRank('HR')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('HR')) }}>
-              {getProductionPercentile('HR')}
-            </span>
+            <span style={{ backgroundColor: getColor(getPercentile('HR')) }}>{getPercentile('HR')}</span>
           </p>
           <p>
             Runs:<div className="fieldRank">{getRank('R')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('R')) }}>
-              {getProductionPercentile('R')}
-            </span>
+            <span style={{ backgroundColor: getColor(getPercentile('R')) }}>{getPercentile('R')}</span>
           </p>
           <p>
             RBIs:<div className="fieldRank">{getRank('RBI')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('RBI')) }}>
-              {getProductionPercentile('RBI')}
-            </span>
+            <span style={{ backgroundColor: getColor(getPercentile('RBI')) }}>{getPercentile('RBI')}</span>
           </p>
-          <p>
-            wRC+:<div className="fieldRank">{getRank('wRC')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('wRC')) }}>
-              {getProductionPercentile('wRC')}
-            </span>
-          </p>
-          {/* <p>
-            Stolen Bases:<div className="fieldRank">{getRank('SB')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('SB')) }}>
-              {getProductionPercentile('SB')}
-            </span>
-          </p> */}
           <p>
             On Base %:<div className="fieldRank">{getRank('OBP')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('OBP')) }}>
-              {getProductionPercentile('OBP')}
-            </span>
+            <span style={{ backgroundColor: getColor(getPercentile('OBP')) }}>{getPercentile('OBP')}</span>
           </p>
           <p>
             Slugging:<div className="fieldRank">{getRank('SLG')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('SLG')) }}>
-              {getProductionPercentile('SLG')}
+            <span style={{ backgroundColor: getColor(getPercentile('SLG')) }}>{getPercentile('SLG')}</span>
+          </p>
+          <p>
+            wRC:<div className="fieldRank">{getRank('wRC')}</div>
+            <span style={{ backgroundColor: getColor(getPercentile('wRC')) }}>{getPercentile('wRC')}</span>
+          </p>
+          <p>
+            Average - Balls in Play:<div className="fieldRank">{getRank('BABIP')}</div>
+            <span style={{ backgroundColor: getColor(getPercentile('BABIP')) }}>{getPercentile('BABIP')}</span>
+          </p>
+          <p>
+            Walks:<div className="fieldRank">{getRank('BB')}</div>
+            <span style={{ backgroundColor: getColor(getPercentile('BB')) }}>{getPercentile('BB')}</span>
+          </p>
+          <p>
+            Strikeouts:<div className="fieldRank">{getRank('SO', 'asc')}</div>
+            <span style={{ backgroundColor: getColor(getPercentile('SO', 'negative')) }}>
+              {getPercentile('SO', 'negative')}
             </span>
           </p>
+          <p>
+            Walk Per Strikeout:<div className="fieldRank">{getRank('BBPerK')}</div>
+            <span style={{ backgroundColor: getColor(getPercentile('BBPerK')) }}>{getPercentile('BBPerK')}</span>
+          </p>
+          <p>
+            wRC+:<div className="fieldRank">{getRank('wRC+')}</div>
+            <span style={{ backgroundColor: getColor(getPercentile('wRC+')) }}>{getPercentile('wRC+')}</span>
+          </p>
+
           <div className="fullWidthChart">
             <h2 className="playerChart">Batting</h2>
             <LineChart

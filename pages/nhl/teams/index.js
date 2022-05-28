@@ -1,38 +1,54 @@
 /* eslint-disable react/jsx-key */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
 import TeamCard from '../../../components/nhl/TeamCard';
-
-const fetcher = (url) => fetch(url).then((res) => res.json());
+import Select from 'react-select';
 
 export default function Teams() {
-  const { data, error } = useSWR('../api/nhl/teams/', fetcher);
-  if (error) return <div>failed to load</div>;
-  if (!data) return <div>loading...</div>;
+  const [teams, setTeams] = useState(null);
+  const [selectedTeam, setSelectedTeam] = useState(null);
+  const [isLoading, setLoading] = useState(false);
 
-  const teamData = data.dataMoneyPuck.filter((team) => team.situation === 'all');
+  useEffect(() => {
+    setLoading(true);
+    fetch('../../api/nhl/teams')
+      .then((res) => res.json())
+      .then((data) => {
+        setTeams(data);
+        setLoading(false);
+      });
+  }, []);
 
-  var teamCardArray = [];
-  for (let i = 0; i < teamData.length; i++) {
-    teamCardArray.push(teamData[i]);
-  }
+  var handleInputChange = (inputValue) => {
+    setSelectedTeam(inputValue);
+    // fetchTeam(inputValue.value);
+  };
 
-  // Adding fields to the array
-  {
-    teamCardArray
-      ? teamCardArray.forEach((team) => {
-          team.value = team.name;
-          team.label = team.name;
-          team.penaltyDifferential = team.penaltiesAgainst - team.penaltiesFor;
-          team.faceoffPercentage = team.faceOffsWonFor / (team.faceOffsWonFor + team.faceOffsWonAgainst);
-        })
-      : teams;
-  }
+  // const fetchTeam = (team) => {
+  //   fetch('../../api/nhl/teams', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({
+  //       team: team,
+  //     }),
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       console.log(data);
+  //     });
+  // };
+
+  if (isLoading) return <p>Loading...</p>;
+  if (!teams) return <p>No teams data</p>;
 
   return (
-    <>
-      <TeamCard teams={teamCardArray}></TeamCard>
-    </>
+    <div>
+      <h1>Teams Page</h1>
+      <Select options={teams} onChange={handleInputChange} />
+      {selectedTeam ? <TeamCard team={selectedTeam}></TeamCard> : <p></p>}
+    </div>
   );
 }

@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-key */
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
 import PlayerCard from '../../../components/nhl/PlayerCard';
@@ -28,140 +28,56 @@ import {
   Radar,
 } from 'recharts';
 import Select from 'react-select';
-
-const fetcher = (url) => fetch(url).then((res) => res.json());
+import axios from 'axios';
+import { data } from 'autoprefixer';
 
 export default function Players() {
-  const { data, error } = useSWR(`/api/nhl/players`, fetcher);
-  if (error) return <div>failed to load</div>;
-  if (!data) return <div>loading...</div>;
+  const [players, setPlayers] = useState(null);
+  const [selectedPlayer, setSelectedPlayer] = useState(null);
+  const [isLoading, setLoading] = useState(false);
 
-  const allSituationsComposedChart = data.dataMoneyPuck.filter((player) => player.situation === 'all');
-  const allSituationsBarChart = data.dataMoneyPuck.filter((player) => player.situation === 'all');
-  const allSituationsScatterChart = data.dataMoneyPuck.filter((player) => player.situation === 'all');
-  const allSituationsPlayerCard = data.dataMoneyPuck.filter((player) => player.situation === 'all');
+  useEffect(() => {
+    setLoading(true);
+    fetch('../../api/nhl/players')
+      .then((res) => res.json())
+      .then((data) => {
+        setPlayers(data);
+        setLoading(false);
+      });
+  }, []);
 
-  allSituationsComposedChart.sort(function (a, b) {
-    var keyA = a.OnIce_F_goals;
-    var keyB = b.OnIce_F_goals;
-    if (keyA > keyB) return -1;
-    if (keyA < keyB) return 1;
-  });
-  allSituationsBarChart.sort(function (a, b) {
-    var keyA = a.OnIce_F_goals - a.OnIce_A_goals;
-    var keyB = b.OnIce_F_goals - b.OnIce_A_goals;
-    if (keyA > keyB) return -1;
-    if (keyA < keyB) return 1;
-  });
+  var handleInputChange = (inputValue) => {
+    console.log(inputValue);
+    setSelectedPlayer(inputValue);
+    // fetchPlayer(inputValue.value);
+  };
 
-  const composedChartArray = [];
-  const barChartArray = [];
-  const scatterChartArray = [];
-  const playerCardArray = [];
-  for (let i = 0; i < allSituationsComposedChart.length; i++) {
-    composedChartArray.push(allSituationsComposedChart[i]);
-    barChartArray.push(allSituationsBarChart[i]);
-    scatterChartArray.push(allSituationsScatterChart[i]);
-    playerCardArray.push(allSituationsPlayerCard[i]);
-  }
+  // const fetchPlayer = (player) => {
+  //   fetch('../../api/nhl/players', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({
+  //       team: team,
+  //     }),
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       console.log(data);
+  //     });
+  // };
 
-  // Assigning new values
-  {
-    barChartArray
-      ? barChartArray.forEach((player) => {
-          player.actualOnIceGoalsAgainst = -player.OnIce_A_goals;
-        })
-      : teams;
-  }
-  {
-    scatterChartArray
-      ? scatterChartArray.forEach((player) => {
-          player.expectedGoalDifferential = Math.round(player.OnIce_F_xGoals) - Math.round(player.OnIce_A_xGoals);
-        })
-      : teams;
-  }
-  {
-    playerCardArray
-      ? playerCardArray.forEach((player) => {
-          player.value = player.name;
-          player.label = player.name;
-          player.I_F_assists = player.I_F_primaryAssists + player.I_F_secondaryAssists;
-          player.oZoneStartsPercentage =
-            player.I_F_oZoneShiftStarts /
-            (player.I_F_oZoneShiftStarts + player.I_F_dZoneShiftStarts + player.I_F_neutralZoneShiftStarts);
-          player.dZoneStartsPercentage =
-            player.I_F_dZoneShiftStarts /
-            (player.I_F_oZoneShiftStarts + player.I_F_dZoneShiftStarts + player.I_F_neutralZoneShiftStarts);
-          player.nZoneStartsPercentage =
-            player.I_F_neutralZoneShiftStarts /
-            (player.I_F_oZoneShiftStarts + player.I_F_dZoneShiftStarts + player.I_F_neutralZoneShiftStarts);
-        })
-      : teams;
-  }
+  console.log(players);
 
-  barChartArray.sort(function (a, b) {
-    var keyA = a.OnIce_F_goals - a.OnIce_A_goals;
-    var keyB = b.OnIce_F_goals - b.OnIce_A_goals;
+  if (isLoading) return <p>Loading...</p>;
+  if (!players) return <p>No players data</p>;
 
-    if (keyA > keyB) return -1;
-    if (keyA < keyB) return 1;
-  });
-
-  if (data) {
-    return (
-      <>
-        <PlayerCard players={playerCardArray}></PlayerCard>
-        {/* <div className="fullWidth">
-          <ScatterChart
-            width={1735}
-            height={700}
-            margin={{
-              top: 20,
-              right: 20,
-              bottom: 20,
-              left: 20,
-            }}
-          >
-            <CartesianGrid />
-            <XAxis type="category" dataKey="name" name="player" tick={false} />
-            <YAxis type="number" dataKey="expectedGoalDifferential" name="on-ice expected" unit="g" />
-            <ZAxis type="number" dataKey="icetime" name="seconds" range={[1, 80]} unit="s" />
-            <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-            <Legend />
-            <Scatter name="All Situations" data={scatterChartArray} fill="#8884d8" shape="star" />
-          </ScatterChart>
-          <h2>All Situations</h2>
-          <h3>On Ice (+Goals For - Goals Against)</h3>
-          <BarChart
-            width={1735}
-            height={700}
-            data={barChartArray}
-            stackOffset="sign"
-            margin={{
-              top: 15,
-              right: 35,
-              left: 0,
-              bottom: 15,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis type="category" dataKey="name" tick={false} />
-            <YAxis type="number" name="goals" />
-            <Tooltip />
-            <Legend />
-            <ReferenceLine y={0} stroke="#000" />
-            <Brush dataKey="OnIce_F_goals" height={30} stroke="#8884d8" />
-            <Bar dataKey="OnIce_F_goals" fill="#8884d8" stackId="stack"></Bar>
-            <Bar dataKey="actualOnIceGoalsAgainst" fill="#82ca9d" stackId="stack" />
-          </BarChart>
-        </div> */}
-      </>
-    );
-  } else {
-    return (
-      <>
-        <h1>Players Analytics Page Failed</h1>
-      </>
-    );
-  }
+  return (
+    <div>
+      <h1>Players Page</h1>
+      <Select options={players} onChange={handleInputChange} />
+      {selectedPlayer ? <PlayerCard player={selectedPlayer}></PlayerCard> : <p></p>}
+    </div>
+  );
 }

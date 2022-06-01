@@ -3,30 +3,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
 import PlayerCard from '../../../components/nhl/PlayerCard';
-import {
-  XAxis,
-  Tooltip,
-  CartesianGrid,
-  Line,
-  BarChart,
-  YAxis,
-  Legend,
-  Bar,
-  ResponsiveContainer,
-  Area,
-  ComposedChart,
-  ReferenceLine,
-  Label,
-  Scatter,
-  Brush,
-  ZAxis,
-  ScatterChart,
-  RadarChart,
-  PolarAngleAxis,
-  PolarGrid,
-  PolarRadiusAxis,
-  Radar,
-} from 'recharts';
 import Select from 'react-select';
 import axios from 'axios';
 import { data } from 'autoprefixer';

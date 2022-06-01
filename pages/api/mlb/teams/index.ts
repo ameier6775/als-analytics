@@ -1,149 +1,23 @@
-import Excel from 'exceljs';
 import _, { groupBy, keyBy, omit, pick, orderBy } from 'lodash';
 import path from 'path';
+import excuteQuery from '../../../../lib/db';
 
 export default async function handler(req, res) {
-  const dir = path.resolve('../stats-app/data/mlb/teams/2022');
+  if (req.method === 'POST') {
+    const result = await excuteQuery({
+      query: ';',
+      values: [req.body.content],
+    });
+    res.json(result);
+    console.log('posting data ' + req.body.team);
+  } else if (req.method === 'GET') {
+    const result = await excuteQuery({
+      query:
+        'SELECT SH.`Team` AS label, SH.`Team` AS value, SH.`AB` AS hAB, SH.`PA` AS hPA,  SH.`H` AS hH, RANK() OVER (ORDER BY SH.`H` DESC) `hH_rank`, (SH.H - (SELECT MIN(H) FROM MLB_2021.th_fg_standard)) / (SELECT MAX(H) - MIN(H) FROM MLB_2021.th_fg_standard) AS `hH_rate`, SH.`1B`, RANK() OVER (ORDER BY SH.`1B` DESC) `1B_rank`, (SH.`1B` - (SELECT MIN(`1B`) FROM MLB_2021.th_fg_standard)) / (SELECT MAX(`1B`) - MIN(`1B`) FROM MLB_2021.th_fg_standard) AS `1B_rate`, SH.`2B`, RANK() OVER (ORDER BY SH.`2B` DESC) `2B_rank`, (SH.`2B` - (SELECT MIN(`2B`) FROM MLB_2021.th_fg_standard)) / (SELECT MAX(`2B`) - MIN(`2B`) FROM MLB_2021.th_fg_standard) AS `2B_rate`, SH.`3B`, RANK() OVER (ORDER BY SH.`3B` DESC) `3B_rank`, (SH.`3B` - (SELECT MIN(`3B`) FROM MLB_2021.th_fg_standard)) / (SELECT MAX(`3B`) - MIN(`3B`) FROM MLB_2021.th_fg_standard) AS `3B_rate`, SH.`HR` AS hHR, RANK() OVER (ORDER BY SH.`HR` DESC) `hHR_rank`, (SH.`HR` - (SELECT MIN(`HR`) FROM MLB_2021.th_fg_standard)) / (SELECT MAX(`HR`) - MIN(`HR`) FROM MLB_2021.th_fg_standard) AS `hHR_rate`, SH.`R` AS hR, RANK() OVER (ORDER BY SH.`R` DESC) `hR_rank`, (SH.`R` - (SELECT MIN(`R`) FROM MLB_2021.th_fg_standard)) / (SELECT MAX(`R`) - MIN(`R`) FROM MLB_2021.th_fg_standard) AS `hR_rate`, SH.`RBI` AS RBI, RANK() OVER (ORDER BY SH.`RBI` DESC) `RBI_rank`, (SH.`RBI` - (SELECT MIN(`RBI`) FROM MLB_2021.th_fg_standard)) / (SELECT MAX(`RBI`) - MIN(`RBI`) FROM MLB_2021.th_fg_standard) AS `RBI_rate`, SH.`BB` AS hBB, RANK() OVER (ORDER BY SH.`BB` DESC) `hBB_rank`, (SH.`BB` - (SELECT MIN(`BB`) FROM MLB_2021.th_fg_standard)) / (SELECT MAX(`BB`) - MIN(`BB`) FROM MLB_2021.th_fg_standard) AS `hBB_rate`, SH.`SO` AS hSO, RANK() OVER (ORDER BY SH.`SO`) `hSO_rank`, 1 - (SH.`SO` - (SELECT MIN(`SO`) FROM MLB_2021.th_fg_standard)) / (SELECT MAX(`SO`) - MIN(`SO`) FROM MLB_2021.th_fg_standard) AS `hSO_rate`, SH.`SB` AS hSB, RANK() OVER (ORDER BY SH.`SB` DESC) `hSB_rank`, (SH.`SB` - (SELECT MIN(`SB`) FROM MLB_2021.th_fg_standard)) / (SELECT MAX(`SB`) - MIN(`SB`) FROM MLB_2021.th_fg_standard) AS `hSB_rate`, SH.`AVG` AS hAVG, RANK() OVER (ORDER BY SH.`AVG` DESC) `hAVG_rank`, (SH.`AVG` - (SELECT MIN(`AVG`) FROM MLB_2021.th_fg_standard)) / (SELECT MAX(`AVG`) - MIN(`AVG`) FROM MLB_2021.th_fg_standard) AS `hAVG_rate`, AH.`BBPerK` AS hBBperK, RANK() OVER (ORDER BY AH.`BBPerK` DESC) `hBBPerK_rank`, (AH.`BBPerK` - (SELECT MIN(`BBPerK`) FROM MLB_2021.th_fg_advanced)) / (SELECT MAX(`BBPerK`) - MIN(`BBPerK`) FROM MLB_2021.th_fg_advanced) AS `hBBPerK_rate`, AH.`OBP` AS hOBP, RANK() OVER (ORDER BY AH.`OBP` DESC) `hOBP_rank`, (AH.`OBP` - (SELECT MIN(`OBP`) FROM MLB_2021.th_fg_advanced)) / (SELECT MAX(`OBP`) - MIN(`OBP`) FROM MLB_2021.th_fg_advanced) AS `hOBP_rate`, AH.`SLG` AS hSLG, RANK() OVER (ORDER BY AH.`SLG` DESC) `hSLG_rank`, (AH.`SLG` - (SELECT MIN(`SLG`) FROM MLB_2021.th_fg_advanced)) / (SELECT MAX(`SLG`) - MIN(`SLG`) FROM MLB_2021.th_fg_advanced) AS `hSLG_rate`, AH.`ISO` AS hISO, RANK() OVER (ORDER BY AH.`ISO` DESC) `hISO_rank`, (AH.`ISO` - (SELECT MIN(`ISO`) FROM MLB_2021.th_fg_advanced)) / (SELECT MAX(`ISO`) - MIN(`ISO`) FROM MLB_2021.th_fg_advanced) AS `hISO_rate`, AH.`Spd` AS hSPD, RANK() OVER (ORDER BY AH.`Spd` DESC) `hSpd_rank`, (AH.`Spd` - (SELECT MIN(`Spd`) FROM MLB_2021.th_fg_advanced)) / (SELECT MAX(`Spd`) - MIN(`Spd`) FROM MLB_2021.th_fg_advanced) AS `hSpd_rate`, AH.`BABIP` AS hBABIP, RANK() OVER (ORDER BY AH.`BABIP` DESC) `hBABIP_rank`, (AH.`BABIP` - (SELECT MIN(`BABIP`) FROM MLB_2021.th_fg_advanced)) / (SELECT MAX(`BABIP`) - MIN(`BABIP`) FROM MLB_2021.th_fg_advanced) AS `hBABIP_rate`, AH.`UBR` AS hUBR, RANK() OVER (ORDER BY AH.`UBR` DESC) `hUBR_rank`, (AH.`UBR` - (SELECT MIN(`UBR`) FROM MLB_2021.th_fg_advanced)) / (SELECT MAX(`UBR`) - MIN(`UBR`) FROM MLB_2021.th_fg_advanced) AS `hUBR_rate`,  AH.`wOBA` AS hwOBA, RANK() OVER (ORDER BY AH.`wOBA` DESC) `hwOBA_rank`, (AH.`wOBA` - (SELECT MIN(`wOBA`) FROM MLB_2021.th_fg_advanced)) / (SELECT MAX(`wOBA`) - MIN(`wOBA`) FROM MLB_2021.th_fg_advanced) AS `hwOBA_rate`,  AH.`wRC+`, RANK() OVER (ORDER BY AH.`wRC+` DESC) `hwRC+_rank`, (AH.`wRC+` - (SELECT MIN(`wRC+`) FROM MLB_2021.th_fg_advanced)) / (SELECT MAX(`wRC+`) - MIN(`wRC+`) FROM MLB_2021.th_fg_advanced) AS `hwRC+_rate`,  SP.`W` AS wins, RANK() OVER (ORDER BY SP.`W` DESC) `wins_rank`, (SP.`W` - (SELECT MIN(`W`) FROM MLB_2021.tp_fg_standard)) / (SELECT MAX(`W`) - MIN(`W`) FROM MLB_2021.tp_fg_standard) AS `wins_rate`,  SP.`L` AS losses, RANK() OVER (ORDER BY SP.`L`) `losses_rank`, 1 - (SP.`L` - (SELECT MIN(`L`) FROM MLB_2021.tp_fg_standard)) / (SELECT MAX(`L`) - MIN(`L`) FROM MLB_2021.tp_fg_standard) AS `losses_rate`,  SP.`ERA` AS ERA, RANK() OVER (ORDER BY SP.`ERA`) `ERA_rank`, 1 - (SP.`ERA` - (SELECT MIN(`ERA`) FROM MLB_2021.tp_fg_standard)) / (SELECT MAX(`ERA`) - MIN(`ERA`) FROM MLB_2021.tp_fg_standard) AS `ERA_rate`,  SP.`CG` AS complete_games, RANK() OVER (ORDER BY SP.`CG` DESC) `CG_rank`, (SP.`CG` - (SELECT MIN(`CG`) FROM MLB_2021.tp_fg_standard)) / (SELECT MAX(`CG`) - MIN(`CG`) FROM MLB_2021.tp_fg_standard) AS `CG_rate`,  SP.`ShO` AS shutouts, RANK() OVER (ORDER BY SP.`ShO` DESC) `ShO_rank`, (SP.`ShO` - (SELECT MIN(`ShO`) FROM MLB_2021.tp_fg_standard)) / (SELECT MAX(`ShO`) - MIN(`ShO`) FROM MLB_2021.tp_fg_standard) AS `ShO_rate`,  SP.`SV` AS saves, RANK() OVER (ORDER BY SP.`SV` DESC) `SV_rank`, (SP.`SV` - (SELECT MIN(`SV`) FROM MLB_2021.tp_fg_standard)) / (SELECT MAX(`SV`) - MIN(`SV`) FROM MLB_2021.tp_fg_standard) AS `SV_rate`,  SP.`IP` AS innings_pitched, RANK() OVER (ORDER BY SP.`IP` DESC) `IP_rank`, (SP.`IP` - (SELECT MIN(`IP`) FROM MLB_2021.tp_fg_standard)) / (SELECT MAX(`IP`) - MIN(`IP`) FROM MLB_2021.tp_fg_standard) AS `IP_rate`,  SP.`TBF` AS pTBF, RANK() OVER (ORDER BY SP.`TBF`) `pTBF_rank`, 1 - (SP.`TBF` - (SELECT MIN(`TBF`) FROM MLB_2021.tp_fg_standard)) / (SELECT MAX(`TBF`) - MIN(`TBF`) FROM MLB_2021.tp_fg_standard) AS `pTBF_rate`,  SP.`H` AS pH, RANK() OVER (ORDER BY SP.`H`) `pH_rank`, 1 - (SP.`H` - (SELECT MIN(`H`) FROM MLB_2021.tp_fg_standard)) / (SELECT MAX(`H`) - MIN(`H`) FROM MLB_2021.tp_fg_standard) AS `pH_rate`,  AP.`KPer9` AS pKper9, RANK() OVER (ORDER BY AP.`KPer9` DESC) `pKPer9_rank`, (AP.`KPer9` - (SELECT MIN(`KPer9`) FROM MLB_2021.tp_fg_advanced)) / (SELECT MAX(`KPer9`) - MIN(`KPer9`) FROM MLB_2021.tp_fg_advanced) AS `pKPer9_rate`,  AP.`BBPer9` AS pBBper9, RANK() OVER (ORDER BY AP.`BBPer9`) `pBBPer9_rank`, 1 - (AP.`BBPer9` - (SELECT MIN(`BBPer9`) FROM MLB_2021.tp_fg_advanced)) / (SELECT MAX(`BBPer9`) - MIN(`BBPer9`) FROM MLB_2021.tp_fg_advanced) AS `pBBPer9_rate`,  AP.`KPerBB` AS pKperBB, RANK() OVER (ORDER BY AP.`KPerBB` DESC) `pKPerBB_rank`, (AP.`KPerBB` - (SELECT MIN(`KPerBB`) FROM MLB_2021.tp_fg_advanced)) / (SELECT MAX(`KPerBB`) - MIN(`KPerBB`) FROM MLB_2021.tp_fg_advanced) AS `pKPerBB_rate`,  AP.`HRPer9` AS pHRper9, RANK() OVER (ORDER BY AP.`HRPer9`) `pHRPer9_rank`, 1 - (AP.`HRPer9` - (SELECT MIN(`HRPer9`) FROM MLB_2021.tp_fg_advanced)) / (SELECT MAX(`HRPer9`) - MIN(`HRPer9`) FROM MLB_2021.tp_fg_advanced) AS `pHRPer9_rate`,  AP.`AVG` AS pAVG, RANK() OVER (ORDER BY AP.`AVG`) `pAVG_rank`, 1 - (AP.`AVG` - (SELECT MIN(`AVG`) FROM MLB_2021.tp_fg_advanced)) / (SELECT MAX(`AVG`) - MIN(`AVG`) FROM MLB_2021.tp_fg_advanced) AS `pAVG_rate`,  AP.`WHIP`, RANK() OVER (ORDER BY AP.`WHIP`) `pWHIP_rank`, 1 - (AP.`WHIP` - (SELECT MIN(`WHIP`) FROM MLB_2021.tp_fg_advanced)) / (SELECT MAX(`WHIP`) - MIN(`WHIP`) FROM MLB_2021.tp_fg_advanced) AS `pWHIP_rate`,  AP.`BABIP` AS pBABIP, RANK() OVER (ORDER BY AP.`BABIP`) `pBABIP_rank`, 1 - (AP.`BABIP` - (SELECT MIN(`BABIP`) FROM MLB_2021.tp_fg_advanced)) / (SELECT MAX(`BABIP`) - MIN(`BABIP`) FROM MLB_2021.tp_fg_advanced) AS `pBABIP_rate`,  AP.`LOBRate` AS pLOBrate, RANK() OVER (ORDER BY AP.`LOBRate` DESC) `pLOB_rank`, (AP.`LOBRate` - (SELECT MIN(`LOBRate`) FROM MLB_2021.tp_fg_advanced)) / (SELECT MAX(`LOBRate`) - MIN(`LOBRate`) FROM MLB_2021.tp_fg_advanced) AS `pLOB_rate`,  AP.`SIERA` AS SIERA, RANK() OVER (ORDER BY AP.`SIERA`) `SIERA_rank`, 1 - (AP.`SIERA` - (SELECT MIN(`SIERA`) FROM MLB_2021.tp_fg_advanced)) / (SELECT MAX(`SIERA`) - MIN(`SIERA`) FROM MLB_2021.tp_fg_advanced) AS `SIERA_rate`  FROM MLB_2021.th_fg_standard AS SH JOIN MLB_2021.th_fg_advanced AS AH ON SH.Team = AH.Team JOIN MLB_2021.tp_fg_standard AS SP ON SH.Team = SP.Team JOIN MLB_2021.tp_fg_advanced AS AP ON SH.Team = AP.Team ORDER BY SH.Team;',
 
-  // Hitters Fan Graphs Standard Data
-  const columnArrayHitterFGStandard =
-    'Team G AB PA HFor 1B 2B 3B HRFor RFor RBI BBFor IBBFor SOFor HBPFor SF SH GDP SB CS AVGFor'.split(/\s+/);
-
-  type ColumnHeaderForHitterFGStandard = { [C in typeof columnArrayHitterFGStandard[number]]: number };
-  const columnHeaderMapHitterFGStandard: ColumnHeaderForHitterFGStandard = columnArrayHitterFGStandard.reduce(
-    (acc, value, index) => ({ ...acc, [value]: index + 1 }),
-    {},
-  );
-
-  const workbookHitterFGStandard = new Excel.Workbook();
-  await workbookHitterFGStandard.csv.readFile(`${dir}/HitterFGStandard.csv`);
-  const worksheetHitterFGStandard = workbookHitterFGStandard.worksheets[0];
-  const dataHitterFGStandard = [];
-
-  worksheetHitterFGStandard.eachRow((row, rowNumber) => {
-    const rowObject = Object.entries(columnHeaderMapHitterFGStandard).reduce((acc, value) => {
-      return {
-        ...acc,
-        [value[0]]: row.values[value[1]],
-      };
-    }, {});
-
-    if (rowNumber !== 1) {
-      dataHitterFGStandard.push(rowObject);
-    }
-  });
-  // Hitters Fan Graphs Advanced Data
-  const columnArrayHitterFGAdvanced =
-    'Team PA BBRate KRate BBPerK AVGFor OBP SLG OPS ISO Spd BABIPFor UBR wGDP wSB wRC wRAA wOBA wRC'.split(/\s+/);
-
-  type ColumnHeaderForHitterFGAdvanced = { [C in typeof columnArrayHitterFGAdvanced[number]]: number };
-  const columnHeaderMapHitterFGAdvanced: ColumnHeaderForHitterFGAdvanced = columnArrayHitterFGAdvanced.reduce(
-    (acc, value, index) => ({ ...acc, [value]: index + 1 }),
-    {},
-  );
-
-  const workbookHitterFGAdvanced = new Excel.Workbook();
-  await workbookHitterFGAdvanced.csv.readFile(`${dir}/HitterFGAdvanced.csv`);
-  const worksheetHitterFGAdvanced = workbookHitterFGAdvanced.worksheets[0];
-  const dataHitterFGAdvanced = [];
-
-  worksheetHitterFGAdvanced.eachRow((row, rowNumber) => {
-    const rowObject = Object.entries(columnHeaderMapHitterFGAdvanced).reduce((acc, value) => {
-      return {
-        ...acc,
-        [value[0]]: row.values[value[1]],
-      };
-    }, {});
-
-    if (rowNumber !== 1) {
-      dataHitterFGAdvanced.push(rowObject);
-    }
-  });
-
-  // Pitchers Fan Graphs Standard Data
-  const columnArrayPitcherFGStandard =
-    'Team W L ERA G GS CG ShO SV HLD BS IP TBF HAgainst RAgainst ER HRAgainst BBAgainst IBBAgainst HBPAgainst WP BK SOAgainst'.split(
-      /\s+/,
-    );
-
-  type ColumnHeaderForPitcherFGStandard = { [C in typeof columnArrayPitcherFGStandard[number]]: number };
-  const columnHeaderMapPitcherFGStandard: ColumnHeaderForPitcherFGStandard = columnArrayPitcherFGStandard.reduce(
-    (acc, value, index) => ({ ...acc, [value]: index + 1 }),
-    {},
-  );
-
-  const workbookPitcherFGStandard = new Excel.Workbook();
-  await workbookPitcherFGStandard.csv.readFile(`${dir}/PitcherFGStandard.csv`);
-  const worksheetPitcherFGStandard = workbookPitcherFGStandard.worksheets[0];
-  const dataPitcherFGStandard = [];
-
-  worksheetPitcherFGStandard.eachRow((row, rowNumber) => {
-    const rowObject = Object.entries(columnHeaderMapPitcherFGStandard).reduce((acc, value) => {
-      return {
-        ...acc,
-        [value[0]]: row.values[value[1]],
-      };
-    }, {});
-
-    if (rowNumber !== 1) {
-      dataPitcherFGStandard.push(rowObject);
-    }
-  });
-  // Pitchers Fan Graphs Advanced Data
-  const columnArrayPitcherFGAdvanced =
-    'Team KPer9 BBPer9 KPerBB HRPer9 KRate BBRate K-BBRate AVGAgainst WHIP BABIPAgainst LOBRate ERA- FIP- xFIP- ERA FIP E-F xFIP SIERA'.split(
-      /\s+/,
-    );
-  type ColumnHeaderForPitcherFGAdvanced = { [C in typeof columnArrayPitcherFGAdvanced[number]]: number };
-  const columnHeaderMapPitcherFGAdvanced: ColumnHeaderForPitcherFGAdvanced = columnArrayPitcherFGAdvanced.reduce(
-    (acc, value, index) => ({ ...acc, [value]: index + 1 }),
-    {},
-  );
-
-  const workbookPitcherFGAdvanced = new Excel.Workbook();
-  await workbookPitcherFGAdvanced.csv.readFile(`${dir}/PitcherFGAdvanced.csv`);
-  const worksheetPitcherFGAdvanced = workbookPitcherFGAdvanced.worksheets[0];
-  const dataPitcherFGAdvanced = [];
-
-  worksheetPitcherFGAdvanced.eachRow((row, rowNumber) => {
-    const rowObject = Object.entries(columnHeaderMapPitcherFGAdvanced).reduce((acc, value) => {
-      return {
-        ...acc,
-        [value[0]]: row.values[value[1]],
-      };
-    }, {});
-
-    if (rowNumber !== 1) {
-      dataPitcherFGAdvanced.push(rowObject);
-    }
-  });
-
-  // Joining the two hitter fan graphs tables by team name
-  const data = [];
-  for (let i = 0; i < 30; i++) {
-    const standardHitterElement = dataHitterFGStandard[i];
-
-    // Adding these two fields for the dropdown
-    standardHitterElement.value = standardHitterElement['Team'];
-    standardHitterElement.label = standardHitterElement['Team'];
-
-    // Finding advanced data object by the standards team name
-    const advancedHitterElement = dataHitterFGAdvanced.find((obj) => obj['Team'] === standardHitterElement['Team']);
-    const standardPitcherElement = dataPitcherFGStandard.find((obj) => obj['Team'] === standardHitterElement['Team']);
-    const advancedPitcherElement = dataPitcherFGAdvanced.find((obj) => obj['Team'] === standardHitterElement['Team']);
-
-    // Putting both objects values into one & inserting it into the array
-    const element = {
-      ...standardHitterElement,
-      ...advancedHitterElement,
-      ...standardPitcherElement,
-      ...advancedPitcherElement,
-    };
-    data.push(element);
+      values: [req.body.content],
+    });
+    res.json(result);
+    console.log('getting data');
   }
-
-  // Response
-  res.status(200).json({
-    data: data,
-  });
 }

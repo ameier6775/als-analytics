@@ -1,22 +1,40 @@
 /* eslint-disable react/jsx-key */
-import React from 'react';
-import Link from 'next/link';
-import useSWR from 'swr';
 import TeamCard from '../../../components/mlb/TeamCard';
-
-const fetcher = (url) => fetch(url).then((res) => res.json());
+import React, { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
+import Select from 'react-select';
+import axios from 'axios';
+import { data } from 'autoprefixer';
 
 export default function Teams() {
-  const { data, error } = useSWR('../api/mlb/teams/', fetcher);
-  if (error) return <div>failed to load</div>;
-  if (!data) return <div>loading...</div>;
-  console.log(data);
+  const [teams, setTeams] = useState(null);
+  const [selectedTeam, setSelectedTeam] = useState(null);
+  const [isLoading, setLoading] = useState(false);
 
-  const teamData = data.data;
+  useEffect(() => {
+    setLoading(true);
+    fetch('../../api/mlb/teams')
+      .then((res) => res.json())
+      .then((data) => {
+        setTeams(data);
+        setLoading(false);
+      });
+  }, []);
+
+  var handleInputChange = (inputValue) => {
+    setSelectedTeam(inputValue);
+  };
+
+  console.log(teams);
+
+  if (isLoading) return <p>Loading...</p>;
+  if (!teams) return <p>No teams data</p>;
 
   return (
-    <>
-      <TeamCard teams={teamData}></TeamCard>
-    </>
+    <div>
+      <h1>MLB Teams</h1>
+      <Select options={teams} onChange={handleInputChange} />
+      {selectedTeam ? <TeamCard team={selectedTeam}></TeamCard> : <p></p>}
+    </div>
   );
 }

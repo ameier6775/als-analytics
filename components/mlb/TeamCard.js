@@ -20,447 +20,543 @@ import {
 } from 'recharts';
 import teamLogos from '../../data/mlb/teams/2022/logos';
 
-const TeamCard = ({ teams }) => {
-  const [selectedTeam, setSelectedTeam] = useState(teams[0]);
-  const onChange = (e) => {
-    setSelectedTeam(e);
-  };
-
-  function getProductionPercentile(category, direction = 'positive') {
-    var positionalArr = teams;
-    // Get the maximum player value for the statistic
-    var maxValue = Math.max.apply(
-      Math,
-      positionalArr.map((obj) => {
-        return obj[category];
-      }),
-    );
-    // Get the minimum player value for the statistic
-    var minValue = Math.min.apply(
-      Math,
-      positionalArr.map((obj) => {
-        return obj[category];
-      }),
-    );
-    var difference = maxValue - minValue;
-    var teamValue = selectedTeam[category];
-    var result = (teamValue - minValue) / difference;
-
-    // Specific conditions (100% & 0&) based off if its a positive or negative statistic
-    if (direction === 'positive') {
-      if (maxValue === teamValue) {
-        return '100%';
-      } else if (minValue === teamValue) {
-        return '0%';
-      } else if (result.toFixed(2).substring(2, 3) === '0') {
-        return result.toFixed(2).substring(3, 4) + '%';
-      } else {
-        return result.toFixed(2).substring(2, 4) + '%';
-      }
-    } else if (direction === 'negative') {
-      if (minValue === teamValue) {
-        return '100%';
-      } else if (maxValue === teamValue) {
-        return '0%';
-      } else if ((1 - result).toFixed(2).substring(2, 3) === '0') {
-        return (1 - result).toFixed(2).substring(3, 4) + '%';
-      } else {
-        return (1 - result).toFixed(2).substring(2, 4) + '%';
-      }
+const TeamCard = ({ team }) => {
+  function getRank(rank) {
+    let rankStr = rank.toString();
+    let factor = rank % 10;
+    if (rank >= 10 && rank <= 20) {
+      rankStr += 'th';
+    } else if (factor === 1) {
+      rankStr += 'st';
+    } else if (factor === 2) {
+      rankStr += 'nd';
+    } else if (factor === 3) {
+      rankStr += 'rd';
+    } else {
+      rankStr += 'th';
     }
+    return rankStr;
   }
 
-  // Gets the ranking for the given statistic
-  function getRank(category, order = 'desc') {
-    // Duplicate the players array
-    var resultArr = teams.slice();
-    var rankArr = resultArr;
-
-    // Sorting by the category
-    if (order === 'desc') {
-      rankArr.sort((a, b) => b[category] - a[category]);
-    } else if (order === 'asc') {
-      rankArr.sort((a, b) => a[category] - b[category]);
-    }
-
-    let categoryRank = rankArr.indexOf(selectedTeam) + 1;
-    let rankString = categoryRank.toString();
-    let lastDigit = categoryRank % 10;
-
-    // Pronunciation of the ranking
-    if ((lastDigit >= 10 && lastDigit <= 20) || (lastDigit >= 4 && lastDigit <= 9) || lastDigit === 0) {
-      rankString = rankString + 'th';
-    } else if (lastDigit === 1) {
-      rankString = rankString + 'st';
-    } else if (lastDigit === 2) {
-      rankString = rankString + 'nd';
-    } else if (lastDigit === 3) {
-      rankString = rankString + 'rd';
-    }
-
-    return rankString;
+  // Validation for fields
+  function getGraphField(field) {
+    let result = field === 0 || field < 0.1 ? 1 : (100 * field).toFixed();
+    return result;
   }
 
-  // Set field color based off of incoming value
-  function getColor(value) {
-    let percentage = parseFloat(value.substring(-1));
-
-    let color =
-      percentage <= 33 ? '255, 51, 51' : percentage <= 66 ? '255, 205, 0' : percentage > 66 ? '51, 255, 74' : '0, 0, 0';
-    let colorPercentage =
-      percentage <= 33
-        ? percentage * 3
-        : percentage <= 66
-        ? ((percentage - 33) * 3) / 100
-        : percentage > 66
-        ? ((percentage - 67) * 3) / 100
-        : 0;
-
-    // Color is too dark, need to fix this eventually (is this a good solution?)
-    colorPercentage = colorPercentage < 0.2 ? colorPercentage + 0.2 : colorPercentage;
-
-    let resultColor = 'rgba(' + color + ', ' + colorPercentage + ')';
-
-    return resultColor;
+  // Conversion to percentage
+  function getRatePercentage(field) {
+    let result = (field * 100).toFixed().toString() + '%';
+    return result;
   }
 
-  // Preparing hitters chart data (all positive valued fields)
-  let runsFor =
-    parseInt(getProductionPercentile('RFor').substring(0, 2)) === 10
-      ? 100
-      : !parseInt(getProductionPercentile('RFor').substring(0, 2)) === 0
-      ? 0
-      : parseInt(getProductionPercentile('RFor').substring(0, 2));
-  let BBperK =
-    parseInt(getProductionPercentile('BBPerK').substring(0, 2)) === 10
-      ? 100
-      : !parseInt(getProductionPercentile('BBPerK').substring(0, 2)) === 0
-      ? 0
-      : parseInt(getProductionPercentile('BBPerK').substring(0, 2));
-  let average =
-    parseInt(getProductionPercentile('AVGFor').substring(0, 2)) === 10
-      ? 100
-      : !parseInt(getProductionPercentile('AVGFor').substring(0, 2)) === 0
-      ? 0
-      : parseInt(getProductionPercentile('AVGFor').substring(0, 2));
-  let ops =
-    parseInt(getProductionPercentile('OPS').substring(0, 2)) === 10
-      ? 100
-      : !parseInt(getProductionPercentile('OPS').substring(0, 2)) === 0
-      ? 0
-      : parseInt(getProductionPercentile('OPS').substring(0, 2));
-  let homeRunsFor =
-    parseInt(getProductionPercentile('HRFor').substring(0, 2)) === 10
-      ? 100
-      : !parseInt(getProductionPercentile('HRFor').substring(0, 2)) === 0
-      ? 0
-      : parseInt(getProductionPercentile('HRFor').substring(0, 2));
-
-  // Preparing pitchers chart data (all negative valued fields)
-  let runsAgainst =
-    parseInt(getProductionPercentile('RAgainst').substring(0, 2)) === 10
-      ? 100
-      : !parseInt(getProductionPercentile('RAgainst').substring(0, 2)) === 0
-      ? 0
-      : parseInt(getProductionPercentile('RAgainst').substring(0, 2));
-  let era =
-    parseInt(getProductionPercentile('ERA').substring(0, 2)) === 10
-      ? 100
-      : !parseInt(getProductionPercentile('ERA').substring(0, 2)) === 0
-      ? 0
-      : parseInt(getProductionPercentile('ERA').substring(0, 2));
-  let whip =
-    parseInt(getProductionPercentile('WHIP').substring(0, 2)) === 10
-      ? 100
-      : !parseInt(getProductionPercentile('WHIP').substring(0, 2)) === 0
-      ? 0
-      : parseInt(getProductionPercentile('WHIP').substring(0, 2));
-  let averageAgainst =
-    parseInt(getProductionPercentile('AVGAgainst').substring(0, 2)) === 10
-      ? 100
-      : !parseInt(getProductionPercentile('AVGAgainst').substring(0, 2)) === 0
-      ? 0
-      : parseInt(getProductionPercentile('AVGAgainst').substring(0, 2));
-  let homeRunsAgainst =
-    parseInt(getProductionPercentile('HRAgainst').substring(0, 2)) === 10
-      ? 0
-      : !parseInt(getProductionPercentile('HRAgainst').substring(0, 2)) === 0
-      ? 100
-      : parseInt(getProductionPercentile('HRAgainst').substring(0, 2));
-
-  // Plotting chart data
+  // function getProductionPercentile(category, direction = 'positive') {
+  //   var positionalArr = teams;
+  //   var maxValue = Math.max.apply(
+  //     Math,
+  //     positionalArr.map((obj) => {
+  //       return obj[category];
+  //     }),
+  //   );
+  //   var minValue = Math.min.apply(
+  //     Math,
+  //     positionalArr.map((obj) => {
+  //       return obj[category];
+  //     }),
+  //   );
+  //   var difference = maxValue - minValue;
+  //   var teamValue = selectedTeam[category];
+  //   var result = (teamValue - minValue) / difference;
+  //   if (direction === 'positive') {
+  //     if (maxValue === teamValue) {
+  //       return '100%';
+  //     } else if (minValue === teamValue) {
+  //       return '0%';
+  //     } else if (result.toFixed(2).substring(2, 3) === '0') {
+  //       return result.toFixed(2).substring(3, 4) + '%';
+  //     } else {
+  //       return result.toFixed(2).substring(2, 4) + '%';
+  //     }
+  //   } else if (direction === 'negative') {
+  //     if (minValue === teamValue) {
+  //       return '100%';
+  //     } else if (maxValue === teamValue) {
+  //       return '0%';
+  //     } else if ((1 - result).toFixed(2).substring(2, 3) === '0') {
+  //       return (1 - result).toFixed(2).substring(3, 4) + '%';
+  //     } else {
+  //       return (1 - result).toFixed(2).substring(2, 4) + '%';
+  //     }
+  //   }
+  // }
+  // function getRank(category, order = 'desc') {
+  //   var resultArr = teams.slice();
+  //   var rankArr = resultArr;
+  //   if (order === 'desc') {
+  //     rankArr.sort((a, b) => b[category] - a[category]);
+  //   } else if (order === 'asc') {
+  //     rankArr.sort((a, b) => a[category] - b[category]);
+  //   }
+  //   let categoryRank = rankArr.indexOf(selectedTeam) + 1;
+  //   let rankString = categoryRank.toString();
+  //   let lastDigit = categoryRank % 10;
+  //   if ((lastDigit >= 10 && lastDigit <= 20) || (lastDigit >= 4 && lastDigit <= 9) || lastDigit === 0) {
+  //     rankString = rankString + 'th';
+  //   } else if (lastDigit === 1) {
+  //     rankString = rankString + 'st';
+  //   } else if (lastDigit === 2) {
+  //     rankString = rankString + 'nd';
+  //   } else if (lastDigit === 3) {
+  //     rankString = rankString + 'rd';
+  //   }
+  //   return rankString;
+  // }
+  // function getColor(value) {
+  //   let percentage = parseFloat(value.substring(-1));
+  //   let color =
+  //     percentage <= 33 ? '255, 51, 51' : percentage <= 66 ? '255, 205, 0' : percentage > 66 ? '51, 255, 74' : '0, 0, 0';
+  //   let colorPercentage =
+  //     percentage <= 33
+  //       ? percentage * 3
+  //       : percentage <= 66
+  //       ? ((percentage - 33) * 3) / 100
+  //       : percentage > 66
+  //       ? ((percentage - 67) * 3) / 100
+  //       : 0;
+  //   colorPercentage = colorPercentage < 0.2 ? colorPercentage + 0.2 : colorPercentage;
+  //   let resultColor = 'rgba(' + color + ', ' + colorPercentage + ')';
+  //   return resultColor;
+  // }
   var hittersGraphData = [
     {
       category: 'Runs',
-      score: runsFor,
+      score: getGraphField(team.hR_rate),
       fullMark: 100,
     },
     {
       category: 'Average',
-      score: average,
+      score: getGraphField(team.hAVG_rate),
       fullMark: 100,
     },
     {
-      category: 'OPS',
-      score: ops,
+      category: 'OBP',
+      score: getGraphField(team.hOBP_rate),
       fullMark: 100,
     },
     {
       category: 'Walk Per Strikeout',
-      score: BBperK,
+      score: getGraphField(team.hBBPerK_rate),
       fullMark: 100,
     },
     {
       category: 'Home Runs',
-      score: homeRunsFor,
+      score: getGraphField(team.hHR_rate),
       fullMark: 100,
     },
   ];
-  // Plotting chart data
   var pitchersGraphData = [
     {
-      category: 'Runs',
-      score: runsAgainst,
+      category: 'ERA',
+      score: getGraphField(team.ERA_rate),
       fullMark: 100,
     },
     {
       category: 'Average',
-      score: averageAgainst,
+      score: getGraphField(team.pAVG_rate),
       fullMark: 100,
     },
 
     {
-      category: 'ERA',
-      score: era,
-      fullMark: 100,
-    },
-    {
       category: 'WHIP',
-      score: whip,
+      score: getGraphField(team.pWHIP_rate),
       fullMark: 100,
     },
     {
-      category: 'Home Runs',
-      score: homeRunsAgainst,
+      category: 'K per BB',
+      score: getGraphField(team.pKPerBB_rate),
+      fullMark: 100,
+    },
+    {
+      category: 'SIERA',
+      score: getGraphField(team.pSIERA_rate),
       fullMark: 100,
     },
   ];
 
-  var logo = teamLogos.find((obj) => obj.team === selectedTeam['Team']);
+  var logo = teamLogos.find((obj) => obj.team === team.value);
+  {
+    /* <h2 className="mlbTeamCardSubHeader">Batting:</h2> */
+  }
 
   return (
-    <div>
-      {/* <h2 className="mlbTeamCardSubHeader">Batting:</h2> */}
-      <Select onChange={onChange} options={teams} />
-      {selectedTeam ? (
-        <div id={selectedTeam.playerId} className="playerCard">
-          <h1>{selectedTeam.Team}</h1>
-          <img className="teamLogo" height="10" src={logo.logo} />
-          {/* <h2>Batting</h2> */}
-          <p>
-            Average:
-            <div className="fieldRank">{getRank('AVGFor')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('AVGFor')) }}>
-              {getProductionPercentile('AVGFor')}
-            </span>
-          </p>
-          <p>
-            Singles:<div className="fieldRank">{getRank('1B')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('1B')) }}>
-              {getProductionPercentile('1B')}
-            </span>
-          </p>
-          <p>
-            Doubles:<div className="fieldRank">{getRank('2B')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('2B')) }}>
-              {getProductionPercentile('2B')}
-            </span>
-          </p>
-          <p>
-            Triples:<div className="fieldRank">{getRank('3B')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('3B')) }}>
-              {getProductionPercentile('3B')}
-            </span>
-          </p>
-          <p>
-            Home Runs:<div className="fieldRank">{getRank('HRFor')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('HRFor')) }}>
-              {getProductionPercentile('HRFor')}
-            </span>
-          </p>
-          <p>
-            Runs:<div className="fieldRank">{getRank('RFor')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('RFor')) }}>
-              {getProductionPercentile('RFor')}
-            </span>
-          </p>
-          <p>
-            Hits:<div className="fieldRank">{getRank('HFor')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('HFor')) }}>
-              {getProductionPercentile('HFor')}
-            </span>
-          </p>
-          <p>
-            Walks:<div className="fieldRank">{getRank('BBFor')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('BBFor')) }}>
-              {getProductionPercentile('BBFor')}
-            </span>
-          </p>
-          <p>
-            Strikeouts:<div className="fieldRank">{getRank('SOFor', 'asc')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('SOFor', 'negative')) }}>
-              {getProductionPercentile('SOFor', 'negative')}
-            </span>
-          </p>
-          <p>
-            Walk Per Strikeout:<div className="fieldRank">{getRank('BBPerK')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('BBPerK')) }}>
-              {getProductionPercentile('BBPerK')}
-            </span>
-          </p>
-          <div className="fullWidthChart">
-            <h2 className="playerChart">Batting</h2>
-            <LineChart
-              width={1200}
-              height={280}
-              data={hittersGraphData}
-              margin={{
-                top: 15,
-                bottom: 5,
-              }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="category" stroke="white" />
-              <YAxis stroke="white" />
-              <ReferenceLine
-                y={100}
-                label={{ value: 'Best', angle: 0, position: 'top', fill: 'lightgreen', fontSize: 12 }}
-                stroke="lightgreen"
-              />
-              <ReferenceLine
-                y={50}
-                label={{ value: 'Average', angle: 0, position: 'top', fill: 'gold', fontSize: 12 }}
-                stroke="gold"
-              />
-              <ReferenceLine
-                y={0}
-                label={{ value: 'Worst', angle: 0, position: 'top', fill: 'red', fontSize: 12 }}
-                stroke="red"
-              />
-              <Line
-                type="monotone"
-                dataKey="score"
-                stroke="white"
-                fill="rgb(255, 174, 0)"
-                label={{ angle: 0, position: 'bottom', fill: 'white', fontSize: 9 }}
-              />
-            </LineChart>
-          </div>
-          {/* <h2>Pitching</h2> */}
-          <p>
-            Earned Run Average:<div className="fieldRank">{getRank('ERA', 'asc')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('ERA', 'negative')) }}>
-              {getProductionPercentile('ERA', 'negative')}
-            </span>
-          </p>
-          <p>
-            WHIP:<div className="fieldRank">{getRank('WHIP', 'asc')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('WHIP', 'negative')) }}>
-              {getProductionPercentile('WHIP', 'negative')}
-            </span>
-          </p>
-          <p>
-            Strikeouts:<div className="fieldRank">{getRank('SOAgainst')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('SOAgainst')) }}>
-              {getProductionPercentile('SOAgainst')}
-            </span>
-          </p>
-          <p>
-            Walks:<div className="fieldRank">{getRank('BBAgainst', 'asc')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('BBAgainst', 'negative')) }}>
-              {getProductionPercentile('BBAgainst', 'negative')}
-            </span>
-          </p>
-          <p>
-            Home Runs:<div className="fieldRank">{getRank('HRAgainst', 'asc')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('HRAgainst', 'negative')) }}>
-              {getProductionPercentile('HRAgainst', 'negative')}
-            </span>
-          </p>
-          <p>
-            Runs:<div className="fieldRank">{getRank('RAgainst', 'asc')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('RAgainst', 'negative')) }}>
-              {getProductionPercentile('RAgainst', 'negative')}
-            </span>
-          </p>
-          <p>
-            Hits:<div className="fieldRank">{getRank('HAgainst', 'asc')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('HAgainst', 'negative')) }}>
-              {getProductionPercentile('HAgainst', 'negative')}
-            </span>
-          </p>
-          <p>
-            Strikeouts Per 9:<div className="fieldRank">{getRank('KPer9')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('KPer9')) }}>
-              {getProductionPercentile('KPer9')}
-            </span>
-          </p>
-          <p>
-            Walks Per 9:<div className="fieldRank">{getRank('BBAgainst', 'asc')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('BBAgainst', 'negative')) }}>
-              {getProductionPercentile('BBAgainst', 'negative')}
-            </span>
-          </p>
-          <p>
-            Home Runs Per 9:<div className="fieldRank">{getRank('HRPer9', 'asc')}</div>
-            <span style={{ backgroundColor: getColor(getProductionPercentile('HRPer9', 'negative')) }}>
-              {getProductionPercentile('HRPer9', 'negative')}
-            </span>
-          </p>
-          <div className="fullWidthChart">
-            <h2 className="playerChart">Pitching</h2>
-            <LineChart
-              width={1200}
-              height={280}
-              data={pitchersGraphData}
-              margin={{
-                top: 15,
-                bottom: 5,
-              }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="category" stroke="white" />
-              <YAxis stroke="white" />
-              <ReferenceLine
-                y={0}
-                label={{ value: 'Best', angle: 0, position: 'top', fill: 'lightgreen', fontSize: 12 }}
-                stroke="lightgreen"
-              />
-              <ReferenceLine
-                y={50}
-                label={{ value: 'Average', angle: 0, position: 'top', fill: 'gold', fontSize: 12 }}
-                stroke="gold"
-              />
-              <ReferenceLine
-                y={100}
-                label={{ value: 'Worst', angle: 0, position: 'top', fill: 'red', fontSize: 12 }}
-                stroke="red"
-              />
-              <Line
-                type="monotone"
-                dataKey="score"
-                stroke="white"
-                fill="rgb(255, 174, 0)"
-                label={{ angle: 0, position: 'bottom', fill: 'white', fontSize: 9 }}
-              />
-            </LineChart>
-          </div>
-        </div>
-      ) : (
-        <p>N/A</p>
-      )}
+    <div id={team.value} className="playerCard">
+      <h1>{team.value}</h1>
+      <img className="teamLogo" height="10" src={logo.logo} />
+      <p>
+        Average + :<div className="fieldRank">{getRank(team['hAVG_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['hAVG_rate'])}</span>
+      </p>
+      <p>
+        Singles + :<div className="fieldRank">{getRank(team['1B_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['1B_rate'])}</span>
+      </p>
+      <p>
+        Doubles + :<div className="fieldRank">{getRank(team['2B_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['2B_rate'])}</span>
+      </p>
+      <p>
+        Triples + :<div className="fieldRank">{getRank(team['3B_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['3B_rate'])}</span>
+      </p>
+      <p>
+        Home Runs + :<div className="fieldRank">{getRank(team['hHR_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['hHR_rate'])}</span>
+      </p>
+      <p>
+        Runs + :<div className="fieldRank">{getRank(team['hR_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['hR_rate'])}</span>
+      </p>
+      <p>
+        RBIs + :<div className="fieldRank">{getRank(team['RBI_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['RBI_rate'])}</span>
+      </p>
+      <p>
+        OBP + :<div className="fieldRank">{getRank(team['hOBP_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['hOBP_rate'])}</span>
+      </p>
+      <p>
+        SLG + :<div className="fieldRank">{getRank(team['hSLG_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['hSLG_rate'])}</span>
+      </p>
+      <p>
+        Power + :<div className="fieldRank">{getRank(team['hISO_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['hISO_rate'])}</span>
+      </p>
+      <p>
+        BABIP + :<div className="fieldRank">{getRank(team['hBABIP_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['hBABIP_rate'])}</span>
+      </p>
+      <p>
+        SB + :<div className="fieldRank">{getRank(team['hSB_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['hSB_rate'])}</span>
+      </p>
+      <p>
+        BB / K + :<div className="fieldRank">{getRank(team['hBBPerK_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['hBBPerK_rate'])}</span>
+      </p>
+      <p>
+        Base Running + :<div className="fieldRank">{getRank(team['hUBR_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['hUBR_rate'])}</span>
+      </p>
+      <p>
+        wRC + :<div className="fieldRank">{getRank(team['hwRC+_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['hwRC+_rate'])}</span>
+      </p>
+      <div className="fullWidthChart">
+        <h2 className="playerChart">Hitting</h2>
+        <LineChart
+          width={1200}
+          height={280}
+          data={hittersGraphData}
+          margin={{
+            top: 15,
+            bottom: 5,
+          }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="category" stroke="white" />
+          <YAxis stroke="white" />
+          <ReferenceLine
+            y={100}
+            label={{ value: 'Best', angle: 0, position: 'top', fill: 'lightgreen', fontSize: 12 }}
+            stroke="lightgreen"
+          />
+          <ReferenceLine
+            y={50}
+            label={{ value: 'Average', angle: 0, position: 'top', fill: 'gold', fontSize: 12 }}
+            stroke="gold"
+          />
+          <ReferenceLine
+            y={0}
+            label={{ value: 'Worst', angle: 0, position: 'top', fill: 'red', fontSize: 12 }}
+            stroke="red"
+          />
+          <Line
+            type="monotone"
+            dataKey="score"
+            stroke="white"
+            fill="rgb(255, 174, 0)"
+            label={{ angle: 0, position: 'bottom', fill: 'white', fontSize: 9 }}
+          />
+        </LineChart>
+      </div>
+      <p>
+        Average - :<div className="fieldRank">{getRank(team['pAVG_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['pAVG_rate'])}</span>
+      </p>
+      <p>
+        Hits - :<div className="fieldRank">{getRank(team['pH_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['pH_rate'])}</span>
+      </p>
+      <p>
+        Bases Against - :<div className="fieldRank">{getRank(team['pTBF_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['pTBF_rate'])}</span>
+      </p>
+      <p>
+        BABIP - :<div className="fieldRank">{getRank(team['pBABIP_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['pBABIP_rate'])}</span>
+      </p>
+      <p>
+        LOB - :<div className="fieldRank">{getRank(team['pLOB_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['pLOB_rate'])}</span>
+      </p>
+      <p>
+        ERA - :<div className="fieldRank">{getRank(team['ERA_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['ERA_rate'])}</span>
+      </p>
+      <p>
+        WHIP - :<div className="fieldRank">{getRank(team['pWHIP_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['pWHIP_rate'])}</span>
+      </p>
+      <p>
+        K per 9 - :<div className="fieldRank">{getRank(team['pKPer9_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['pKPer9_rate'])}</span>
+      </p>
+      <p>
+        BB per 9 - :<div className="fieldRank">{getRank(team['pBBPer9_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['pBBPer9_rate'])}</span>
+      </p>
+      <p>
+        Innings - :<div className="fieldRank">{getRank(team['IP_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['IP_rate'])}</span>
+      </p>
+      <p>
+        SIERA - :<div className="fieldRank">{getRank(team['SIERA_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['SIERA_rate'])}</span>
+      </p>
+      <p>
+        Innings - :<div className="fieldRank">{getRank(team['IP_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['IP_rate'])}</span>
+      </p>
+      <p>
+        Innings - :<div className="fieldRank">{getRank(team['IP_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['IP_rate'])}</span>
+      </p>
+      <p>
+        Innings - :<div className="fieldRank">{getRank(team['IP_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['IP_rate'])}</span>
+      </p>
+      <p>
+        Innings - :<div className="fieldRank">{getRank(team['IP_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['IP_rate'])}</span>
+      </p>
+      <div className="fullWidthChart">
+        <h2 className="playerChart">Pitching</h2>
+        <LineChart
+          width={1200}
+          height={280}
+          data={pitchersGraphData}
+          margin={{
+            top: 15,
+            bottom: 5,
+          }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="category" stroke="white" />
+          <YAxis stroke="white" />
+          <ReferenceLine
+            y={100}
+            label={{ value: 'Best', angle: 0, position: 'top', fill: 'lightgreen', fontSize: 12 }}
+            stroke="lightgreen"
+          />
+          <ReferenceLine
+            y={50}
+            label={{ value: 'Average', angle: 0, position: 'top', fill: 'gold', fontSize: 12 }}
+            stroke="gold"
+          />
+          <ReferenceLine
+            y={0}
+            label={{ value: 'Worst', angle: 0, position: 'top', fill: 'red', fontSize: 12 }}
+            stroke="red"
+          />
+          <Line
+            type="monotone"
+            dataKey="score"
+            stroke="white"
+            fill="rgb(255, 174, 0)"
+            label={{ angle: 0, position: 'bottom', fill: 'white', fontSize: 9 }}
+          />
+        </LineChart>
+      </div>
     </div>
   );
-};
 
+  // return (
+  //   <div>
+  //     <Select onChange={onChange} options={teams} />
+  //     {selectedTeam ? (
+  //       <div id={selectedTeam.playerId} className="playerCard">
+  //         <h1>{selectedTeam.Team}</h1>
+  //         <img className="teamLogo" height="10" src={logo.logo} />
+  //         <p>
+  //           Walks:<div className="fieldRank">{getRank('BBFor')}</div>
+  //           <span style={{ backgroundColor: getColor(getProductionPercentile('BBFor')) }}>
+  //             {getProductionPercentile('BBFor')}
+  //           </span>
+  //         </p>
+  //         <p>
+  //           Strikeouts:<div className="fieldRank">{getRank('SOFor', 'asc')}</div>
+  //           <span style={{ backgroundColor: getColor(getProductionPercentile('SOFor', 'negative')) }}>
+  //             {getProductionPercentile('SOFor', 'negative')}
+  //           </span>
+  //         </p>
+  //         <p>
+  //           Walk Per Strikeout:<div className="fieldRank">{getRank('BBPerK')}</div>
+  //           <span style={{ backgroundColor: getColor(getProductionPercentile('BBPerK')) }}>
+  //             {getProductionPercentile('BBPerK')}
+  //           </span>
+  //         </p>
+  //         <div className="fullWidthChart">
+  //           <h2 className="playerChart">Batting</h2>
+  //           <LineChart
+  //             width={1200}
+  //             height={280}
+  //             data={hittersGraphData}
+  //             margin={{
+  //               top: 15,
+  //               bottom: 5,
+  //             }}
+  //           >
+  //             <CartesianGrid strokeDasharray="3 3" />
+  //             <XAxis dataKey="category" stroke="white" />
+  //             <YAxis stroke="white" />
+  //             <ReferenceLine
+  //               y={100}
+  //               label={{ value: 'Best', angle: 0, position: 'top', fill: 'lightgreen', fontSize: 12 }}
+  //               stroke="lightgreen"
+  //             />
+  //             <ReferenceLine
+  //               y={50}
+  //               label={{ value: 'Average', angle: 0, position: 'top', fill: 'gold', fontSize: 12 }}
+  //               stroke="gold"
+  //             />
+  //             <ReferenceLine
+  //               y={0}
+  //               label={{ value: 'Worst', angle: 0, position: 'top', fill: 'red', fontSize: 12 }}
+  //               stroke="red"
+  //             />
+  //             <Line
+  //               type="monotone"
+  //               dataKey="score"
+  //               stroke="white"
+  //               fill="rgb(255, 174, 0)"
+  //               label={{ angle: 0, position: 'bottom', fill: 'white', fontSize: 9 }}
+  //             />
+  //           </LineChart>
+  //         </div>
+  //         <p>
+  //           Earned Run Average:<div className="fieldRank">{getRank('ERA', 'asc')}</div>
+  //           <span style={{ backgroundColor: getColor(getProductionPercentile('ERA', 'negative')) }}>
+  //             {getProductionPercentile('ERA', 'negative')}
+  //           </span>
+  //         </p>
+  //         <p>
+  //           WHIP:<div className="fieldRank">{getRank('WHIP', 'asc')}</div>
+  //           <span style={{ backgroundColor: getColor(getProductionPercentile('WHIP', 'negative')) }}>
+  //             {getProductionPercentile('WHIP', 'negative')}
+  //           </span>
+  //         </p>
+  //         <p>
+  //           Strikeouts:<div className="fieldRank">{getRank('SOAgainst')}</div>
+  //           <span style={{ backgroundColor: getColor(getProductionPercentile('SOAgainst')) }}>
+  //             {getProductionPercentile('SOAgainst')}
+  //           </span>
+  //         </p>
+  //         <p>
+  //           Walks:<div className="fieldRank">{getRank('BBAgainst', 'asc')}</div>
+  //           <span style={{ backgroundColor: getColor(getProductionPercentile('BBAgainst', 'negative')) }}>
+  //             {getProductionPercentile('BBAgainst', 'negative')}
+  //           </span>
+  //         </p>
+  //         <p>
+  //           Home Runs:<div className="fieldRank">{getRank('HRAgainst', 'asc')}</div>
+  //           <span style={{ backgroundColor: getColor(getProductionPercentile('HRAgainst', 'negative')) }}>
+  //             {getProductionPercentile('HRAgainst', 'negative')}
+  //           </span>
+  //         </p>
+  //         <p>
+  //           Runs:<div className="fieldRank">{getRank('RAgainst', 'asc')}</div>
+  //           <span style={{ backgroundColor: getColor(getProductionPercentile('RAgainst', 'negative')) }}>
+  //             {getProductionPercentile('RAgainst', 'negative')}
+  //           </span>
+  //         </p>
+  //         <p>
+  //           Hits:<div className="fieldRank">{getRank('HAgainst', 'asc')}</div>
+  //           <span style={{ backgroundColor: getColor(getProductionPercentile('HAgainst', 'negative')) }}>
+  //             {getProductionPercentile('HAgainst', 'negative')}
+  //           </span>
+  //         </p>
+  //         <p>
+  //           Strikeouts Per 9:<div className="fieldRank">{getRank('KPer9')}</div>
+  //           <span style={{ backgroundColor: getColor(getProductionPercentile('KPer9')) }}>
+  //             {getProductionPercentile('KPer9')}
+  //           </span>
+  //         </p>
+  //         <p>
+  //           Walks Per 9:<div className="fieldRank">{getRank('BBAgainst', 'asc')}</div>
+  //           <span style={{ backgroundColor: getColor(getProductionPercentile('BBAgainst', 'negative')) }}>
+  //             {getProductionPercentile('BBAgainst', 'negative')}
+  //           </span>
+  //         </p>
+  //         <p>
+  //           Home Runs Per 9:<div className="fieldRank">{getRank('HRPer9', 'asc')}</div>
+  //           <span style={{ backgroundColor: getColor(getProductionPercentile('HRPer9', 'negative')) }}>
+  //             {getProductionPercentile('HRPer9', 'negative')}
+  //           </span>
+  //         </p>
+  //         <div className="fullWidthChart">
+  //           <h2 className="playerChart">Pitching</h2>
+  //           <LineChart
+  //             width={1200}
+  //             height={280}
+  //             data={pitchersGraphData}
+  //             margin={{
+  //               top: 15,
+  //               bottom: 5,
+  //             }}
+  //           >
+  //             <CartesianGrid strokeDasharray="3 3" />
+  //             <XAxis dataKey="category" stroke="white" />
+  //             <YAxis stroke="white" />
+  //             <ReferenceLine
+  //               y={0}
+  //               label={{ value: 'Best', angle: 0, position: 'top', fill: 'lightgreen', fontSize: 12 }}
+  //               stroke="lightgreen"
+  //             />
+  //             <ReferenceLine
+  //               y={50}
+  //               label={{ value: 'Average', angle: 0, position: 'top', fill: 'gold', fontSize: 12 }}
+  //               stroke="gold"
+  //             />
+  //             <ReferenceLine
+  //               y={100}
+  //               label={{ value: 'Worst', angle: 0, position: 'top', fill: 'red', fontSize: 12 }}
+  //               stroke="red"
+  //             />
+  //             <Line
+  //               type="monotone"
+  //               dataKey="score"
+  //               stroke="white"
+  //               fill="rgb(255, 174, 0)"
+  //               label={{ angle: 0, position: 'bottom', fill: 'white', fontSize: 9 }}
+  //             />
+  //           </LineChart>
+  //         </div>
+  //       </div>
+  //     ) : (
+  //       <p>N/A</p>
+  //     )}
+  //   </div>
+  // );
+};
 export default TeamCard;

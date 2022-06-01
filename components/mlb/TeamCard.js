@@ -144,7 +144,7 @@ const TeamCard = ({ team }) => {
       fullMark: 100,
     },
     {
-      category: 'Walk Per Strikeout',
+      category: 'Walk per Strikeout',
       score: getGraphField(team.hBBPerK_rate),
       fullMark: 100,
     },
@@ -172,13 +172,13 @@ const TeamCard = ({ team }) => {
       fullMark: 100,
     },
     {
-      category: 'K per BB',
+      category: 'Strikeout per Walk',
       score: getGraphField(team.pKPerBB_rate),
       fullMark: 100,
     },
     {
       category: 'SIERA',
-      score: getGraphField(team.pSIERA_rate),
+      score: getGraphField(team.SIERA_rate),
       fullMark: 100,
     },
   ];
@@ -327,28 +327,28 @@ const TeamCard = ({ team }) => {
         <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['pBBPer9_rate'])}</span>
       </p>
       <p>
-        Innings - :<div className="fieldRank">{getRank(team['IP_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['IP_rate'])}</span>
+        HR per 9 - :<div className="fieldRank">{getRank(team['pHRPer9_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['pHRPer9_rate'])}</span>
       </p>
       <p>
         SIERA - :<div className="fieldRank">{getRank(team['SIERA_rank'])}</div>
         <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['SIERA_rate'])}</span>
       </p>
       <p>
-        Innings - :<div className="fieldRank">{getRank(team['IP_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['IP_rate'])}</span>
+        K per BB - :<div className="fieldRank">{getRank(team['pKPerBB_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['pKPerBB_rate'])}</span>
       </p>
       <p>
         Innings - :<div className="fieldRank">{getRank(team['IP_rank'])}</div>
         <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['IP_rate'])}</span>
       </p>
       <p>
-        Innings - :<div className="fieldRank">{getRank(team['IP_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['IP_rate'])}</span>
+        Wins - :<div className="fieldRank">{getRank(team['wins_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['wins_rate'])}</span>
       </p>
       <p>
-        Innings - :<div className="fieldRank">{getRank(team['IP_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['IP_rate'])}</span>
+        Losses - :<div className="fieldRank">{getRank(team['losses_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['losses_rate'])}</span>
       </p>
       <div className="fullWidthChart">
         <h2 className="playerChart">Pitching</h2>

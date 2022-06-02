@@ -51,23 +51,23 @@ const HitterCard = ({ hitter }) => {
   // Plotting chart data - AVG, RBI, R, OPS, wRC+
   var hittersGraphData = [
     {
-      category: 'Runs',
-      score: getGraphField(hitter.R_rate),
-      fullMark: 100,
-    },
-    {
       category: 'Average',
       score: getGraphField(hitter.AVG_rate),
       fullMark: 100,
     },
     {
-      category: 'OPS',
-      score: getGraphField(hitter.OPS_rate),
+      category: 'Runs',
+      score: getGraphField(hitter.R_rate),
       fullMark: 100,
     },
     {
       category: 'RBIs',
       score: getGraphField(hitter.RBI_rate),
+      fullMark: 100,
+    },
+    {
+      category: 'OPS',
+      score: getGraphField(hitter.OPS_rate),
       fullMark: 100,
     },
     {
@@ -152,7 +152,7 @@ const HitterCard = ({ hitter }) => {
         <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(hitter['KRate_rate'])}</span>
       </p>
       <p>
-        BB / SO:<div className="fieldRank">{getRank(hitter['BBPerK_rank'])}</div>
+        BB/SO:<div className="fieldRank">{getRank(hitter['BBPerK_rank'])}</div>
         <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(hitter['BBPerK_rate'])}</span>
       </p>
       <p>

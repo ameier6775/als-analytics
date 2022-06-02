@@ -46,7 +46,7 @@ Nav {
   background-color: #333333;
 }
 
-select {
+/* select {
   width: 250px;
   display: flex;
   margin: 0 auto;
@@ -55,7 +55,7 @@ select {
   text-transform: uppercase;
   font-weight: 900;
   background-color: white;
-}
+} */
 
 table {
   background-color: rgb(250, 250, 250);

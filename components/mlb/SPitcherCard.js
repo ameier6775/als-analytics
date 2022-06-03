@@ -92,26 +92,59 @@ const SPitcherCard = ({ pitcher }) => {
         <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(pitcher['L_rate'])}</span>
       </p>
       <p>
+        GS:<div className="fieldRank">{getRank(pitcher['GS_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(pitcher['GS_rate'])}</span>
+      </p>
+      <p>
+        TB:<div className="fieldRank">{getRank(pitcher['TBF_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(pitcher['TBF_rate'])}</span>
+      </p>
+      <p>
+        Shutouts:<div className="fieldRank">{getRank(pitcher['ShO_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(pitcher['ShO_rate'])}</span>
+      </p>
+      <p>
+        WHIP:<div className="fieldRank">{getRank(pitcher['WHIP_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(pitcher['WHIP_rate'])}</span>
+      </p>
+      <p>
+        K%:<div className="fieldRank">{getRank(pitcher['KRate_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(pitcher['KRate_rate'])}</span>
+      </p>
+
+      <p>
         ERA:<div className="fieldRank">{getRank(pitcher['ERA_rank'])}</div>
         <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(pitcher['ERA_rate'])}</span>
       </p>
       <p>
-        G:<div className="fieldRank">{getRank(pitcher['GS_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(pitcher['GS_rate'])}</span>
+        ERA adj:<div className="fieldRank">{getRank(pitcher['ERAadj_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(pitcher['ERAadj_rate'])}</span>
       </p>
       <p>
-        ShO:<div className="fieldRank">{getRank(pitcher['ShO_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(pitcher['ShO_rate'])}</span>
+        SIERA:<div className="fieldRank">{getRank(pitcher['SIERA_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(pitcher['SIERA_rate'])}</span>
       </p>
       <p>
         IP:<div className="fieldRank">{getRank(pitcher['IP_rank'])}</div>
         <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(pitcher['IP_rate'])}</span>
       </p>
       <p>
-        TBF:<div className="fieldRank">{getRank(pitcher['TBF_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(pitcher['TBF_rate'])}</span>
+        FIP:<div className="fieldRank">{getRank(pitcher['FIP_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(pitcher['FIP_rate'])}</span>
       </p>
       <p>
+        FIP adj:<div className="fieldRank">{getRank(pitcher['FIPadj_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(pitcher['FIPadj_rate'])}</span>
+      </p>
+      <p>
+        xFIP:<div className="fieldRank">{getRank(pitcher['xFIP_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(pitcher['xFIP_rate'])}</span>
+      </p>
+      <p>
+        xFIP adj:<div className="fieldRank">{getRank(pitcher['xFIPadj_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(pitcher['xFIPadj_rate'])}</span>
+      </p>
+      {/* <p>
         H:<div className="fieldRank">{getRank(pitcher['H_rank'])}</div>
         <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(pitcher['H_rate'])}</span>
       </p>
@@ -144,10 +177,6 @@ const SPitcherCard = ({ pitcher }) => {
         <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(pitcher['KPerBB_rate'])}</span>
       </p>
       <p>
-        K%:<div className="fieldRank">{getRank(pitcher['KRate_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(pitcher['KRate_rate'])}</span>
-      </p>
-      <p>
         BB%:<div className="fieldRank">{getRank(pitcher['BBRate_rank'])}</div>
         <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(pitcher['BBRate_rate'])}</span>
       </p>
@@ -160,10 +189,6 @@ const SPitcherCard = ({ pitcher }) => {
         <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(pitcher['AVG_rate'])}</span>
       </p>
       <p>
-        WHIP:<div className="fieldRank">{getRank(pitcher['WHIP_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(pitcher['WHIP_rate'])}</span>
-      </p>
-      <p>
         BABIP:<div className="fieldRank">{getRank(pitcher['BABIP_rank'])}</div>
         <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(pitcher['BABIP_rate'])}</span>
       </p>
@@ -172,33 +197,9 @@ const SPitcherCard = ({ pitcher }) => {
         <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(pitcher['LOBRate_rate'])}</span>
       </p>
       <p>
-        ERA adj:<div className="fieldRank">{getRank(pitcher['ERAadj_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(pitcher['ERAadj_rate'])}</span>
-      </p>
-      <p>
-        FIP adj:<div className="fieldRank">{getRank(pitcher['FIPadj_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(pitcher['FIPadj_rate'])}</span>
-      </p>
-      <p>
-        xFIP adj:<div className="fieldRank">{getRank(pitcher['xFIPadj_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(pitcher['xFIPadj_rate'])}</span>
-      </p>
-      <p>
-        FIP:<div className="fieldRank">{getRank(pitcher['FIP_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(pitcher['FIP_rate'])}</span>
-      </p>
-      <p>
         EF:<div className="fieldRank">{getRank(pitcher['EF_rank'])}</div>
         <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(pitcher['EF_rate'])}</span>
-      </p>
-      <p>
-        xFIP:<div className="fieldRank">{getRank(pitcher['xFIP_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(pitcher['xFIP_rate'])}</span>
-      </p>
-      <p>
-        SIERA:<div className="fieldRank">{getRank(pitcher['SIERA_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(pitcher['SIERA_rate'])}</span>
-      </p>
+      </p> */}
       <div className="fullWidthChart">
         <h2 className="playerChart">Starter</h2>
         <LineChart

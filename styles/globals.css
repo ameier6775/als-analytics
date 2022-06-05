@@ -85,6 +85,10 @@ tr {
   box-sizing: border-box;
 }
 
+.categorySelect {
+  margin-bottom: 10px;
+}
+
 .comapreContainer {
   width: 50%;
   float: left;

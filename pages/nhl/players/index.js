@@ -1,15 +1,15 @@
 /* eslint-disable react/jsx-key */
 import React, { useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
-import useSWR from 'swr';
 import PlayerCard from '../../../components/nhl/PlayerCard';
-import Select from 'react-select';
 import axios from 'axios';
-import { data } from 'autoprefixer';
+import ComparePlayersCard from '../../../components/nhl/ComparePlayers';
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
 
 export default function Players() {
   const [players, setPlayers] = useState(null);
   const [selectedPlayer, setSelectedPlayer] = useState(null);
+  const [comparisonPlayers, setComparisonPlayers] = useState(null);
   const [isLoading, setLoading] = useState(false);
   useEffect(() => {
     setLoading(true);
@@ -20,10 +20,14 @@ export default function Players() {
         setLoading(false);
       });
   }, []);
+  const animatedComponents = makeAnimated();
   var handleInputChange = (inputValue) => {
     console.log(inputValue);
     setSelectedPlayer(inputValue);
     // fetchPlayer(inputValue.value);
+  };
+  const handleSelectChange = (inputValue) => {
+    setComparisonPlayers(inputValue);
   };
   // const fetchPlayer = (player) => {
   //   fetch('../../api/nhl/players', {
@@ -44,9 +48,30 @@ export default function Players() {
   if (!players) return <p>No NHL players data</p>;
   return (
     <div>
-      <h1>NHL Players</h1>
-      <Select options={players} onChange={handleInputChange} />
-      {selectedPlayer ? <PlayerCard player={selectedPlayer}></PlayerCard> : <p></p>}
+      <div>
+        <h1>NHL Players</h1>
+        <span className="selectSubHeader">Choose Player:</span>
+        <Select options={players} onChange={handleInputChange} />
+        {selectedPlayer ? <PlayerCard player={selectedPlayer}></PlayerCard> : <p></p>}
+      </div>
+      <div>
+        <span className="selectSubHeader">Compare Players:</span>
+        <Select
+          closeMenuOnSelect={false}
+          components={animatedComponents}
+          onChange={handleSelectChange}
+          isMulti
+          name="colors"
+          options={players}
+          className="basic-multi-select"
+          classNamePrefix="select"
+        />
+        {comparisonPlayers && comparisonPlayers.length >= 2 ? (
+          <ComparePlayersCard comparisonPlayers={comparisonPlayers}></ComparePlayersCard>
+        ) : (
+          <p></p>
+        )}
+      </div>
     </div>
   );
 }

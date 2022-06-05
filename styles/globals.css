@@ -85,6 +85,30 @@ tr {
   box-sizing: border-box;
 }
 
+.comapreContainer {
+  width: 50%;
+  float: left;
+}
+
+.comapreContainer p {
+  color: rgb(255, 174, 0);
+  width: 50%;
+  float: left;
+  text-align: center;
+  padding: 5px;
+  border: solid rgb(255, 174, 0);
+  font-size: x-large;
+}
+.comapreContainer span {
+  color: 333333;
+  width: 50%;
+  float: right;
+  text-align: center;
+  padding: 5px;
+  border: solid #333333;
+  font-size: x-large;
+}
+
 .fieldRank {
   float: right;
 }
@@ -187,6 +211,15 @@ tr {
 
 .sameCategory {
   margin-bottom: 3rem;
+}
+
+.selectSubHeader {
+  width: auto;
+  color: rgb(255, 174, 0);
+  float: left;
+  text-align: center;
+  margin-right: 10px;
+  margin-left: 10px;
 }
 
 .sideBySide {

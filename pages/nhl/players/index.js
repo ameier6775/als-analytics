@@ -48,13 +48,13 @@ export default function Players() {
   if (!players) return <p>No NHL players data</p>;
   return (
     <div>
-      <div>
+      <div className="categorySelect">
         <h1>NHL Players</h1>
         <span className="selectSubHeader">Choose Player:</span>
         <Select options={players} onChange={handleInputChange} />
         {selectedPlayer ? <PlayerCard player={selectedPlayer}></PlayerCard> : <p></p>}
       </div>
-      <div>
+      <div className="categorySelect">
         <span className="selectSubHeader">Compare Players:</span>
         <Select
           closeMenuOnSelect={false}

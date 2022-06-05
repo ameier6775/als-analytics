@@ -11,7 +11,6 @@ export default function Players() {
   const [players, setPlayers] = useState(null);
   const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [isLoading, setLoading] = useState(false);
-
   useEffect(() => {
     setLoading(true);
     fetch('../../api/nhl/players')
@@ -21,13 +20,11 @@ export default function Players() {
         setLoading(false);
       });
   }, []);
-
   var handleInputChange = (inputValue) => {
     console.log(inputValue);
     setSelectedPlayer(inputValue);
     // fetchPlayer(inputValue.value);
   };
-
   // const fetchPlayer = (player) => {
   //   fetch('../../api/nhl/players', {
   //     method: 'POST',
@@ -43,15 +40,11 @@ export default function Players() {
   //       console.log(data);
   //     });
   // };
-
-  console.log(players);
-
   if (isLoading) return <p>Loading...</p>;
-  if (!players) return <p>No players data</p>;
-
+  if (!players) return <p>No NHL players data</p>;
   return (
     <div>
-      <h1>Players Page</h1>
+      <h1>NHL Players</h1>
       <Select options={players} onChange={handleInputChange} />
       {selectedPlayer ? <PlayerCard player={selectedPlayer}></PlayerCard> : <p></p>}
     </div>

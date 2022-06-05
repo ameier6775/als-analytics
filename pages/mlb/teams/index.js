@@ -10,7 +10,6 @@ export default function Teams() {
   const [teams, setTeams] = useState(null);
   const [selectedTeam, setSelectedTeam] = useState(null);
   const [isLoading, setLoading] = useState(false);
-
   useEffect(() => {
     setLoading(true);
     fetch('../../api/mlb/teams')
@@ -20,16 +19,11 @@ export default function Teams() {
         setLoading(false);
       });
   }, []);
-
   var handleInputChange = (inputValue) => {
     setSelectedTeam(inputValue);
   };
-
-  console.log(teams);
-
   if (isLoading) return <p>Loading...</p>;
-  if (!teams) return <p>No teams data</p>;
-
+  if (!teams) return <p>No MLB teams data</p>;
   return (
     <div>
       <h1>MLB Teams</h1>

@@ -16,7 +16,6 @@ export default function Players() {
   const [relievers, setRelievers] = useState(null);
   const [selectedReliever, setSelectedReliever] = useState(null);
   const [isLoading, setLoading] = useState(false);
-
   useEffect(() => {
     setLoading(true);
     fetch('../../api/mlb/players')
@@ -29,7 +28,6 @@ export default function Players() {
         console.log(data);
       });
   }, []);
-
   var handleHitterInputChange = (inputValue) => {
     setSelectedHitter(inputValue);
   };
@@ -39,13 +37,11 @@ export default function Players() {
   var handleRelieverInputChange = (inputValue) => {
     setSelectedReliever(inputValue);
   };
-
   if (isLoading) return <p>Loading...</p>;
-  if (!hitters) return <p>No players data</p>;
-
+  if (!hitters) return <p>No MLB players data</p>;
   return (
     <div>
-      {/* <Select options={hitters} onChange={handleInputChange} /> */}
+      <h1>MLB Players</h1>
       <Select options={hitters} onChange={handleHitterInputChange} />
       {selectedHitter ? <HitterCard hitter={selectedHitter}></HitterCard> : <p></p>}
       <Select options={starters} onChange={handleStarterInputChange} />

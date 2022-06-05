@@ -3,13 +3,15 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
 import TeamCard from '../../../components/nhl/TeamCard';
+import CompareTeamsCard from '../../../components/nhl/CompareTeams';
 import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
 
 export default function Teams() {
   const [teams, setTeams] = useState(null);
   const [selectedTeam, setSelectedTeam] = useState(null);
+  const [comparisonTeams, setComparisonTeams] = useState(null);
   const [isLoading, setLoading] = useState(false);
-
   useEffect(() => {
     setLoading(true);
     fetch('../../api/nhl/teams')
@@ -19,36 +21,41 @@ export default function Teams() {
         setLoading(false);
       });
   }, []);
-
-  var handleInputChange = (inputValue) => {
+  const animatedComponents = makeAnimated();
+  const handleInputChange = (inputValue) => {
     setSelectedTeam(inputValue);
-    // fetchTeam(inputValue.value);
   };
-
-  // const fetchTeam = (team) => {
-  //   fetch('../../api/nhl/teams', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({
-  //       team: team,
-  //     }),
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       console.log(data);
-  //     });
-  // };
-
+  const handleSelectChange = (inputValue) => {
+    setComparisonTeams(inputValue);
+  };
   if (isLoading) return <p>Loading...</p>;
-  if (!teams) return <p>No teams data</p>;
-
+  if (!teams) return <p>No NHL teams data</p>;
   return (
     <div>
-      <h1>Teams Page</h1>
-      <Select options={teams} onChange={handleInputChange} />
-      {selectedTeam ? <TeamCard team={selectedTeam}></TeamCard> : <p></p>}
+      <div>
+        <h1>NHL Teams</h1>
+        <span className="selectSubHeader">Choose Team:</span>
+        <Select options={teams} onChange={handleInputChange} />
+        {selectedTeam ? <TeamCard team={selectedTeam}></TeamCard> : <p></p>}
+      </div>
+      <div>
+        <span className="selectSubHeader">Compare Teams:</span>
+        <Select
+          closeMenuOnSelect={false}
+          components={animatedComponents}
+          onChange={handleSelectChange}
+          isMulti
+          name="colors"
+          options={teams}
+          className="basic-multi-select"
+          classNamePrefix="select"
+        />
+        {comparisonTeams && comparisonTeams.length >= 2 ? (
+          <CompareTeamsCard comparisonTeams={comparisonTeams}></CompareTeamsCard>
+        ) : (
+          <p></p>
+        )}
+      </div>
     </div>
   );
 }

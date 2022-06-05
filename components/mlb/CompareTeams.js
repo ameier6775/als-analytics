@@ -83,7 +83,7 @@ const CompareTeamsCard = ({ comparisonTeams }) => {
     <div>
       {comparisonTeams ? (
         comparisonTeams.map((team) => (
-          <div className="comapreContainer" key={team.value}>
+          <div className="compareContainer" key={team.value}>
             <h1>{team.value}</h1>
             <img className="teamLogo" height="10" src={teamLogos.find((obj) => obj.team === team.value).logo} />
             <p>Hits For:</p>

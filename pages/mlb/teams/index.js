@@ -25,7 +25,6 @@ export default function Teams() {
     setSelectedTeam(inputValue);
   };
   const handleSelectChange = (inputValue) => {
-    console.log(inputValue);
     setComparisonTeams(inputValue);
   };
   if (isLoading) return <p>Loading...</p>;

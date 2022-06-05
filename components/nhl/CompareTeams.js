@@ -38,7 +38,6 @@ const CompareTeamsCard = ({ comparisonTeams }) => {
     }
     return rankStr;
   }
-
   // Background color for fields (currently not being used)
   function getColor(team, field) {
     let resultArr = comparisonTeams.slice();
@@ -48,23 +47,33 @@ const CompareTeamsCard = ({ comparisonTeams }) => {
     let comparedTeam = comparisonArray.find((obj) => obj.value === team);
     let rank = comparisonArray.indexOf(comparedTeam) + 1;
     let color = 'rgba(';
-    color +=
-      rank === comparisonArray.length
-        ? '255, 51, 51)'
-        : rank != 1
-        ? '255, 205, 0)'
-        : rank === 1
-        ? '51, 255, 74)'
-        : '0, 0, 0)';
+    if (comparisonArray.length >= 6) {
+      let comparisonFactor = Math.floor(comparisonArray.length / 3);
+      color +=
+        rank > comparisonFactor * 2
+          ? '255, 51, 51)'
+          : rank > comparisonFactor && rank <= comparisonFactor * 2
+          ? '255, 205, 0)'
+          : rank <= comparisonFactor
+          ? '51, 255, 74)'
+          : '0, 0, 0)';
+    } else {
+      color +=
+        rank === comparisonArray.length
+          ? '255, 51, 51)'
+          : rank != 1
+          ? '255, 205, 0)'
+          : rank === 1
+          ? '51, 255, 74)'
+          : '0, 0, 0)';
+    }
     return color;
   }
-
   // Validation for fields
   function getGraphField(field) {
     let result = field === 0 || field < 0.1 ? 1 : (100 * field).toFixed();
     return result;
   }
-
   // Conversion to percentage
   function getRatePercentage(field) {
     let result = (field * 100).toFixed().toString() + '%';

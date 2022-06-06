@@ -5,6 +5,7 @@ import axios from 'axios';
 import ComparePlayersCard from '../../../components/nhl/ComparePlayers';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
+import nhlLogo from '../../../data/nhl/logo';
 
 export default function Players() {
   const [players, setPlayers] = useState(null);
@@ -48,14 +49,15 @@ export default function Players() {
   if (!players) return <p>No NHL players data</p>;
   return (
     <div>
+      <img className="teamLogo" height="100" src={nhlLogo.logo} />
+      <h1>Players</h1>
       <div className="categorySelect">
-        <h1>NHL Players</h1>
-        <span className="selectSubHeader">Choose Player:</span>
+        <span className="selectSubHeader">Card:</span>
         <Select options={players} onChange={handleInputChange} />
         {selectedPlayer ? <PlayerCard player={selectedPlayer}></PlayerCard> : <p></p>}
       </div>
       <div className="categorySelect">
-        <span className="selectSubHeader">Compare Players:</span>
+        <span className="selectSubHeader">Compare:</span>
         <Select
           closeMenuOnSelect={false}
           components={animatedComponents}

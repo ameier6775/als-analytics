@@ -83,7 +83,7 @@ const CompareHittersCard = ({ comparisonHitters }) => {
       {comparisonHitters ? (
         comparisonHitters.map((hitter) => (
           <div className="compareContainer" key={hitter.value}>
-            <h1>{hitter.value}</h1>
+            <h2>{hitter.value}</h2>
             <img className="teamLogo" height="10" src={teamLogos.find((obj) => obj.team === hitter.Team).logo} />
             <p>Hits:</p>
             <span style={{ backgroundColor: getColor(hitter.value, 'AVG_rate') }}>

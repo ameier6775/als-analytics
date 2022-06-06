@@ -16,8 +16,12 @@ body {
 h1 {
   text-align: center;
   font-weight: 500;
-  font-size: 4rem;
+  font-size: 4.5rem;
   color: rgb(255, 174, 0);
+  /* font-family: 'Bradley Hand'; */
+  /* font-family: 'Trattatello'; */
+  /* font-family: 'Trattatello'; */
+  font-family: 'Trebuchet MS';
 }
 
 h2 {
@@ -85,6 +89,10 @@ tr {
   float: left;
   margin-bottom: 10px;
 }
+.compareContainer h2 {
+  font-size: xx-large;
+  font-family: 'Rockwell Extra Bold';
+}
 .compareContainer p {
   color: rgb(255, 174, 0);
   width: 50%;
@@ -93,6 +101,7 @@ tr {
   padding: 5px;
   border: solid rgb(255, 174, 0);
   font-size: x-large;
+  font-family: 'Courier New';
 }
 .compareContainer span {
   color: 333333;
@@ -102,6 +111,7 @@ tr {
   padding: 5px;
   border: solid #333333;
   font-size: x-large;
+  font-family: 'Copperplate';
 }
 
 .fieldRank {
@@ -117,7 +127,7 @@ tr {
   padding: 20px;
   align-items: center;
   border: 2px solid rgb(255, 174, 0);
-  font-family: Trebuchet MS, sans-serif;
+  /* font-family: Trebuchet MS, sans-serif; */
 }
 
 .homeHeader {
@@ -192,20 +202,28 @@ tr {
   padding: 5px;
   margin-bottom: 5px;
   border: 1px solid rgb(255, 174, 0);
-  font-family: Chalkduster, fantasy;
+  font-family: 'Courier New';
+  font-size: medium;
+  font-weight: 600;
 }
 
 .playerCard span {
   display: flex;
   justify-content: center;
   color: whitesmoke;
-  font-family: Marker Felt, fantasy;
-  font-weight: 300;
+  font-family: 'Copperplate';
+  font-weight: 500;
   font-size: large;
 }
 
 .sameCategory {
   margin-bottom: 3rem;
+}
+
+.selectCategoryHeader {
+  font-size: xx-large;
+  font-family: 'Cooperplate';
+  font-weight: 500;
 }
 
 .selectSubHeader {
@@ -215,6 +233,9 @@ tr {
   text-align: center;
   margin-right: 10px;
   margin-left: 10px;
+  font-family: 'Courier New';
+  font-size: large;
+  padding: auto;
 }
 
 .sideBySide {

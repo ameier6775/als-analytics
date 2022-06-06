@@ -9,6 +9,7 @@ import SPitcherCard from '../../../components/mlb/SPitcherCard';
 import CompareStartersCard from '../../../components/mlb/CompareSPitchers';
 import RPitcherCard from '../../../components/mlb/RPitcherCard';
 import CompareRelieversCard from '../../../components/mlb/CompareRPitchers';
+import mlbLogo from '../../../data/mlb/logo';
 
 export default function Players() {
   const [hitters, setHitters] = useState(null);
@@ -59,14 +60,16 @@ export default function Players() {
   if (!hitters) return <p>No MLB players data</p>;
   return (
     <div>
-      <h1>MLB Players</h1>
+      <img className="teamLogo" height="10" src={mlbLogo.logo} />
+      {/* <h1 className="selectCategoryHeader">Batters</h1> */}
+      <h1>Batters</h1>
       <div className="categorySelect">
-        <span className="selectSubHeader">Choose Hitter:</span>
+        <span className="selectSubHeader">Card:</span>
         <Select options={hitters} onChange={handleHitterInputChange} />
         {selectedHitter ? <HitterCard hitter={selectedHitter}></HitterCard> : <p></p>}
       </div>
       <div className="categorySelect">
-        <span className="selectSubHeader">Compare Hitters:</span>
+        <span className="selectSubHeader">Compare:</span>
         <Select
           closeMenuOnSelect={false}
           components={animatedComponents}
@@ -84,13 +87,14 @@ export default function Players() {
           <p></p>
         )}
       </div>
+      <h1>Starters</h1>
       <div className="categorySelect">
-        <span className="selectSubHeader">Choose Starter:</span>
+        <span className="selectSubHeader">Card:</span>
         <Select options={starters} onChange={handleStarterInputChange} />
         {selectedStarter ? <SPitcherCard pitcher={selectedStarter}></SPitcherCard> : <p></p>}
       </div>
       <div className="categorySelect">
-        <span className="selectSubHeader">Compare Starters:</span>
+        <span className="selectSubHeader">Compare:</span>
         <Select
           closeMenuOnSelect={false}
           components={animatedComponents}
@@ -107,13 +111,14 @@ export default function Players() {
           <p></p>
         )}
       </div>
+      <h1>Relievers</h1>
       <div className="categorySelect">
-        <span className="selectSubHeader">Choose Reliever:</span>
+        <span className="selectSubHeader">Card:</span>
         <Select options={relievers} onChange={handleRelieverInputChange} />
         {selectedReliever ? <RPitcherCard pitcher={selectedReliever}></RPitcherCard> : <p></p>}
       </div>
       <div className="categorySelect">
-        <span className="selectSubHeader">Compare Relievers:</span>
+        <span className="selectSubHeader">Compare:</span>
         <Select
           closeMenuOnSelect={false}
           components={animatedComponents}

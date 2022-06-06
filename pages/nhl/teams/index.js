@@ -4,6 +4,7 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import TeamCard from '../../../components/nhl/TeamCard';
 import CompareTeamsCard from '../../../components/nhl/CompareTeams';
+import nhlLogo from '../../../data/nhl/logo';
 
 export default function Teams() {
   const [teams, setTeams] = useState(null);
@@ -30,14 +31,15 @@ export default function Teams() {
   if (!teams) return <p>No NHL teams data</p>;
   return (
     <div>
-      <h1>NHL Teams</h1>
+      <img className="teamLogo" height="100" src={nhlLogo.logo} />
+      <h1>Teams</h1>
       <div className="categorySelect">
-        <span className="selectSubHeader">Choose Team:</span>
+        <span className="selectSubHeader">Card:</span>
         <Select options={teams} onChange={handleInputChange} />
         {selectedTeam ? <TeamCard team={selectedTeam}></TeamCard> : <p></p>}
       </div>
       <div className="categorySelect">
-        <span className="selectSubHeader">Compare Teams:</span>
+        <span className="selectSubHeader">Compare:</span>
         <Select
           closeMenuOnSelect={false}
           components={animatedComponents}

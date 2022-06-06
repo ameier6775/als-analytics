@@ -5,6 +5,7 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import TeamCard from '../../../components/mlb/TeamCard';
 import CompareTeamsCard from '../../../components/mlb/CompareTeams';
+import mlbLogo from '../../../data/mlb/logo';
 
 export default function Teams() {
   const [teams, setTeams] = useState(null);
@@ -31,14 +32,15 @@ export default function Teams() {
   if (!teams) return <p>No MLB teams data</p>;
   return (
     <div>
-      <h1>MLB Teams</h1>
+      <img className="teamLogo" height="10" src={mlbLogo.logo} />
+      <h1>Teams</h1>
       <div className="categorySelect">
-        <span className="selectSubHeader">Choose Team:</span>
+        <span className="selectSubHeader">Card:</span>
         <Select options={teams} onChange={handleInputChange} />
         {selectedTeam ? <TeamCard team={selectedTeam}></TeamCard> : <p></p>}
       </div>
       <div className="categorySelect">
-        <span className="selectSubHeader">Compare Teams:</span>
+        <span className="selectSubHeader">Compare:</span>
         <Select
           closeMenuOnSelect={false}
           components={animatedComponents}

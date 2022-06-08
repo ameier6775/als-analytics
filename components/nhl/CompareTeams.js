@@ -103,6 +103,30 @@ const CompareTeamsCard = ({ comparisonTeams }) => {
             <span style={{ backgroundColor: getColor(team.value, 'xGoalsAgainstRate') }}>
               {getRatePercentage(team.xGoalsAgainstRate) + ' (' + getRank(team.xGoalsAgainstRank) + ')'}
             </span>
+            <p>Shot Attempts For:</p>
+            <span style={{ backgroundColor: getColor(team.value, 'shotAttemptsForRate') }}>
+              {getRatePercentage(team.shotAttemptsForRate) + ' (' + getRank(team.shotAttemptsForRank) + ')'}
+            </span>
+            <p>Shot Attempts Against:</p>
+            <span style={{ backgroundColor: getColor(team.value, 'shotAttemptsAgainstRate') }}>
+              {getRatePercentage(team.shotAttemptsAgainstRate) + ' (' + getRank(team.shotAttemptsAgainstRank) + ')'}
+            </span>
+            <p>Takeaways:</p>
+            <span style={{ backgroundColor: getColor(team.value, 'takeawaysForRate') }}>
+              {getRatePercentage(team.takeawaysForRate) + ' (' + getRank(team.takeawaysForRank) + ')'}
+            </span>
+            <p>Giveaways:</p>
+            <span style={{ backgroundColor: getColor(team.value, 'giveawaysForRate') }}>
+              {getRatePercentage(team.giveawaysForRate) + ' (' + getRank(team.giveawaysForRank) + ')'}
+            </span>
+            <p>Faceoffs:</p>
+            <span style={{ backgroundColor: getColor(team.value, 'faceoffPercentage') }}>
+              {getRatePercentage(team.faceoffPercentage) + ' (' + getRank(team.faceoffsRank) + ')'}
+            </span>
+            <p>Penalty Differential:</p>
+            <span style={{ backgroundColor: getColor(team.value, 'penaltyDifferential') }}>
+              {team.penaltyDifferential + ' (' + getRank(team.penaltyRank) + ')'}
+            </span>
           </div>
         ))
       ) : (

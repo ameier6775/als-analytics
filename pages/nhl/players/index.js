@@ -8,28 +8,24 @@ import makeAnimated from 'react-select/animated';
 import nhlLogo from '../../../data/nhl/logo';
 
 export default function Players() {
-  const [players, setPlayers] = useState(null);
-  const [selectedPlayer, setSelectedPlayer] = useState(null);
-  const [comparisonPlayers, setComparisonPlayers] = useState(null);
+  const [forwards, setForwards] = useState(null);
+  const [defensemen, setDefensemen] = useState(null);
+  const [selectedForward, setSelectedForward] = useState(null);
+  const [selectedDefenseman, setSelectedDefenseman] = useState(null);
+  const [comparisonForwards, setComparisonForwards] = useState(null);
+  const [comparisonDefensemen, setComparisonDefensemen] = useState(null);
   const [isLoading, setLoading] = useState(false);
   useEffect(() => {
     setLoading(true);
     fetch('../../api/nhl/players')
       .then((res) => res.json())
       .then((data) => {
-        setPlayers(data);
+        console.log(data);
+        setForwards(data[0]);
+        setDefensemen(data[1]);
         setLoading(false);
       });
   }, []);
-  const animatedComponents = makeAnimated();
-  var handleInputChange = (inputValue) => {
-    console.log(inputValue);
-    setSelectedPlayer(inputValue);
-    // fetchPlayer(inputValue.value);
-  };
-  const handleSelectChange = (inputValue) => {
-    setComparisonPlayers(inputValue);
-  };
   // const fetchPlayer = (player) => {
   //   fetch('../../api/nhl/players', {
   //     method: 'POST',
@@ -45,31 +41,69 @@ export default function Players() {
   //       console.log(data);
   //     });
   // };
+  const animatedComponents = makeAnimated();
+  var handleForwardChange = (inputValue) => {
+    setSelectedForward(inputValue);
+    // fetchPlayer(inputValue.value);
+  };
+  var handleDefensemanChange = (inputValue) => {
+    setSelectedDefenseman(inputValue);
+  };
+  const handleForwardSelectChange = (inputValue) => {
+    setComparisonForwards(inputValue);
+  };
+  const handleDefensemanSelectChange = (inputValue) => {
+    setComparisonDefensemen(inputValue);
+  };
   if (isLoading) return <p>Loading...</p>;
-  if (!players) return <p>No NHL players data</p>;
+  if (!forwards || !defensemen) return <p>No NHL players data</p>;
   return (
     <div>
       <img className="teamLogo" height="100" src={nhlLogo.logo} />
-      <h1>Players</h1>
+      <h1>Forwards</h1>
       <div className="categorySelect">
         <span className="selectSubHeader">Card:</span>
-        <Select options={players} onChange={handleInputChange} />
-        {selectedPlayer ? <PlayerCard player={selectedPlayer}></PlayerCard> : <p></p>}
+        <Select options={forwards} onChange={handleForwardChange} />
+        {selectedForward ? <PlayerCard player={selectedForward}></PlayerCard> : <p></p>}
       </div>
       <div className="categorySelect">
         <span className="selectSubHeader">Compare:</span>
         <Select
           closeMenuOnSelect={false}
           components={animatedComponents}
-          onChange={handleSelectChange}
+          onChange={handleForwardSelectChange}
           isMulti
           name="colors"
-          options={players}
+          options={forwards}
           className="basic-multi-select"
           classNamePrefix="select"
         />
-        {comparisonPlayers && comparisonPlayers.length >= 2 ? (
-          <ComparePlayersCard comparisonPlayers={comparisonPlayers}></ComparePlayersCard>
+        {comparisonForwards && comparisonForwards.length >= 2 ? (
+          <ComparePlayersCard comparisonPlayers={comparisonForwards}></ComparePlayersCard>
+        ) : (
+          <p></p>
+        )}
+      </div>
+      <h1>Defensemen</h1>
+      <div className="categorySelect">
+        <span className="selectSubHeader">Card:</span>
+        <Select options={defensemen} onChange={handleDefensemanChange} />
+        {selectedDefenseman ? <PlayerCard player={selectedDefenseman}></PlayerCard> : <p></p>}
+      </div>
+      <div className="categorySelect">
+        <span className="selectSubHeader">Compare:</span>
+        <Select
+          closeMenuOnSelect={false}
+          components={animatedComponents}
+          onChange={handleDefensemanSelectChange}
+          isMulti
+          name="colors"
+          options={defensemen}
+          className="basic-multi-select"
+          classNamePrefix="select"
+        />
+        {comparisonDefensemen && comparisonDefensemen.length >= 2 ? (
+          <ComparePlayersCard comparisonPlayers={comparisonDefensemen}></ComparePlayersCard>
         ) : (
           <p></p>
         )}

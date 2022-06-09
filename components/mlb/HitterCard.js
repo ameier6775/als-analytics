@@ -136,16 +136,16 @@ const HitterCard = ({ hitter }) => {
         <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(hitter['SF_rate'])}</span>
       </p>
       <p>
-        BB/SO:<div className="fieldRank">{getRank(hitter['BBPerK_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(hitter['BBPerK_rate'])}</span>
+        BB/SO:<div className="fieldRank">{getRank(hitter['BB/K_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(hitter['BB/K_rate'])}</span>
       </p>
       <p>
         wRC+:<div className="fieldRank">{getRank(hitter['wRC+_rank'])}</div>
         <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(hitter['wRC+_rate'])}</span>
       </p>
       <p>
-        BB%:<div className="fieldRank">{getRank(hitter['BBRate_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(hitter['BBRate_rate'])}</span>
+        BB%:<div className="fieldRank">{getRank(hitter['BB%_rank'])}</div>
+        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(hitter['BB%_rate'])}</span>
       </p>
       <p>
         SB:<div className="fieldRank">{getRank(hitter['SB_rank'])}</div>

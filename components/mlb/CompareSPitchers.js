@@ -110,8 +110,8 @@ const CompareStartersCard = ({ comparisonStarters }) => {
               {getRatePercentage(starter.ERA_rate) + ' (' + getRank(starter.ERA_rank) + ')'}
             </span>
             <p>ERA ADJ:</p>
-            <span style={{ backgroundColor: getColor(starter.value, 'ERAadj_rate') }}>
-              {getRatePercentage(starter.ERAadj_rate) + ' (' + getRank(starter.ERAadj_rank) + ')'}
+            <span style={{ backgroundColor: getColor(starter.value, 'ERA-_rate') }}>
+              {getRatePercentage(starter['ERA-_rate']) + ' (' + getRank(starter['ERA-_rank']) + ')'}
             </span>
             <p>SIERA:</p>
             <span style={{ backgroundColor: getColor(starter.value, 'SIERA_rate') }}>
@@ -126,28 +126,28 @@ const CompareStartersCard = ({ comparisonStarters }) => {
               {getRatePercentage(starter.FIP_rate) + ' (' + getRank(starter.FIP_rank) + ')'}
             </span>
             <p>FIP ADJ:</p>
-            <span style={{ backgroundColor: getColor(starter.value, 'FIPadj_rate') }}>
-              {getRatePercentage(starter.FIPadj_rate) + ' (' + getRank(starter.FIPadj_rank) + ')'}
+            <span style={{ backgroundColor: getColor(starter.value, 'FIP-_rate') }}>
+              {getRatePercentage(starter['FIP-_rate']) + ' (' + getRank(starter['FIP-_rank']) + ')'}
             </span>
             <p>ERA - FIP:</p>
-            <span style={{ backgroundColor: getColor(starter.value, 'EF_rate') }}>
-              {getRatePercentage(starter.EF_rate) + ' (' + getRank(starter.EF_rank) + ')'}
+            <span style={{ backgroundColor: getColor(starter.value, 'E-F_rate') }}>
+              {getRatePercentage(starter['E-F_rate']) + ' (' + getRank(starter['E-F_rank']) + ')'}
             </span>
             <p>K / 9:</p>
-            <span style={{ backgroundColor: getColor(starter.value, 'KPer9_rate') }}>
-              {getRatePercentage(starter.KPer9_rate) + ' (' + getRank(starter.KPer9_rank) + ')'}
+            <span style={{ backgroundColor: getColor(starter.value, 'K/9_rate') }}>
+              {getRatePercentage(starter['K/9_rate']) + ' (' + getRank(starter['K/9_rank']) + ')'}
             </span>
             <p>BB / 9:</p>
-            <span style={{ backgroundColor: getColor(starter.value, 'BBRate_rate') }}>
-              {getRatePercentage(starter.BBRate_rate) + ' (' + getRank(starter.BBRate_rank) + ')'}
+            <span style={{ backgroundColor: getColor(starter.value, 'BB/9_rate') }}>
+              {getRatePercentage(starter['BB/9_rate']) + ' (' + getRank(starter['BB/9_rank']) + ')'}
             </span>
             <p>HR / 9:</p>
-            <span style={{ backgroundColor: getColor(starter.value, 'HRPer9_rate') }}>
-              {getRatePercentage(starter.HRPer9_rate) + ' (' + getRank(starter.HRPer9_rank) + ')'}
+            <span style={{ backgroundColor: getColor(starter.value, 'HR/9_rate') }}>
+              {getRatePercentage(starter['HR/9_rate']) + ' (' + getRank(starter['HR/9_rank']) + ')'}
             </span>
             <p>LOB %:</p>
-            <span style={{ backgroundColor: getColor(starter.value, 'LOBRate_rate') }}>
-              {getRatePercentage(starter.LOBRate_rate) + ' (' + getRank(starter.LOBRate_rank) + ')'}
+            <span style={{ backgroundColor: getColor(starter.value, 'LOB%_rate') }}>
+              {getRatePercentage(starter['LOB%_rate']) + ' (' + getRank(starter['LOB%_rank']) + ')'}
             </span>
             <p>TBF:</p>
             <span style={{ backgroundColor: getColor(starter.value, 'TBF_rate') }}>

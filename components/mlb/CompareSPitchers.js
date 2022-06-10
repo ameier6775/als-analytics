@@ -91,7 +91,7 @@ const CompareStartersCard = ({ comparisonStarters }) => {
             </span>
             <p>IP:</p>
             <span style={{ backgroundColor: getColor(starter.value, 'IP_rate') }}>
-              {getRatePercentage(starter.HRPer9_rate) + ' (' + getRank(starter.IP_rank) + ')'}
+              {getRatePercentage(starter.IP_rate) + ' (' + getRank(starter.IP_rank) + ')'}
             </span>
             <p>W:</p>
             <span style={{ backgroundColor: getColor(starter.value, 'W_rate') }}>

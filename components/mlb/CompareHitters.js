@@ -85,29 +85,63 @@ const CompareHittersCard = ({ comparisonHitters }) => {
           <div className="compareContainer" key={hitter.value}>
             <h2>{hitter.value}</h2>
             <img className="teamLogo" height="10" src={teamLogos.find((obj) => obj.team === hitter.Team).logo} />
-            <p>Hits:</p>
+            <p>PA:</p>
+            <span style={{ backgroundColor: getColor(hitter.value, 'PA_rate') }}>
+              {getRatePercentage(hitter.PA_rate) + ' (' + getRank(hitter.PA_rank) + ')'}
+            </span>
+            <p>AVG:</p>
             <span style={{ backgroundColor: getColor(hitter.value, 'AVG_rate') }}>
               {getRatePercentage(hitter.AVG_rate) + ' (' + getRank(hitter.AVG_rank) + ')'}
+            </span>
+            <p>OBP:</p>
+            <span style={{ backgroundColor: getColor(hitter.value, 'OBP_rate') }}>
+              {getRatePercentage(hitter['OBP_rate']) + ' (' + getRank(hitter['OBP_rank']) + ')'}
+            </span>
+            <p>R:</p>
+            <span style={{ backgroundColor: getColor(hitter.value, 'R_rate') }}>
+              {getRatePercentage(hitter.R_rate) + ' (' + getRank(hitter.R_rank) + ')'}
+            </span>
+            <p>RBI:</p>
+            <span style={{ backgroundColor: getColor(hitter.value, 'RBI_rate') }}>
+              {getRatePercentage(hitter.RBI_rate) + ' (' + getRank(hitter.RBI_rank) + ')'}
+            </span>
+            <p>HR:</p>
+            <span style={{ backgroundColor: getColor(hitter.value, 'HR_rate') }}>
+              {getRatePercentage(hitter.HR_rate) + ' (' + getRank(hitter.HR_rank) + ')'}
+            </span>
+            <p>SLG:</p>
+            <span style={{ backgroundColor: getColor(hitter.value, 'SLG_rate') }}>
+              {getRatePercentage(hitter.SLG_rate) + ' (' + getRank(hitter.SLG_rank) + ')'}
+            </span>
+            <p>BB%:</p>
+            <span style={{ backgroundColor: getColor(hitter.value, 'BB%_rate') }}>
+              {getRatePercentage(hitter['BB%_rate']) + ' (' + getRank(hitter['BB%_rank']) + ')'}
+            </span>
+            <p>K%:</p>
+            <span style={{ backgroundColor: getColor(hitter.value, 'K%_rate') }}>
+              {getRatePercentage(hitter['K%_rate']) + ' (' + getRank(hitter['K%_rank']) + ')'}
+            </span>
+            <p>SB:</p>
+            <span style={{ backgroundColor: getColor(hitter.value, 'SB_rate') }}>
+              {getRatePercentage(hitter.SB_rate) + ' (' + getRank(hitter.SB_rank) + ')'}
+            </span>
+            <p>SPD:</p>
+            <span style={{ backgroundColor: getColor(hitter.value, 'Spd_rate') }}>
+              {getRatePercentage(hitter.Spd_rate) + ' (' + getRank(hitter.Spd_rank) + ')'}
+            </span>
+            <p>UBR:</p>
+            <span style={{ backgroundColor: getColor(hitter.value, 'UBR_rate') }}>
+              {getRatePercentage(hitter.UBR_rate) + ' (' + getRank(hitter.UBR_rank) + ')'}
+            </span>
+            <p>wRC+:</p>
+            <span style={{ backgroundColor: getColor(hitter.value, 'wRC+_rate') }}>
+              {getRatePercentage(hitter['wRC+_rate']) + ' (' + getRank(hitter['wRC+_rank']) + ')'}
             </span>
           </div>
         ))
       ) : (
         <p></p>
       )}
-      {/* {comparisonHitters ? (
-        comparisonHitters.map((hitter) => (
-          <div className="compareContainer" key={hitter.value}>
-            <h1>{hitter.value}</h1>
-            <img className="teamLogo" height="10" src={teamLogos.find((obj) => obj.team === hitter.Team).logo} />
-            <p>Hits:</p>
-            <span style={{ backgroundColor: getColor(hitter.value, 'AVG_rate') }}>
-              {getRatePercentage(hitter.AVG_rate) + ' (' + getRank(hitter.AVG_rank) + ')'}
-            </span>
-          </div>
-        ))
-      ) : (
-        <p></p>
-      )} */}
     </div>
   );
 };

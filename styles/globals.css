@@ -114,6 +114,18 @@ tr {
   font-family: 'Copperplate';
 }
 
+.fieldSubheader {
+  width: 100%;
+  /* color: rgb(255, 174, 0); */
+  color: skyblue;
+  float: left;
+  text-align: center;
+  padding: 5px;
+  border: solid rgb(255, 174, 0);
+  font-size: xx-large;
+  font-family: 'Courier New';
+}
+
 .fieldRank {
   float: right;
 }

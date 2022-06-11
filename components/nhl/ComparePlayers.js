@@ -89,46 +89,81 @@ const ComparePlayersCard = ({ comparisonPlayers }) => {
           <div className="compareContainer" key={player.value}>
             <h1>{player.value}</h1>
             <img className="teamLogo" height="10" src={teamLogos.find((obj) => obj.team === player.team).logo} />
+            <h3 className="fieldSubheader">Production:</h3>
             <p>Goals:</p>
             <span style={{ backgroundColor: getColor(player.value, 'goalsRate') }}>
-              {getRatePercentage(player.goalsRate) + ' (' + getRank(player.goalsRank) + ')'}
+              {player.goals + ' - ' + getRatePercentage(player.goalsRate) + ' (' + getRank(player.goalsRank) + ')'}
             </span>
             <p>Assists:</p>
             <span style={{ backgroundColor: getColor(player.value, 'assistsRate') }}>
-              {getRatePercentage(player.assistsRate) + ' (' + getRank(player.assistsRank) + ')'}
+              {player.assists +
+                ' - ' +
+                getRatePercentage(player.assistsRate) +
+                ' (' +
+                getRank(player.assistsRank) +
+                ')'}
             </span>
             <p>Points:</p>
             <span style={{ backgroundColor: getColor(player.value, 'pointsRate') }}>
-              {getRatePercentage(player.pointsRate) + ' (' + getRank(player.pointsRank) + ')'}
+              {player.points + ' - ' + getRatePercentage(player.pointsRate) + ' (' + getRank(player.pointsRank) + ')'}
             </span>
-            <p>On Ice Goals +:</p>
+            <h3 className="fieldSubheader">On Ice:</h3>
+            <p>Goals For:</p>
             <span style={{ backgroundColor: getColor(player.value, 'onIceGoalsForRate') }}>
-              {getRatePercentage(player.onIceGoalsForRate) + ' (' + getRank(player.onIceGoalsForRank) + ')'}
+              {player.onIceGoals +
+                ' - ' +
+                getRatePercentage(player.onIceGoalsForRate) +
+                ' (' +
+                getRank(player.onIceGoalsForRank) +
+                ')'}
             </span>
-            <p>On Ice Goals -:</p>
+            <p>Goals Against:</p>
             <span style={{ backgroundColor: getColor(player.value, 'onIceGoalsAgainstRate') }}>
-              {getRatePercentage(player.onIceGoalsAgainstRate) + ' (' + getRank(player.onIceGoalsAgainstRank) + ')'}
+              {player.onIceGoalsAgainst +
+                ' - ' +
+                getRatePercentage(player.onIceGoalsAgainstRate) +
+                ' (' +
+                getRank(player.onIceGoalsAgainstRank) +
+                ')'}
             </span>
-            <p>xGoals +:</p>
+            <h3 className="fieldSubheader">Expected:</h3>
+            <p>Goals For:</p>
             <span style={{ backgroundColor: getColor(player.value, 'xGoalsRate') }}>
-              {getRatePercentage(player.xGoalsRate) + ' (' + getRank(player.xGoalsRank) + ')'}
+              {player.xGoalsFor +
+                ' - ' +
+                getRatePercentage(player.xGoalsRate) +
+                ' (' +
+                getRank(player.xGoalsRank) +
+                ')'}
             </span>
-            <p>xGoals -:</p>
+            <p>Goals Against:</p>
             <span style={{ backgroundColor: getColor(player.value, 'xGoalsAgainstRate') }}>
-              {getRatePercentage(player.xGoalsAgainstRate) + ' (' + getRank(player.xGoalsAgainstRank) + ')'}
+              {player.xGoalsAgainst +
+                ' - ' +
+                getRatePercentage(player.xGoalsAgainstRate) +
+                ' (' +
+                getRank(player.xGoalsAgainstRank) +
+                ')'}
             </span>
-            {/* <p>Goals Against:</p>
-            <span style={{ backgroundColor: getColor(player.value, 'goalsAgainstRate') }}>
-              {getRatePercentage(player.goalsAgainstRate) + ' (' + getRank(player.goalsAgainstRank) + ')'}
+            <h3 className="fieldSubheader">Zone Starts:</h3>
+            <p>Offensive:</p>
+            <span style={{ backgroundColor: getColor(player.value, 'oZoneStartRate') }}>
+              {player.oZoneStarts +
+                ' - ' +
+                getRatePercentage(player.oZoneStartRate) +
+                ' (' +
+                getRank(player.oZoneStartRank) +
+                ')'}
             </span>
-            <p>xGoals For:</p>
-            <span style={{ backgroundColor: getColor(player.value, 'xGoalsForRate') }}>
-              {getRatePercentage(player.xGoalsForRate) + ' (' + getRank(player.xGoalsForRank) + ')'}
+            <p>Defensive:</p>
+            <span style={{ backgroundColor: getColor(player.value, 'dZoneStartRate') }}>
+              {player.dZoneStarts +
+                ' - ' +
+                getRatePercentage(player.dZoneStartRate) +
+                ' (' +
+                getRank(player.dZoneStartRank) +
+                ')'}
             </span>
-            <p>xGoals Against:</p>
-            <span style={{ backgroundColor: getColor(player.value, 'xGoalsAgainstRate') }}>
-              {getRatePercentage(player.xGoalsAgainstRate) + ' (' + getRank(player.xGoalsAgainstRank) + ')'}
-            </span> */}
           </div>
         ))
       ) : (

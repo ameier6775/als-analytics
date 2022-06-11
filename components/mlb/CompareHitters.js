@@ -88,57 +88,62 @@ const CompareHittersCard = ({ comparisonHitters }) => {
             <h3 className="fieldSubheader">Production:</h3>
             <p>PA:</p>
             <span style={{ backgroundColor: getColor(hitter.value, 'PA_rate') }}>
-              {getRatePercentage(hitter.PA_rate) + ' (' + getRank(hitter.PA_rank) + ')'}
+              {hitter.PA + ' - ' + getRatePercentage(hitter.PA_rate) + ' (' + getRank(hitter.PA_rank) + ')'}
             </span>
             <p>AVG:</p>
             <span style={{ backgroundColor: getColor(hitter.value, 'AVG_rate') }}>
-              {getRatePercentage(hitter.AVG_rate) + ' (' + getRank(hitter.AVG_rank) + ')'}
+              {hitter.AVG + ' - ' + getRatePercentage(hitter.AVG_rate) + ' (' + getRank(hitter.AVG_rank) + ')'}
             </span>
             <p>R:</p>
             <span style={{ backgroundColor: getColor(hitter.value, 'R_rate') }}>
-              {getRatePercentage(hitter.R_rate) + ' (' + getRank(hitter.R_rank) + ')'}
+              {hitter.R + ' - ' + getRatePercentage(hitter.R_rate) + ' (' + getRank(hitter.R_rank) + ')'}
             </span>
             <p>RBI:</p>
             <span style={{ backgroundColor: getColor(hitter.value, 'RBI_rate') }}>
-              {getRatePercentage(hitter.RBI_rate) + ' (' + getRank(hitter.RBI_rank) + ')'}
+              {hitter.RBI + ' - ' + getRatePercentage(hitter.RBI_rate) + ' (' + getRank(hitter.RBI_rank) + ')'}
             </span>
             <p>HR:</p>
             <span style={{ backgroundColor: getColor(hitter.value, 'HR_rate') }}>
-              {getRatePercentage(hitter.HR_rate) + ' (' + getRank(hitter.HR_rank) + ')'}
+              {hitter.HR + ' - ' + getRatePercentage(hitter.HR_rate) + ' (' + getRank(hitter.HR_rank) + ')'}
             </span>
             <p>SLG:</p>
             <span style={{ backgroundColor: getColor(hitter.value, 'SLG_rate') }}>
-              {getRatePercentage(hitter.SLG_rate) + ' (' + getRank(hitter.SLG_rank) + ')'}
+              {hitter.SLG + ' - ' + getRatePercentage(hitter.SLG_rate) + ' (' + getRank(hitter.SLG_rank) + ')'}
             </span>
             <p>wRC+:</p>
             <span style={{ backgroundColor: getColor(hitter.value, 'wRC+_rate') }}>
-              {getRatePercentage(hitter['wRC+_rate']) + ' (' + getRank(hitter['wRC+_rank']) + ')'}
+              {hitter['wRC+'] +
+                ' - ' +
+                getRatePercentage(hitter['wRC+_rate']) +
+                ' (' +
+                getRank(hitter['wRC+_rank']) +
+                ')'}
             </span>
             <h3 className="fieldSubheader">Batting Eye:</h3>
             <p>OBP:</p>
             <span style={{ backgroundColor: getColor(hitter.value, 'OBP_rate') }}>
-              {getRatePercentage(hitter['OBP_rate']) + ' (' + getRank(hitter['OBP_rank']) + ')'}
+              {hitter.OBP + ' - ' + getRatePercentage(hitter['OBP_rate']) + ' (' + getRank(hitter['OBP_rank']) + ')'}
             </span>
             <p>BB%:</p>
             <span style={{ backgroundColor: getColor(hitter.value, 'BB%_rate') }}>
-              {getRatePercentage(hitter['BB%_rate']) + ' (' + getRank(hitter['BB%_rank']) + ')'}
+              {hitter['BB%'] + ' - ' + getRatePercentage(hitter['BB%_rate']) + ' (' + getRank(hitter['BB%_rank']) + ')'}
             </span>
             <p>K%:</p>
             <span style={{ backgroundColor: getColor(hitter.value, 'K%_rate') }}>
-              {getRatePercentage(hitter['K%_rate']) + ' (' + getRank(hitter['K%_rank']) + ')'}
+              {hitter['K%'] + ' - ' + getRatePercentage(hitter['K%_rate']) + ' (' + getRank(hitter['K%_rank']) + ')'}
             </span>
             <h3 className="fieldSubheader">Base Running:</h3>
             <p>SB:</p>
             <span style={{ backgroundColor: getColor(hitter.value, 'SB_rate') }}>
-              {getRatePercentage(hitter.SB_rate) + ' (' + getRank(hitter.SB_rank) + ')'}
+              {hitter.SB + ' - ' + getRatePercentage(hitter.SB_rate) + ' (' + getRank(hitter.SB_rank) + ')'}
             </span>
             <p>SPD:</p>
             <span style={{ backgroundColor: getColor(hitter.value, 'Spd_rate') }}>
-              {getRatePercentage(hitter.Spd_rate) + ' (' + getRank(hitter.Spd_rank) + ')'}
+              {hitter.Spd + ' - ' + getRatePercentage(hitter.Spd_rate) + ' (' + getRank(hitter.Spd_rank) + ')'}
             </span>
             <p>UBR:</p>
             <span style={{ backgroundColor: getColor(hitter.value, 'UBR_rate') }}>
-              {getRatePercentage(hitter.UBR_rate) + ' (' + getRank(hitter.UBR_rank) + ')'}
+              {hitter.UBR + ' - ' + getRatePercentage(hitter.UBR_rate) + ' (' + getRank(hitter.UBR_rank) + ')'}
             </span>
           </div>
         ))

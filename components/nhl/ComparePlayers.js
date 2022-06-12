@@ -89,7 +89,7 @@ const ComparePlayersCard = ({ comparisonPlayers }) => {
           <div className="compareContainer" key={player.value}>
             <h1>{player.value}</h1>
             <img className="teamLogo" height="10" src={teamLogos.find((obj) => obj.team === player.team).logo} />
-            <h3 className="fieldSubheader">Production:</h3>
+            <h3 className="fieldSubheader">Offense:</h3>
             <p>Goals:</p>
             <span style={{ backgroundColor: getColor(player.value, 'goalsRate') }}>
               {player.goals + ' - ' + getRatePercentage(player.goalsRate) + ' (' + getRank(player.goalsRank) + ')'}
@@ -107,8 +107,81 @@ const ComparePlayersCard = ({ comparisonPlayers }) => {
             <span style={{ backgroundColor: getColor(player.value, 'pointsRate') }}>
               {player.points + ' - ' + getRatePercentage(player.pointsRate) + ' (' + getRank(player.pointsRank) + ')'}
             </span>
-            <h3 className="fieldSubheader">On Ice:</h3>
-            <p>Goals For:</p>
+            <h3 className="fieldSubheader">Per 60:</h3>
+            <p>Goals:</p>
+            <span style={{ backgroundColor: getColor(player.value, 'goalsPer60Rate') }}>
+              {(3600 * player.goalsPer60).toFixed(2) +
+                ' - ' +
+                getRatePercentage(player.goalsPer60Rate) +
+                ' (' +
+                getRank(player.goalsPer60Rank) +
+                ')'}
+            </span>
+            <p>Assists:</p>
+            <span style={{ backgroundColor: getColor(player.value, 'assistsPer60Rate') }}>
+              {(3600 * player.assistsPer60).toFixed(2) +
+                ' - ' +
+                getRatePercentage(player.assistsPer60Rate) +
+                ' (' +
+                getRank(player.assistsPer60Rank) +
+                ')'}
+            </span>
+            <p>Points:</p>
+            <span style={{ backgroundColor: getColor(player.value, 'pointsPer60Rate') }}>
+              {(3600 * player.pointsPer60).toFixed(2) +
+                ' - ' +
+                getRatePercentage(player.pointsPer60Rate) +
+                ' (' +
+                getRank(player.pointsPer60Rank) +
+                ')'}
+            </span>
+            <h3 className="fieldSubheader">Defense:</h3>
+            <p>Blocks:</p>
+            <span style={{ backgroundColor: getColor(player.value, 'blocksRate') }}>
+              {player.blocks + ' - ' + getRatePercentage(player.blocksRate) + ' (' + getRank(player.blocksRank) + ')'}
+            </span>
+            <p>Hits:</p>
+            <span style={{ backgroundColor: getColor(player.value, 'hitsRate') }}>
+              {player.hits + ' - ' + getRatePercentage(player.hitsRate) + ' (' + getRank(player.hitsRank) + ')'}
+            </span>
+            <p>Breakups:</p>
+            <span style={{ backgroundColor: getColor(player.value, 'breakupsRate') }}>
+              {player.breakups +
+                ' - ' +
+                getRatePercentage(player.breakupsRate) +
+                ' (' +
+                getRank(player.breakupsRank) +
+                ')'}
+            </span>
+            <p>Takeaways:</p>
+            <span style={{ backgroundColor: getColor(player.value, 'takeawaysRate') }}>
+              {player.takeaways +
+                ' - ' +
+                getRatePercentage(player.takeawaysRate) +
+                ' (' +
+                getRank(player.takeawaysRank) +
+                ')'}
+            </span>
+            <p>Giveaways:</p>
+            <span style={{ backgroundColor: getColor(player.value, 'giveawaysRate') }}>
+              {player.giveaways +
+                ' - ' +
+                getRatePercentage(player.giveawaysRate) +
+                ' (' +
+                getRank(player.giveawaysRank) +
+                ')'}
+            </span>
+            <p>D Zone Giveaways:</p>
+            <span style={{ backgroundColor: getColor(player.value, 'dZoneGiveawaysRate') }}>
+              {player.breakups +
+                ' - ' +
+                getRatePercentage(player.dZoneGiveawaysRate) +
+                ' (' +
+                getRank(player.dZoneGiveawaysRank) +
+                ')'}
+            </span>
+            <h3 className="fieldSubheader">On Ice Goals:</h3>
+            <p>For:</p>
             <span style={{ backgroundColor: getColor(player.value, 'onIceGoalsForRate') }}>
               {player.onIceGoals +
                 ' - ' +
@@ -117,7 +190,7 @@ const ComparePlayersCard = ({ comparisonPlayers }) => {
                 getRank(player.onIceGoalsForRank) +
                 ')'}
             </span>
-            <p>Goals Against:</p>
+            <p>Against:</p>
             <span style={{ backgroundColor: getColor(player.value, 'onIceGoalsAgainstRate') }}>
               {player.onIceGoalsAgainst +
                 ' - ' +
@@ -126,8 +199,8 @@ const ComparePlayersCard = ({ comparisonPlayers }) => {
                 getRank(player.onIceGoalsAgainstRank) +
                 ')'}
             </span>
-            <h3 className="fieldSubheader">Expected:</h3>
-            <p>Goals For:</p>
+            <h3 className="fieldSubheader">Expected Goals:</h3>
+            <p>For:</p>
             <span style={{ backgroundColor: getColor(player.value, 'xGoalsRate') }}>
               {player.xGoalsFor +
                 ' - ' +
@@ -136,7 +209,7 @@ const ComparePlayersCard = ({ comparisonPlayers }) => {
                 getRank(player.xGoalsRank) +
                 ')'}
             </span>
-            <p>Goals Against:</p>
+            <p>Against:</p>
             <span style={{ backgroundColor: getColor(player.value, 'xGoalsAgainstRate') }}>
               {player.xGoalsAgainst +
                 ' - ' +
@@ -145,6 +218,26 @@ const ComparePlayersCard = ({ comparisonPlayers }) => {
                 getRank(player.xGoalsAgainstRank) +
                 ')'}
             </span>
+            <h3 className="fieldSubheader">Shot Attempts:</h3>
+            <p>For:</p>
+            <span style={{ backgroundColor: getColor(player.value, 'shotAttemptsRate') }}>
+              {player.shotAttempts +
+                ' - ' +
+                getRatePercentage(player.shotAttemptsRate) +
+                ' (' +
+                getRank(player.shotAttemptsRank) +
+                ')'}
+            </span>
+            <p>Against:</p>
+            <span style={{ backgroundColor: getColor(player.value, 'shotAttemptsAgainstRate') }}>
+              {player.shotAttemptsAgainst +
+                ' - ' +
+                getRatePercentage(player.shotAttemptsAgainstRate) +
+                ' (' +
+                getRank(player.shotAttemptsAgainstRank) +
+                ')'}
+            </span>
+            {/* Something wrong with Per 60 calculations */}
             <h3 className="fieldSubheader">Zone Starts:</h3>
             <p>Offensive:</p>
             <span style={{ backgroundColor: getColor(player.value, 'oZoneStartRate') }}>

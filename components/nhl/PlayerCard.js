@@ -39,19 +39,30 @@ const PlayerCard = ({ player }) => {
     }
     return rankStr;
   }
-
   // Validation for fields
   function getGraphField(field) {
     let result = field === 0 || field < 0.1 ? 1 : (100 * field).toFixed();
     return result;
   }
-
   // Conversion to percentage
   function getRatePercentage(field) {
     let result = (field * 100).toFixed().toString() + '%';
     return result;
   }
-
+  // Background color for fields (currently not being used)
+  function getColor(field) {
+    console.log(field);
+    let color = 'rgba(';
+    color +=
+      field <= 0.33
+        ? '255, 51, 51)'
+        : field > 0.33 && field <= 0.66
+        ? '255, 205, 0)'
+        : field > 0.66
+        ? '51, 255, 74)'
+        : '0, 0, 0)';
+    return color;
+  }
   // Plotting chart data
   var offensiveGraphData = [
     {
@@ -101,54 +112,64 @@ const PlayerCard = ({ player }) => {
       fullMark: 100,
     },
   ];
-
   // Team logo
   var logo = teamLogos.find((obj) => obj.team === player.team);
-
   return (
     <div id={player.name} className="playerCard">
       <h1>{player.name}</h1>
       <h2>{player.position}</h2>
       <img className="teamLogo" height="10" src={logo.logo} />
       <p>
-        Goals :<div className="fieldRank">{getRank(player.goalsRank)}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(player.goalsRate)}</span>
+        Goals:<div className="fieldRank">{getRank(player.goalsRank)}</div>
+        <span style={{ backgroundColor: getColor(player.goalsRate) }}>{getRatePercentage(player.goalsRate)}</span>
       </p>
       <p>
-        Assists :<div className="fieldRank">{getRank(player.assistsRank)}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(player.assistsRate)}</span>
+        Assists:<div className="fieldRank">{getRank(player.assistsRank)}</div>
+        <span style={{ backgroundColor: getColor(player.assistsRate) }}>{getRatePercentage(player.assistsRate)}</span>
       </p>
       <p>
-        Points :<div className="fieldRank">{getRank(player.pointsRank)}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(player.goalsRate)}</span>
+        Points:<div className="fieldRank">{getRank(player.pointsRank)}</div>
+        <span style={{ backgroundColor: getColor(player.pointsRate) }}>{getRatePercentage(player.pointsRate)}</span>
       </p>
       <p>
-        Expected Goals + :<div className="fieldRank">{getRank(player.xGoalsRank)}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(player.xGoalsRate)}</span>
+        Expected Goals +:<div className="fieldRank">{getRank(player.xGoalsRank)}</div>
+        <span style={{ backgroundColor: getColor(player.xGoalsRate) }}>{getRatePercentage(player.xGoalsRate)}</span>
       </p>
       <p>
-        🧊 Goals + :<div className="fieldRank">{getRank(player.onIceGoalsForRank)}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(player.onIceGoalsForRate)}</span>
+        🧊 Goals +:<div className="fieldRank">{getRank(player.onIceGoalsForRank)}</div>
+        <span style={{ backgroundColor: getColor(player.onIceGoalsForRate) }}>
+          {getRatePercentage(player.onIceGoalsForRate)}
+        </span>
       </p>
       <p>
-        🚨 Per 60 :<div className="fieldRank">{getRank(player.goalsPer60Rank)}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(player.goalsPer60Rate)}</span>
+        🚨 Per 60:<div className="fieldRank">{getRank(player.goalsPer60Rank)}</div>
+        <span style={{ backgroundColor: getColor(player.goalsPer60Rate) }}>
+          {getRatePercentage(player.goalsPer60Rate)}
+        </span>
       </p>
       <p>
-        🍏 Per 60 :<div className="fieldRank">{getRank(player.assistsPer60Rank)}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(player.assistsPer60Rate)}</span>
+        🍏 Per 60:<div className="fieldRank">{getRank(player.assistsPer60Rank)}</div>
+        <span style={{ backgroundColor: getColor(player.assistsPer60Rate) }}>
+          {getRatePercentage(player.assistsPer60Rate)}
+        </span>
       </p>
       <p>
-        🥅 Per 60 :<div className="fieldRank">{getRank(player.pointsPer60Rank)}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(player.pointsPer60Rate)}</span>
+        🥅 Per 60:<div className="fieldRank">{getRank(player.pointsPer60Rank)}</div>
+        <span style={{ backgroundColor: getColor(player.pointsPer60Rate) }}>
+          {getRatePercentage(player.pointsPer60Rate)}
+        </span>
       </p>
       <p>
-        Shot Attempts + :<div className="fieldRank">{getRank(player.shotAttemptsRank)}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(player.shotAttemptsRate)}</span>
+        Shot Attempts +:<div className="fieldRank">{getRank(player.shotAttemptsRank)}</div>
+        <span style={{ backgroundColor: getColor(player.shotAttemptsRate) }}>
+          {getRatePercentage(player.shotAttemptsRate)}
+        </span>
       </p>
       <p>
-        O-Zone Starts :<div className="fieldRank">{getRank(player.oZoneStartRank)}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(player.oZoneStartRate)}</span>
+        O-Zone Starts:<div className="fieldRank">{getRank(player.oZoneStartRank)}</div>
+        <span style={{ backgroundColor: getColor(player.oZoneStartRate) }}>
+          {getRatePercentage(player.oZoneStartRate)}
+        </span>
       </p>
       <div className="fullWidthChart">
         <h2 className="playerChart">Offense Per 60</h2>
@@ -191,44 +212,58 @@ const PlayerCard = ({ player }) => {
         </LineChart>
       </div>
       <p>
-        Takeaways :<div className="fieldRank">{getRank(player.takeawaysRank)}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(player.takeawaysRate)}</span>
+        Takeaways:<div className="fieldRank">{getRank(player.takeawaysRank)}</div>
+        <span style={{ backgroundColor: getColor(player.takeawaysRate) }}>
+          {getRatePercentage(player.takeawaysRate)}
+        </span>
       </p>
       <p>
-        Giveaways :<div className="fieldRank">{getRank(player.giveawaysRank)}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(player.giveawaysRate)}</span>
+        Giveaways:<div className="fieldRank">{getRank(player.giveawaysRank)}</div>
+        <span style={{ backgroundColor: getColor(player.giveawaysRate) }}>
+          {getRatePercentage(player.giveawaysRate)}
+        </span>
       </p>
       <p>
-        Hits :<div className="fieldRank">{getRank(player.hitsRank)}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(player.hitsRate)}</span>
+        Hits:<div className="fieldRank">{getRank(player.hitsRank)}</div>
+        <span style={{ backgroundColor: getColor(player.hitsRate) }}>{getRatePercentage(player.hitsRate)}</span>
       </p>
       <p>
-        Expected Goals - :<div className="fieldRank">{getRank(player.xGoalsAgainstRank)}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(player.xGoalsAgainstRate)}</span>
+        Expected Goals -:<div className="fieldRank">{getRank(player.xGoalsAgainstRank)}</div>
+        <span style={{ backgroundColor: getColor(player.xGoalsAgainstRate) }}>
+          {getRatePercentage(player.xGoalsAgainstRate)}
+        </span>
       </p>
       <p>
-        🧊 Goals - :<div className="fieldRank">{getRank(player.onIceGoalsAgainstRank)}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(player.onIceGoalsAgainstRate)}</span>
+        🧊 Goals -:<div className="fieldRank">{getRank(player.onIceGoalsAgainstRank)}</div>
+        <span style={{ backgroundColor: getColor(player.onIceGoalsAgainstRate) }}>
+          {getRatePercentage(player.onIceGoalsAgainstRate)}
+        </span>
       </p>
       <p>
-        Blocks :<div className="fieldRank">{getRank(player.blocksRank)}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(player.blocksRate)}</span>
+        Blocks:<div className="fieldRank">{getRank(player.blocksRank)}</div>
+        <span style={{ backgroundColor: getColor(player.blocksRate) }}>{getRatePercentage(player.blocksRate)}</span>
       </p>
       <p>
-        D-Zone Giveaways :<div className="fieldRank">{getRank(player.dZoneGiveawaysRank)}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(player.dZoneGiveawaysRate)}</span>
+        D-Zone Giveaways:<div className="fieldRank">{getRank(player.dZoneGiveawaysRank)}</div>
+        <span style={{ backgroundColor: getColor(player.dZoneGiveawaysRate) }}>
+          {getRatePercentage(player.dZoneGiveawaysRate)}
+        </span>
       </p>
       <p>
-        Breakups :<div className="fieldRank">{getRank(player.breakupsRank)}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(player.breakupsRate)}</span>
+        Breakups:<div className="fieldRank">{getRank(player.breakupsRank)}</div>
+        <span style={{ backgroundColor: getColor(player.breakupsRate) }}>{getRatePercentage(player.breakupsRate)}</span>
       </p>
       <p>
-        Shot Attempts - :<div className="fieldRank">{getRank(player.shotAttemptsAgainstRank)}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(player.shotAttemptsAgainstRate)}</span>
+        Shot Attempts -:<div className="fieldRank">{getRank(player.shotAttemptsAgainstRank)}</div>
+        <span style={{ backgroundColor: getColor(player.shotAttemptsAgainstRate) }}>
+          {getRatePercentage(player.shotAttemptsAgainstRate)}
+        </span>
       </p>
       <p>
-        D-Zone Starts :<div className="fieldRank">{getRank(player.dZoneStartRank)}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(player.dZoneStartRate)}</span>
+        D-Zone Starts:<div className="fieldRank">{getRank(player.dZoneStartRank)}</div>
+        <span style={{ backgroundColor: getColor(player.dZoneStartRate) }}>
+          {getRatePercentage(player.dZoneStartRate)}
+        </span>
       </p>
       <div className="fullWidthChart">
         <h2 className="playerChart">Defense Per 60</h2>

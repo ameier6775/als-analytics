@@ -40,26 +40,18 @@ const TeamCard = ({ team }) => {
   }
 
   // Background color for fields (currently not being used)
-  function getColor(percentage) {
-    let color =
-      percentage <= 0.33
-        ? '255, 51, 51'
-        : percentage <= 0.66
-        ? '255, 205, 0'
-        : percentage > 0.66
-        ? '51, 255, 74'
-        : '0, 0, 0';
-    let colorPercentage =
-      percentage <= 0.33
-        ? 10 * percentage * 3
-        : percentage <= 0.66
-        ? ((10 * percentage - 33) * 3) / 100
-        : percentage > 0.66
-        ? ((10 * percentage - 67) * 3) / 100
-        : 0;
-    colorPercentage = colorPercentage < 0.2 ? colorPercentage + 0.15 : colorPercentage;
-    let resultColor = 'rgba(' + color + ', ' + colorPercentage + ')';
-    return resultColor;
+  function getColor(field) {
+    console.log(field);
+    let color = 'rgba(';
+    color +=
+      field <= 0.33
+        ? '255, 51, 51)'
+        : field > 0.33 && field <= 0.66
+        ? '255, 205, 0)'
+        : field > 0.66
+        ? '51, 255, 74)'
+        : '0, 0, 0)';
+    return color;
   }
 
   // Validation for fields
@@ -128,44 +120,58 @@ const TeamCard = ({ team }) => {
       <h1>{team.value}</h1>
       <img className="teamLogo" height="10" src={logo.logo} />
       <p>
-        Goals + :<div className="fieldRank">{getRank(team.goalsForRank)}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team.goalsForRate)}</span>
+        Goals +:<div className="fieldRank">{getRank(team.goalsForRank)}</div>
+        <span style={{ backgroundColor: getColor(team.goalsForRate) }}>{getRatePercentage(team.goalsForRate)}</span>
       </p>
       <p>
-        Expected Goals + :<div className="fieldRank">{getRank(team.xGoalsForRank)}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team.xGoalsForRate)}</span>
+        Expected Goals +:<div className="fieldRank">{getRank(team.xGoalsForRank)}</div>
+        <span style={{ backgroundColor: getColor(team.xGoalsForRate) }}>{getRatePercentage(team.xGoalsForRate)}</span>
       </p>
       <p>
-        Takeaways + :<div className="fieldRank">{getRank(team.takeawaysForRank)}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team.takeawaysForRate)}</span>
+        Takeaways +:<div className="fieldRank">{getRank(team.takeawaysForRank)}</div>
+        <span style={{ backgroundColor: getColor(team.takeawaysForRate) }}>
+          {getRatePercentage(team.takeawaysForRate)}
+        </span>
       </p>
       <p>
-        Shot Attempts + :<div className="fieldRank">{getRank(team.shotAttemptsForRank)}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team.shotAttemptsForRate)}</span>
+        Shot Attempts +:<div className="fieldRank">{getRank(team.shotAttemptsForRank)}</div>
+        <span style={{ backgroundColor: getColor(team.shotAttemptsForRate) }}>
+          {getRatePercentage(team.shotAttemptsForRate)}
+        </span>
       </p>
       <p>
-        Faceoffs :<div className="fieldRank">{getRank(team.faceoffsRank)}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team.faceoffPercentage)}</span>
+        Faceoffs:<div className="fieldRank">{getRank(team.faceoffsRank)}</div>
+        <span style={{ backgroundColor: getColor(team.faceoffPercentage) }}>
+          {getRatePercentage(team.faceoffPercentage)}
+        </span>
       </p>
       <p>
         Goals - :<div className="fieldRank">{getRank(team.goalsAgainstRank)}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team.goalsAgainstRate)}</span>
+        <span style={{ backgroundColor: getColor(team.goalsAgainstRate) }}>
+          {getRatePercentage(team.goalsAgainstRate)}
+        </span>
       </p>
       <p>
         Expected Goals - :<div className="fieldRank">{getRank(team.xGoalsAgainstRank)}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team.xGoalsAgainstRate)}</span>
+        <span style={{ backgroundColor: getColor(team.xGoalsAgainstRate) }}>
+          {getRatePercentage(team.xGoalsAgainstRate)}
+        </span>
       </p>
       <p>
         Giveaways - :<div className="fieldRank">{getRank(team.giveawaysForRank)}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team.giveawaysForRate)}</span>
+        <span style={{ backgroundColor: getColor(team.giveawaysForRate) }}>
+          {getRatePercentage(team.giveawaysForRate)}
+        </span>
       </p>
       <p>
         Shot Attempts - :<div className="fieldRank">{getRank(team.shotAttemptsAgainstRank)}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team.shotAttemptsAgainstRate)}</span>
+        <span style={{ backgroundColor: getColor(team.shotAttemptsAgainstRate) }}>
+          {getRatePercentage(team.shotAttemptsAgainstRate)}
+        </span>
       </p>
       <p>
         Penalties :<div className="fieldRank">{getRank(team.penaltyRank)}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{team.penaltyDifferential}</span>
+        <span style={{ backgroundColor: 'rgb(255, 205, 0)' }}>{team.penaltyDifferential}</span>
       </p>
       <div className="fullWidthChart">
         <h2 className="playerChart">Offense</h2>

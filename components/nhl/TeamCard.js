@@ -38,7 +38,6 @@ const TeamCard = ({ team }) => {
     }
     return rankStr;
   }
-
   // Background color for fields (currently not being used)
   function getColor(field) {
     console.log(field);
@@ -53,19 +52,16 @@ const TeamCard = ({ team }) => {
         : '0, 0, 0)';
     return color;
   }
-
   // Validation for fields
   function getGraphField(field) {
     let result = field === 0 || field < 0.1 ? 1 : (100 * field).toFixed();
     return result;
   }
-
   // Conversion to percentage
   function getRatePercentage(field) {
     let result = (field * 100).toFixed().toString() + '%';
     return result;
   }
-
   // Plotting chart data
   var offensiveGraphData = [
     {
@@ -111,10 +107,8 @@ const TeamCard = ({ team }) => {
       fullMark: 100,
     },
   ];
-
   // Team logo
   var logo = teamLogos.find((obj) => obj.team === team.team);
-
   return (
     <div id={team.team} className="playerCard">
       <h1>{team.value}</h1>

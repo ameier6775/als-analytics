@@ -38,6 +38,20 @@ const HitterCard = ({ hitter }) => {
     }
     return rankStr;
   }
+  // Background color for fields (currently not being used)
+  function getColor(field) {
+    console.log(field);
+    let color = 'rgba(';
+    color +=
+      field <= 0.33
+        ? '255, 51, 51)'
+        : field > 0.33 && field <= 0.66
+        ? '255, 205, 0)'
+        : field > 0.66
+        ? '51, 255, 74)'
+        : '0, 0, 0)';
+    return color;
+  }
   // Validation for fields
   function getGraphField(field) {
     let result = field === 0 || field < 0.1 ? 1 : (100 * field).toFixed();
@@ -85,83 +99,83 @@ const HitterCard = ({ hitter }) => {
       <img className="teamLogo" height="10" src={logo.logo} />
       <p>
         PA:<div className="fieldRank">{getRank(hitter['PA_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(hitter['PA_rate'])}</span>
+        <span style={{ backgroundColor: getColor(hitter.PA_rate) }}>{getRatePercentage(hitter['PA_rate'])}</span>
       </p>
       <p>
-        H:<div className="fieldRank">{getRank(hitter['SH_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(hitter['H_rate'])}</span>
+        H:<div className="fieldRank">{getRank(hitter['H_rank'])}</div>
+        <span style={{ backgroundColor: getColor(hitter.H_rate) }}>{getRatePercentage(hitter['H_rate'])}</span>
       </p>
       <p>
         2B:<div className="fieldRank">{getRank(hitter['2B_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(hitter['2B_rate'])}</span>
+        <span style={{ backgroundColor: getColor(hitter['2B_rate']) }}>{getRatePercentage(hitter['2B_rate'])}</span>
       </p>
       <p>
         3B:<div className="fieldRank">{getRank(hitter['3B_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(hitter['3B_rate'])}</span>
+        <span style={{ backgroundColor: getColor(hitter['3B_rate']) }}>{getRatePercentage(hitter['3B_rate'])}</span>
       </p>
       <p>
         HR:<div className="fieldRank">{getRank(hitter['HR_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(hitter['HR_rate'])}</span>
+        <span style={{ backgroundColor: getColor(hitter.HR_rate) }}>{getRatePercentage(hitter['HR_rate'])}</span>
       </p>
       <p>
         AVG:<div className="fieldRank">{getRank(hitter['AVG_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(hitter['AVG_rate'])}</span>
+        <span style={{ backgroundColor: getColor(hitter.AVG_rate) }}>{getRatePercentage(hitter['AVG_rate'])}</span>
       </p>
       <p>
         R:<div className="fieldRank">{getRank(hitter['R_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(hitter['R_rate'])}</span>
+        <span style={{ backgroundColor: getColor(hitter.R_rate) }}>{getRatePercentage(hitter['R_rate'])}</span>
       </p>
       <p>
         RBI:<div className="fieldRank">{getRank(hitter['RBI_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(hitter['RBI_rate'])}</span>
+        <span style={{ backgroundColor: getColor(hitter.RBI_rate) }}>{getRatePercentage(hitter['RBI_rate'])}</span>
       </p>
       <p>
         OBP:<div className="fieldRank">{getRank(hitter['OBP_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(hitter['OBP_rate'])}</span>
+        <span style={{ backgroundColor: getColor(hitter.OBP_rate) }}>{getRatePercentage(hitter['OBP_rate'])}</span>
       </p>
       <p>
         SLG:<div className="fieldRank">{getRank(hitter['SLG_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(hitter['SLG_rate'])}</span>
+        <span style={{ backgroundColor: getColor(hitter.SLG_rate) }}>{getRatePercentage(hitter['SLG_rate'])}</span>
       </p>
       <p>
         BABIP:<div className="fieldRank">{getRank(hitter['BABIP_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(hitter['BABIP_rate'])}</span>
+        <span style={{ backgroundColor: getColor(hitter.BABIP_rate) }}>{getRatePercentage(hitter['BABIP_rate'])}</span>
       </p>
       <p>
         SH:<div className="fieldRank">{getRank(hitter['SH_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(hitter['SH_rate'])}</span>
+        <span style={{ backgroundColor: getColor(hitter.SH_rate) }}>{getRatePercentage(hitter['SH_rate'])}</span>
       </p>
       <p>
         SF:<div className="fieldRank">{getRank(hitter['SF_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(hitter['SF_rate'])}</span>
+        <span style={{ backgroundColor: getColor(hitter.SF_rate) }}>{getRatePercentage(hitter['SF_rate'])}</span>
       </p>
       <p>
         BB/SO:<div className="fieldRank">{getRank(hitter['BB/K_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(hitter['BB/K_rate'])}</span>
+        <span style={{ backgroundColor: getColor(hitter['BB/K_rate']) }}>{getRatePercentage(hitter['BB/K_rate'])}</span>
       </p>
       <p>
         wRC+:<div className="fieldRank">{getRank(hitter['wRC+_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(hitter['wRC+_rate'])}</span>
+        <span style={{ backgroundColor: getColor(hitter['wRC+_rate']) }}>{getRatePercentage(hitter['wRC+_rate'])}</span>
       </p>
       <p>
         BB%:<div className="fieldRank">{getRank(hitter['BB%_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(hitter['BB%_rate'])}</span>
+        <span style={{ backgroundColor: getColor(hitter['BB%_rate']) }}>{getRatePercentage(hitter['BB%_rate'])}</span>
       </p>
       <p>
         SB:<div className="fieldRank">{getRank(hitter['SB_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(hitter['SB_rate'])}</span>
+        <span style={{ backgroundColor: getColor(hitter.SB_rate) }}>{getRatePercentage(hitter['SB_rate'])}</span>
       </p>
       <p>
         Speed:<div className="fieldRank">{getRank(hitter['Spd_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(hitter['Spd_rate'])}</span>
+        <span style={{ backgroundColor: getColor(hitter.Spd_rate) }}>{getRatePercentage(hitter['Spd_rate'])}</span>
       </p>
       <p>
         Baserunning:<div className="fieldRank">{getRank(hitter['UBR_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(hitter['UBR_rate'])}</span>
+        <span style={{ backgroundColor: getColor(hitter.UBR_rate) }}>{getRatePercentage(hitter['UBR_rate'])}</span>
       </p>
       <p>
         Power:<div className="fieldRank">{getRank(hitter['ISO_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(hitter['ISO_rate'])}</span>
+        <span style={{ backgroundColor: getColor(hitter.ISO_rate) }}>{getRatePercentage(hitter['ISO_rate'])}</span>
       </p>
       <div className="fullWidthChart">
         <h2 className="playerChart">Hitter</h2>

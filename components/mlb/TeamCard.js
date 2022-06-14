@@ -37,96 +37,29 @@ const TeamCard = ({ team }) => {
     }
     return rankStr;
   }
-
+  // Background color for fields (currently not being used)
+  function getColor(field) {
+    let color = 'rgba(';
+    color +=
+      field <= 0.33
+        ? '255, 51, 51)'
+        : field > 0.33 && field <= 0.66
+        ? '255, 205, 0)'
+        : field > 0.66
+        ? '51, 255, 74)'
+        : '0, 0, 0)';
+    return color;
+  }
   // Validation for fields
   function getGraphField(field) {
     let result = field === 0 || field < 0.1 ? 1 : (100 * field).toFixed();
     return result;
   }
-
   // Conversion to percentage
   function getRatePercentage(field) {
     let result = (field * 100).toFixed().toString() + '%';
     return result;
   }
-
-  // function getProductionPercentile(category, direction = 'positive') {
-  //   var positionalArr = teams;
-  //   var maxValue = Math.max.apply(
-  //     Math,
-  //     positionalArr.map((obj) => {
-  //       return obj[category];
-  //     }),
-  //   );
-  //   var minValue = Math.min.apply(
-  //     Math,
-  //     positionalArr.map((obj) => {
-  //       return obj[category];
-  //     }),
-  //   );
-  //   var difference = maxValue - minValue;
-  //   var teamValue = selectedTeam[category];
-  //   var result = (teamValue - minValue) / difference;
-  //   if (direction === 'positive') {
-  //     if (maxValue === teamValue) {
-  //       return '100%';
-  //     } else if (minValue === teamValue) {
-  //       return '0%';
-  //     } else if (result.toFixed(2).substring(2, 3) === '0') {
-  //       return result.toFixed(2).substring(3, 4) + '%';
-  //     } else {
-  //       return result.toFixed(2).substring(2, 4) + '%';
-  //     }
-  //   } else if (direction === 'negative') {
-  //     if (minValue === teamValue) {
-  //       return '100%';
-  //     } else if (maxValue === teamValue) {
-  //       return '0%';
-  //     } else if ((1 - result).toFixed(2).substring(2, 3) === '0') {
-  //       return (1 - result).toFixed(2).substring(3, 4) + '%';
-  //     } else {
-  //       return (1 - result).toFixed(2).substring(2, 4) + '%';
-  //     }
-  //   }
-  // }
-  // function getRank(category, order = 'desc') {
-  //   var resultArr = teams.slice();
-  //   var rankArr = resultArr;
-  //   if (order === 'desc') {
-  //     rankArr.sort((a, b) => b[category] - a[category]);
-  //   } else if (order === 'asc') {
-  //     rankArr.sort((a, b) => a[category] - b[category]);
-  //   }
-  //   let categoryRank = rankArr.indexOf(selectedTeam) + 1;
-  //   let rankString = categoryRank.toString();
-  //   let lastDigit = categoryRank % 10;
-  //   if ((lastDigit >= 10 && lastDigit <= 20) || (lastDigit >= 4 && lastDigit <= 9) || lastDigit === 0) {
-  //     rankString = rankString + 'th';
-  //   } else if (lastDigit === 1) {
-  //     rankString = rankString + 'st';
-  //   } else if (lastDigit === 2) {
-  //     rankString = rankString + 'nd';
-  //   } else if (lastDigit === 3) {
-  //     rankString = rankString + 'rd';
-  //   }
-  //   return rankString;
-  // }
-  // function getColor(value) {
-  //   let percentage = parseFloat(value.substring(-1));
-  //   let color =
-  //     percentage <= 33 ? '255, 51, 51' : percentage <= 66 ? '255, 205, 0' : percentage > 66 ? '51, 255, 74' : '0, 0, 0';
-  //   let colorPercentage =
-  //     percentage <= 33
-  //       ? percentage * 3
-  //       : percentage <= 66
-  //       ? ((percentage - 33) * 3) / 100
-  //       : percentage > 66
-  //       ? ((percentage - 67) * 3) / 100
-  //       : 0;
-  //   colorPercentage = colorPercentage < 0.2 ? colorPercentage + 0.2 : colorPercentage;
-  //   let resultColor = 'rgba(' + color + ', ' + colorPercentage + ')';
-  //   return resultColor;
-  // }
   var hittersGraphData = [
     {
       category: 'Runs',
@@ -190,64 +123,64 @@ const TeamCard = ({ team }) => {
       <h1>{team.value}</h1>
       <img className="teamLogo" height="10" src={logo.logo} />
       <p>
-        Average + :<div className="fieldRank">{getRank(team['hAVG_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['hAVG_rate'])}</span>
+        AVG:<div className="fieldRank">{getRank(team['hAVG_rank'])}</div>
+        <span style={{ backgroundColor: getColor(team.hAVG_rate) }}>{getRatePercentage(team['hAVG_rate'])}</span>
       </p>
       <p>
-        Singles + :<div className="fieldRank">{getRank(team['1B_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['1B_rate'])}</span>
+        1B:<div className="fieldRank">{getRank(team['1B_rank'])}</div>
+        <span style={{ backgroundColor: getColor(team['1B_rate']) }}>{getRatePercentage(team['1B_rate'])}</span>
       </p>
       <p>
-        Doubles + :<div className="fieldRank">{getRank(team['2B_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['2B_rate'])}</span>
+        2B:<div className="fieldRank">{getRank(team['2B_rank'])}</div>
+        <span style={{ backgroundColor: getColor(team['2B_rate']) }}>{getRatePercentage(team['2B_rate'])}</span>
       </p>
       <p>
-        Triples + :<div className="fieldRank">{getRank(team['3B_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['3B_rate'])}</span>
+        3B:<div className="fieldRank">{getRank(team['3B_rank'])}</div>
+        <span style={{ backgroundColor: getColor(team['3B_rate']) }}>{getRatePercentage(team['3B_rate'])}</span>
       </p>
       <p>
-        Home Runs + :<div className="fieldRank">{getRank(team['hHR_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['hHR_rate'])}</span>
+        HR:<div className="fieldRank">{getRank(team['hHR_rank'])}</div>
+        <span style={{ backgroundColor: getColor(team['hHR_rate']) }}>{getRatePercentage(team['hHR_rate'])}</span>
       </p>
       <p>
-        Runs + :<div className="fieldRank">{getRank(team['hR_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['hR_rate'])}</span>
+        R:<div className="fieldRank">{getRank(team['hR_rank'])}</div>
+        <span style={{ backgroundColor: getColor(team.hR_rate) }}>{getRatePercentage(team['hR_rate'])}</span>
       </p>
       <p>
-        RBIs + :<div className="fieldRank">{getRank(team['RBI_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['RBI_rate'])}</span>
+        RBI:<div className="fieldRank">{getRank(team['RBI_rank'])}</div>
+        <span style={{ backgroundColor: getColor(team.RBI_rate) }}>{getRatePercentage(team['RBI_rate'])}</span>
       </p>
       <p>
-        OBP + :<div className="fieldRank">{getRank(team['hOBP_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['hOBP_rate'])}</span>
+        OBP:<div className="fieldRank">{getRank(team['hOBP_rank'])}</div>
+        <span style={{ backgroundColor: getColor(team.hOBP_rate) }}>{getRatePercentage(team['hOBP_rate'])}</span>
       </p>
       <p>
-        SLG + :<div className="fieldRank">{getRank(team['hSLG_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['hSLG_rate'])}</span>
+        SLG:<div className="fieldRank">{getRank(team['hSLG_rank'])}</div>
+        <span style={{ backgroundColor: getColor(team.hSLG_rate) }}>{getRatePercentage(team['hSLG_rate'])}</span>
       </p>
       <p>
-        Power + :<div className="fieldRank">{getRank(team['hISO_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['hISO_rate'])}</span>
+        ISO:<div className="fieldRank">{getRank(team['hISO_rank'])}</div>
+        <span style={{ backgroundColor: getColor(team.hISO_rate) }}>{getRatePercentage(team['hISO_rate'])}</span>
       </p>
       <p>
-        BABIP + :<div className="fieldRank">{getRank(team['hBABIP_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['hBABIP_rate'])}</span>
+        BABIP:<div className="fieldRank">{getRank(team['hBABIP_rank'])}</div>
+        <span style={{ backgroundColor: getColor(team.hBABIP_rate) }}>{getRatePercentage(team['hBABIP_rate'])}</span>
       </p>
       <p>
-        SB + :<div className="fieldRank">{getRank(team['hSB_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['hSB_rate'])}</span>
+        SB:<div className="fieldRank">{getRank(team['hSB_rank'])}</div>
+        <span style={{ backgroundColor: getColor(team.hSB_rate) }}>{getRatePercentage(team['hSB_rate'])}</span>
       </p>
       <p>
-        BB / K + :<div className="fieldRank">{getRank(team['hBBPerK_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['hBBPerK_rate'])}</span>
+        BB / K:<div className="fieldRank">{getRank(team['hBBPerK_rank'])}</div>
+        <span style={{ backgroundColor: getColor(team.hBBPerK_rate) }}>{getRatePercentage(team['hBBPerK_rate'])}</span>
       </p>
       <p>
-        Base Running + :<div className="fieldRank">{getRank(team['hUBR_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['hUBR_rate'])}</span>
+        Base Running:<div className="fieldRank">{getRank(team['hUBR_rank'])}</div>
+        <span style={{ backgroundColor: getColor(team.hUBR_rate) }}>{getRatePercentage(team['hUBR_rate'])}</span>
       </p>
       <p>
-        wRC + :<div className="fieldRank">{getRank(team['hwRC+_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['hwRC+_rate'])}</span>
+        wRC+:<div className="fieldRank">{getRank(team['hwRC+_rank'])}</div>
+        <span style={{ backgroundColor: getColor(team['hwRC+_rate']) }}>{getRatePercentage(team['hwRC+_rate'])}</span>
       </p>
       <div className="fullWidthChart">
         <h2 className="playerChart">Hitting</h2>
@@ -288,64 +221,64 @@ const TeamCard = ({ team }) => {
         </LineChart>
       </div>
       <p>
-        Average - :<div className="fieldRank">{getRank(team['pAVG_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['pAVG_rate'])}</span>
+        AVG:<div className="fieldRank">{getRank(team['pAVG_rank'])}</div>
+        <span style={{ backgroundColor: getColor(team.pAVG_rate) }}>{getRatePercentage(team['pAVG_rate'])}</span>
       </p>
       <p>
-        Hits - :<div className="fieldRank">{getRank(team['pH_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['pH_rate'])}</span>
+        Hits:<div className="fieldRank">{getRank(team['pH_rank'])}</div>
+        <span style={{ backgroundColor: getColor(team.pH_rate) }}>{getRatePercentage(team['pH_rate'])}</span>
       </p>
       <p>
-        Bases Against - :<div className="fieldRank">{getRank(team['pTBF_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['pTBF_rate'])}</span>
+        TBA:<div className="fieldRank">{getRank(team['pTBF_rank'])}</div>
+        <span style={{ backgroundColor: getColor(team.pTBF_rate) }}>{getRatePercentage(team['pTBF_rate'])}</span>
       </p>
       <p>
-        BABIP - :<div className="fieldRank">{getRank(team['pBABIP_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['pBABIP_rate'])}</span>
+        BABIP:<div className="fieldRank">{getRank(team['pBABIP_rank'])}</div>
+        <span style={{ backgroundColor: getColor(team.pBABIP_rate) }}>{getRatePercentage(team['pBABIP_rate'])}</span>
       </p>
       <p>
-        LOB - :<div className="fieldRank">{getRank(team['pLOB_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['pLOB_rate'])}</span>
+        LOB:<div className="fieldRank">{getRank(team['pLOB_rank'])}</div>
+        <span style={{ backgroundColor: getColor(team.pLOB_rate) }}>{getRatePercentage(team['pLOB_rate'])}</span>
       </p>
       <p>
-        ERA - :<div className="fieldRank">{getRank(team['ERA_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['ERA_rate'])}</span>
+        ERA:<div className="fieldRank">{getRank(team['ERA_rank'])}</div>
+        <span style={{ backgroundColor: getColor(team.ERA_rate) }}>{getRatePercentage(team['ERA_rate'])}</span>
       </p>
       <p>
-        WHIP - :<div className="fieldRank">{getRank(team['pWHIP_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['pWHIP_rate'])}</span>
+        WHIP:<div className="fieldRank">{getRank(team['pWHIP_rank'])}</div>
+        <span style={{ backgroundColor: getColor(team.pWHIP_rate) }}>{getRatePercentage(team['pWHIP_rate'])}</span>
       </p>
       <p>
-        K per 9 - :<div className="fieldRank">{getRank(team['pKPer9_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['pKPer9_rate'])}</span>
+        K per 9:<div className="fieldRank">{getRank(team['pKPer9_rank'])}</div>
+        <span style={{ backgroundColor: getColor(team.pKPer9_rate) }}>{getRatePercentage(team['pKPer9_rate'])}</span>
       </p>
       <p>
-        BB per 9 - :<div className="fieldRank">{getRank(team['pBBPer9_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['pBBPer9_rate'])}</span>
+        BB per 9:<div className="fieldRank">{getRank(team['pBBPer9_rank'])}</div>
+        <span style={{ backgroundColor: getColor(team.pBBPer9_rate) }}>{getRatePercentage(team['pBBPer9_rate'])}</span>
       </p>
       <p>
-        HR per 9 - :<div className="fieldRank">{getRank(team['pHRPer9_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['pHRPer9_rate'])}</span>
+        HR per 9:<div className="fieldRank">{getRank(team['pHRPer9_rank'])}</div>
+        <span style={{ backgroundColor: getColor(team.pHRPer9_rate) }}>{getRatePercentage(team['pHRPer9_rate'])}</span>
       </p>
       <p>
-        SIERA - :<div className="fieldRank">{getRank(team['SIERA_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['SIERA_rate'])}</span>
+        SIERA:<div className="fieldRank">{getRank(team['SIERA_rank'])}</div>
+        <span style={{ backgroundColor: getColor(team.SIERA_rate) }}>{getRatePercentage(team['SIERA_rate'])}</span>
       </p>
       <p>
-        K per BB - :<div className="fieldRank">{getRank(team['pKPerBB_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['pKPerBB_rate'])}</span>
+        K per BB:<div className="fieldRank">{getRank(team['pKPerBB_rank'])}</div>
+        <span style={{ backgroundColor: getColor(team.pKPerBB_rate) }}>{getRatePercentage(team['pKPerBB_rate'])}</span>
       </p>
       <p>
-        Innings - :<div className="fieldRank">{getRank(team['IP_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['IP_rate'])}</span>
+        IP:<div className="fieldRank">{getRank(team['IP_rank'])}</div>
+        <span style={{ backgroundColor: getColor(team.IP_rate) }}>{getRatePercentage(team['IP_rate'])}</span>
       </p>
       <p>
-        Wins - :<div className="fieldRank">{getRank(team['wins_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['wins_rate'])}</span>
+        W:<div className="fieldRank">{getRank(team['wins_rank'])}</div>
+        <span style={{ backgroundColor: getColor(team.wins_rate) }}>{getRatePercentage(team['wins_rate'])}</span>
       </p>
       <p>
-        Losses - :<div className="fieldRank">{getRank(team['losses_rank'])}</div>
-        <span style={{ backgroundColor: 'rgb(255, 174, 0)' }}>{getRatePercentage(team['losses_rate'])}</span>
+        L:<div className="fieldRank">{getRank(team['losses_rank'])}</div>
+        <span style={{ backgroundColor: getColor(team.losses_rate) }}>{getRatePercentage(team['losses_rate'])}</span>
       </p>
       <div className="fullWidthChart">
         <h2 className="playerChart">Pitching</h2>

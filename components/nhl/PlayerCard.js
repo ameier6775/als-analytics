@@ -51,7 +51,6 @@ const PlayerCard = ({ player }) => {
   }
   // Background color for fields (currently not being used)
   function getColor(field) {
-    console.log(field);
     let color = 'rgba(';
     color +=
       field <= 0.33
@@ -114,6 +113,7 @@ const PlayerCard = ({ player }) => {
   ];
   // Team logo
   var logo = teamLogos.find((obj) => obj.team === player.team);
+  console.log(player);
   return (
     <div id={player.name} className="playerCard">
       <h1>{player.name}</h1>
@@ -121,54 +121,62 @@ const PlayerCard = ({ player }) => {
       <img className="teamLogo" height="10" src={logo.logo} />
       <p>
         Goals:<div className="fieldRank">{getRank(player.goalsRank)}</div>
-        <span style={{ backgroundColor: getColor(player.goalsRate) }}>{getRatePercentage(player.goalsRate)}</span>
+        <span style={{ backgroundColor: getColor(player.goalsRate) }}>
+          {getRatePercentage(player.goalsRate) + ' (' + player.goals + ')'}
+        </span>
       </p>
       <p>
         Assists:<div className="fieldRank">{getRank(player.assistsRank)}</div>
-        <span style={{ backgroundColor: getColor(player.assistsRate) }}>{getRatePercentage(player.assistsRate)}</span>
+        <span style={{ backgroundColor: getColor(player.assistsRate) }}>
+          {getRatePercentage(player.assistsRate) + ' (' + player.assists + ')'}
+        </span>
       </p>
       <p>
         Points:<div className="fieldRank">{getRank(player.pointsRank)}</div>
-        <span style={{ backgroundColor: getColor(player.pointsRate) }}>{getRatePercentage(player.pointsRate)}</span>
+        <span style={{ backgroundColor: getColor(player.pointsRate) }}>
+          {getRatePercentage(player.pointsRate) + ' (' + player.points + ')'}
+        </span>
       </p>
       <p>
         Expected Goals +:<div className="fieldRank">{getRank(player.xGoalsRank)}</div>
-        <span style={{ backgroundColor: getColor(player.xGoalsRate) }}>{getRatePercentage(player.xGoalsRate)}</span>
+        <span style={{ backgroundColor: getColor(player.xGoalsRate) }}>
+          {getRatePercentage(player.xGoalsRate) + ' (' + player.xGoalsFor + ')'}
+        </span>
       </p>
       <p>
         🧊 Goals +:<div className="fieldRank">{getRank(player.onIceGoalsForRank)}</div>
         <span style={{ backgroundColor: getColor(player.onIceGoalsForRate) }}>
-          {getRatePercentage(player.onIceGoalsForRate)}
+          {getRatePercentage(player.onIceGoalsForRate) + ' (' + player.onIceGoals + ')'}
         </span>
       </p>
       <p>
         🚨 Per 60:<div className="fieldRank">{getRank(player.goalsPer60Rank)}</div>
         <span style={{ backgroundColor: getColor(player.goalsPer60Rate) }}>
-          {getRatePercentage(player.goalsPer60Rate)}
+          {getRatePercentage(player.goalsPer60Rate) + ' (' + (player.goalsPer60 * 3600).toFixed(2) + ')'}
         </span>
       </p>
       <p>
         🍏 Per 60:<div className="fieldRank">{getRank(player.assistsPer60Rank)}</div>
         <span style={{ backgroundColor: getColor(player.assistsPer60Rate) }}>
-          {getRatePercentage(player.assistsPer60Rate)}
+          {getRatePercentage(player.assistsPer60Rate) + ' (' + (player.assistsPer60 * 3600).toFixed(2) + ')'}
         </span>
       </p>
       <p>
         🥅 Per 60:<div className="fieldRank">{getRank(player.pointsPer60Rank)}</div>
         <span style={{ backgroundColor: getColor(player.pointsPer60Rate) }}>
-          {getRatePercentage(player.pointsPer60Rate)}
+          {getRatePercentage(player.pointsPer60Rate) + ' (' + (player.pointsPer60 * 3600).toFixed(2) + ')'}
         </span>
       </p>
       <p>
         Shot Attempts +:<div className="fieldRank">{getRank(player.shotAttemptsRank)}</div>
         <span style={{ backgroundColor: getColor(player.shotAttemptsRate) }}>
-          {getRatePercentage(player.shotAttemptsRate)}
+          {getRatePercentage(player.shotAttemptsRate) + ' (' + player.shotAttempts + ')'}
         </span>
       </p>
       <p>
         O-Zone Starts:<div className="fieldRank">{getRank(player.oZoneStartRank)}</div>
         <span style={{ backgroundColor: getColor(player.oZoneStartRate) }}>
-          {getRatePercentage(player.oZoneStartRate)}
+          {getRatePercentage(player.oZoneStartRate) + ' (' + player.oZoneStarts + ')'}
         </span>
       </p>
       <div className="fullWidthChart">
@@ -214,55 +222,61 @@ const PlayerCard = ({ player }) => {
       <p>
         Takeaways:<div className="fieldRank">{getRank(player.takeawaysRank)}</div>
         <span style={{ backgroundColor: getColor(player.takeawaysRate) }}>
-          {getRatePercentage(player.takeawaysRate)}
+          {getRatePercentage(player.takeawaysRate) + ' (' + player.takeaways + ')'}
         </span>
       </p>
       <p>
         Giveaways:<div className="fieldRank">{getRank(player.giveawaysRank)}</div>
         <span style={{ backgroundColor: getColor(player.giveawaysRate) }}>
-          {getRatePercentage(player.giveawaysRate)}
+          {getRatePercentage(player.giveawaysRate) + ' (' + player.giveaways + ')'}
         </span>
       </p>
       <p>
         Hits:<div className="fieldRank">{getRank(player.hitsRank)}</div>
-        <span style={{ backgroundColor: getColor(player.hitsRate) }}>{getRatePercentage(player.hitsRate)}</span>
+        <span style={{ backgroundColor: getColor(player.hitsRate) }}>
+          {getRatePercentage(player.hitsRate) + ' (' + player.hits + ')'}
+        </span>
       </p>
       <p>
         Expected Goals -:<div className="fieldRank">{getRank(player.xGoalsAgainstRank)}</div>
         <span style={{ backgroundColor: getColor(player.xGoalsAgainstRate) }}>
-          {getRatePercentage(player.xGoalsAgainstRate)}
+          {getRatePercentage(player.xGoalsAgainstRate) + ' (' + player.xGoalsAgainst.toFixed(2) + ')'}
         </span>
       </p>
       <p>
         🧊 Goals -:<div className="fieldRank">{getRank(player.onIceGoalsAgainstRank)}</div>
         <span style={{ backgroundColor: getColor(player.onIceGoalsAgainstRate) }}>
-          {getRatePercentage(player.onIceGoalsAgainstRate)}
+          {getRatePercentage(player.onIceGoalsAgainstRate) + ' (' + player.onIceGoalsAgainst + ')'}
         </span>
       </p>
       <p>
         Blocks:<div className="fieldRank">{getRank(player.blocksRank)}</div>
-        <span style={{ backgroundColor: getColor(player.blocksRate) }}>{getRatePercentage(player.blocksRate)}</span>
+        <span style={{ backgroundColor: getColor(player.blocksRate) }}>
+          {getRatePercentage(player.blocksRate) + ' (' + player.blocks + ')'}
+        </span>
       </p>
       <p>
         D-Zone Giveaways:<div className="fieldRank">{getRank(player.dZoneGiveawaysRank)}</div>
         <span style={{ backgroundColor: getColor(player.dZoneGiveawaysRate) }}>
-          {getRatePercentage(player.dZoneGiveawaysRate)}
+          {getRatePercentage(player.dZoneGiveawaysRate) + ' (' + player.dZoneGiveaways + ')'}
         </span>
       </p>
       <p>
         Breakups:<div className="fieldRank">{getRank(player.breakupsRank)}</div>
-        <span style={{ backgroundColor: getColor(player.breakupsRate) }}>{getRatePercentage(player.breakupsRate)}</span>
+        <span style={{ backgroundColor: getColor(player.breakupsRate) }}>
+          {getRatePercentage(player.breakupsRate) + ' (' + player.breakups + ')'}
+        </span>
       </p>
       <p>
         Shot Attempts -:<div className="fieldRank">{getRank(player.shotAttemptsAgainstRank)}</div>
         <span style={{ backgroundColor: getColor(player.shotAttemptsAgainstRate) }}>
-          {getRatePercentage(player.shotAttemptsAgainstRate)}
+          {getRatePercentage(player.shotAttemptsAgainstRate) + ' (' + player.shotAttemptsAgainst + ')'}
         </span>
       </p>
       <p>
         D-Zone Starts:<div className="fieldRank">{getRank(player.dZoneStartRank)}</div>
         <span style={{ backgroundColor: getColor(player.dZoneStartRate) }}>
-          {getRatePercentage(player.dZoneStartRate)}
+          {getRatePercentage(player.dZoneStartRate) + ' (' + player.dZoneStarts + ')'}
         </span>
       </p>
       <div className="fullWidthChart">
